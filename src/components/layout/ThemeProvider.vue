@@ -7,6 +7,11 @@ import { ref, provide, onMounted, watch, computed } from 'vue'
 
 type Theme = 'light' | 'dark'
 
+interface ThemeContext {
+  isDarkMode: ReturnType<typeof computed<boolean>>
+  toggleTheme: () => void
+}
+
 const theme = ref<Theme>('light')
 const isInitialized = ref(false)
 
@@ -38,14 +43,19 @@ watch([theme, isInitialized], ([newTheme, newIsInitialized]) => {
 provide('theme', {
   isDarkMode,
   toggleTheme,
-})
+} as ThemeContext)
 </script>
 
 <script lang="ts">
 import { inject } from 'vue'
 
-export function useTheme() {
-  const theme = inject('theme')
+interface ThemeContext {
+  isDarkMode: ReturnType<typeof computed<boolean>>
+  toggleTheme: () => void
+}
+
+export function useTheme(): ThemeContext {
+  const theme = inject<ThemeContext>('theme')
   if (!theme) {
     throw new Error('useTheme must be used within a ThemeProvider')
   }

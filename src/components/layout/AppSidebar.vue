@@ -1,6 +1,6 @@
 <template>
   <aside :class="[
-    'fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-99999 border-r border-gray-200',
+    'fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-999 border-r border-gray-200',
     {
       'lg:w-[290px]': isExpanded || isMobileOpen || isHovered,
       'lg:w-[90px]': !isExpanded && !isHovered,
@@ -13,9 +13,9 @@
       'py-8 flex',
       !isExpanded && !isHovered ? 'lg:justify-center' : 'justify-start',
     ]">
-      <router-link to="/">
-        <img v-if="isExpanded || isHovered || isMobileOpen" class="dark:hidden" src="/images/logo/logo.svg" alt="Logo"
-          width="150" height="40" />
+      <router-link to="/demo">
+        <img v-if="isExpanded || isHovered || isMobileOpen" class="dark:hidden" src="/images/logo/logo-light.svg"
+          alt="Logo" width="150" height="40" />
         <img v-if="isExpanded || isHovered || isMobileOpen" class="hidden dark:block" src="/images/logo/logo-dark.svg"
           alt="Logo" width="150" height="40" />
         <img v-else src="/images/logo/logo-icon.svg" alt="Logo" width="32" height="32" />
@@ -139,120 +139,100 @@
           </div>
         </div>
       </nav>
+      <SidebarWidget v-if="isExpanded || isHovered || isMobileOpen" />
     </div>
   </aside>
 </template>
 
-<script setup>
-import { ref, computed } from "vue";
+<script setup lang="ts">
+import { computed } from "vue";
 import { useRoute } from "vue-router";
-
+import { useI18n } from "vue-i18n";
 import {
   GridIcon,
-  CalenderIcon,
-  UserCircleIcon,
-  PieChartIcon,
   ChevronDownIcon,
   HorizontalDots,
-  PageIcon,
-  TableIcon,
-  ListIcon,
-  PlugInIcon,
-} from "../../icons";
-import BoxCubeIcon from "@/icons/BoxCubeIcon.vue";
+  TableIcon
+} from "@/icons";
+import SidebarWidget from "@/components/layout/SidebarWidget.vue";
 import { useSidebar } from "@/composables/useSidebar";
 
+interface SubMenuItem {
+  name: string;
+  path: string;
+  pro: boolean;
+  new?: boolean;
+}
+
+interface MenuItem {
+  icon: typeof GridIcon;
+  name: string;
+  path?: string;
+  subItems?: SubMenuItem[];
+}
+
+interface MenuGroup {
+  title: string;
+  items: MenuItem[];
+}
+
 const route = useRoute();
+const { t } = useI18n();
 
 const { isExpanded, isMobileOpen, isHovered, openSubmenu } = useSidebar();
 
-const menuGroups = [
-  {
-    title: "Menu",
+const isDevelopment = import.meta.env.DEV;
+
+const menuGroups = computed<MenuGroup[]>(() => [
+  ...(isDevelopment ? [{
+    title: t('sidebar.menu'),
     items: [
+      {
+        name: t('sidebar.accounts'),
+        icon: TableIcon,
+        subItems: [
+          { name: t('pages.userManagement'), path: "/account/user-management", pro: false },
+          { name: t('pages.adminManagement'), path: "/account/admin-management", pro: false },
+        ],
+      },
       {
         icon: GridIcon,
-        name: "Dashboard",
-        subItems: [{ name: "Ecommerce", path: "/", pro: false }],
-      },
-      {
-        icon: CalenderIcon,
-        name: "Calendar",
-        path: "/calendar",
-      },
-      {
-        icon: UserCircleIcon,
-        name: "User Profile",
-        path: "/profile",
-      },
-
-      {
-        name: "Forms",
-        icon: ListIcon,
+        name: 'Demo',
         subItems: [
-          { name: "Form Elements", path: "/form-elements", pro: false },
-        ],
-      },
-      {
-        name: "Tables",
-        icon: TableIcon,
-        subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
-      },
-      {
-        name: "Pages",
-        icon: PageIcon,
-        subItems: [
-          { name: "Black Page", path: "/blank", pro: false },
-          { name: "404 Page", path: "/error-404", pro: false },
-        ],
-      },
+          { name: "Ecommerce", path: "/demo" },
+          { name: "Calendar", path: "/demo/calendar" },
+          { name: "User Profile", path: "/demo/profile" },
+          { name: "Form Elements", path: "/demo/form-elements" },
+          { name: "Quill", path: "/demo/quill" },
+          { name: "Basic Tables", path: "/demo/basic-tables" },
+          { name: "Black Page", path: "/demo/blank" },
+          { name: "404 Page", path: "/demo/error-404" },
+          { name: "Line Chart", path: "/demo/line-chart" },
+          { name: "Bar Chart", path: "/demo/bar-chart" },
+          { name: "Alerts", path: "/demo/alerts" },
+          { name: "Avatars", path: "/demo/avatars" },
+          { name: "Badge", path: "/demo/badge" },
+          { name: "Buttons", path: "/demo/buttons" },
+          { name: "Images", path: "/demo/images" },
+          { name: "Videos", path: "/demo/videos" },
+          { name: "Signin", path: "/demo/signin" },
+          { name: "Signup", path: "/demo/signup" },
+          { name: "Icons", path: "/demo/icons" },
+        ] as SubMenuItem[],
+      }
     ],
-  },
-  {
-    title: "Others",
-    items: [
-      {
-        icon: PieChartIcon,
-        name: "Charts",
-        subItems: [
-          { name: "Line Chart", path: "/line-chart", pro: false },
-          { name: "Bar Chart", path: "/bar-chart", pro: false },
-        ],
-      },
-      {
-        icon: BoxCubeIcon,
-        name: "Ui Elements",
-        subItems: [
-          { name: "Alerts", path: "/alerts", pro: false },
-          { name: "Avatars", path: "/avatars", pro: false },
-          { name: "Badge", path: "/badge", pro: false },
-          { name: "Buttons", path: "/buttons", pro: false },
-          { name: "Images", path: "/images", pro: false },
-          { name: "Videos", path: "/videos", pro: false },
-        ],
-      },
-      {
-        icon: PlugInIcon,
-        name: "Authentication",
-        subItems: [
-          { name: "Signin", path: "/signin", pro: false },
-          { name: "Signup", path: "/signup", pro: false },
-        ],
-      },
-      // ... Add other menu items here
-    ],
-  },
-];
+  }] : []),
+]);
 
-const isActive = (path) => route.path === path;
+const isActive = (path: string) => route.path === path;
 
-const toggleSubmenu = (groupIndex, itemIndex) => {
+const toggleSubmenu = (groupIndex: number, itemIndex: number) => {
   const key = `${groupIndex}-${itemIndex}`;
   openSubmenu.value = openSubmenu.value === key ? null : key;
 };
 
 const isAnySubmenuRouteActive = computed(() => {
-  return menuGroups.some((group) =>
+  return menuGroups.value.some((group) =>
     group.items.some(
       (item) =>
         item.subItems && item.subItems.some((subItem) => isActive(subItem.path))
@@ -260,26 +240,28 @@ const isAnySubmenuRouteActive = computed(() => {
   );
 });
 
-const isSubmenuOpen = (groupIndex, itemIndex) => {
+const isSubmenuOpen = (groupIndex: number, itemIndex: number) => {
   const key = `${groupIndex}-${itemIndex}`;
   return (
     openSubmenu.value === key ||
     (isAnySubmenuRouteActive.value &&
-      menuGroups[groupIndex].items[itemIndex].subItems?.some((subItem) =>
+      menuGroups.value[groupIndex].items[itemIndex].subItems?.some((subItem) =>
         isActive(subItem.path)
       ))
   );
 };
 
-const startTransition = (el) => {
-  el.style.height = "auto";
-  const height = el.scrollHeight;
-  el.style.height = "0px";
-  el.offsetHeight; // force reflow
-  el.style.height = height + "px";
+const startTransition = (el: Element) => {
+  const htmlEl = el as HTMLElement;
+  htmlEl.style.height = "auto";
+  const height = htmlEl.scrollHeight;
+  htmlEl.style.height = "0px";
+  void htmlEl.offsetHeight; // force reflow
+  htmlEl.style.height = height + "px";
 };
 
-const endTransition = (el) => {
-  el.style.height = "";
+const endTransition = (el: Element) => {
+  const htmlEl = el as HTMLElement;
+  htmlEl.style.height = "";
 };
 </script>

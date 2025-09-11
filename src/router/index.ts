@@ -1,4 +1,6 @@
+import userManager, { login } from '@/auth/user-manager';
 import { createRouter, createWebHistory } from 'vue-router'
+import demoRoutes from './demoRoutes'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,145 +9,52 @@ const router = createRouter({
   },
   routes: [
     {
+      path: '/callback',
+      name: 'Callback',
+      component: () => import('@/views/Callback.vue'),
+    },
+    {
+      path: '/account',
+      children: [
+        {
+          path: '',
+          redirect: '/account/user-management',
+        },
+        {
+          path: 'user-management',
+          name: 'User management',
+          component: () => import('@/views/Accounts/UserManagement.vue'),
+          meta: { title: 'User management' },
+        },
+        {
+          path: 'admin-management',
+          name: 'Admin management',
+          component: () => import('@/views/Accounts/AdminManagement.vue'),
+          meta: { title: 'Admin management' },
+        },
+      ],
+    },
+    {
       path: '/',
-      name: 'Ecommerce',
-      component: () => import('../views/Ecommerce.vue'),
-      meta: {
-        title: 'eCommerce Dashboard',
-      },
+      redirect: '/account/user-management',
     },
-    {
-      path: '/calendar',
-      name: 'Calendar',
-      component: () => import('../views/Others/Calendar.vue'),
-      meta: {
-        title: 'Calendar',
-      },
-    },
-    {
-      path: '/profile',
-      name: 'Profile',
-      component: () => import('../views/Others/UserProfile.vue'),
-      meta: {
-        title: 'Profile',
-      },
-    },
-    {
-      path: '/form-elements',
-      name: 'Form Elements',
-      component: () => import('../views/Forms/FormElements.vue'),
-      meta: {
-        title: 'Form Elements',
-      },
-    },
-    {
-      path: '/basic-tables',
-      name: 'Basic Tables',
-      component: () => import('../views/Tables/BasicTables.vue'),
-      meta: {
-        title: 'Basic Tables',
-      },
-    },
-    {
-      path: '/line-chart',
-      name: 'Line Chart',
-      component: () => import('../views/Chart/LineChart/LineChart.vue'),
-    },
-    {
-      path: '/bar-chart',
-      name: 'Bar Chart',
-      component: () => import('../views/Chart/BarChart/BarChart.vue'),
-    },
-    {
-      path: '/alerts',
-      name: 'Alerts',
-      component: () => import('../views/UiElements/Alerts.vue'),
-      meta: {
-        title: 'Alerts',
-      },
-    },
-    {
-      path: '/avatars',
-      name: 'Avatars',
-      component: () => import('../views/UiElements/Avatars.vue'),
-      meta: {
-        title: 'Avatars',
-      },
-    },
-    {
-      path: '/badge',
-      name: 'Badge',
-      component: () => import('../views/UiElements/Badges.vue'),
-      meta: {
-        title: 'Badge',
-      },
-    },
-
-    {
-      path: '/buttons',
-      name: 'Buttons',
-      component: () => import('../views/UiElements/Buttons.vue'),
-      meta: {
-        title: 'Buttons',
-      },
-    },
-
-    {
-      path: '/images',
-      name: 'Images',
-      component: () => import('../views/UiElements/Images.vue'),
-      meta: {
-        title: 'Images',
-      },
-    },
-    {
-      path: '/videos',
-      name: 'Videos',
-      component: () => import('../views/UiElements/Videos.vue'),
-      meta: {
-        title: 'Videos',
-      },
-    },
-    {
-      path: '/blank',
-      name: 'Blank',
-      component: () => import('../views/Pages/BlankPage.vue'),
-      meta: {
-        title: 'Blank',
-      },
-    },
-
-    {
-      path: '/error-404',
-      name: '404 Error',
-      component: () => import('../views/Errors/FourZeroFour.vue'),
-      meta: {
-        title: '404 Error',
-      },
-    },
-
-    {
-      path: '/signin',
-      name: 'Signin',
-      component: () => import('../views/Auth/Signin.vue'),
-      meta: {
-        title: 'Signin',
-      },
-    },
-    {
-      path: '/signup',
-      name: 'Signup',
-      component: () => import('../views/Auth/Signup.vue'),
-      meta: {
-        title: 'Signup',
-      },
-    },
+    ...demoRoutes,
   ],
 })
 
 export default router
 
-router.beforeEach((to, from, next) => {
-  document.title = `HiveSpace Seller - ${to.meta.title}`
+router.beforeEach(async(to, from, next) => {
+  document.title = `${to.meta.title}`
+  if (to.path === '/callback') {
+    next();
+    return;
+  }
+  const user = await userManager.getUser();
+  if (!user) {
+    login();
+    return;
+  }
+
   next()
 })
