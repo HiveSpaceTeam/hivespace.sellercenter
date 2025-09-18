@@ -1,8 +1,8 @@
 import { createI18n } from 'vue-i18n'
 
-// Import translation files
-import vi from './locales/vi.json'
-import en from './locales/en.json'
+// Import modular translation aggregators
+import vi from './locales/vi'
+import en from './locales/en'
 
 const i18n = createI18n({
   legacy: false,

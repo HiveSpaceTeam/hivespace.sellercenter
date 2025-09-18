@@ -1,0 +1,38 @@
+export default {
+  totalAdmins: "Tổng số Admin:",
+  refresh: "Làm mới",
+  description: "Quản lý các quản trị viên hệ thống và quyền hạn của họ",
+  showingResults: "Hiển thị {count} trên tổng số {total} kết quả",
+  lastUpdated: "Cập nhật lần cuối:",
+  addNewAdmin: "Thêm Admin Mới",
+  fullName: "Họ và tên",
+  email: "Email",
+  password: "Mật khẩu",
+  confirmPassword: "Xác nhận mật khẩu",
+  adminType: "Loại Admin",
+  regularAdmin: "Admin Thường",
+  systemAdmin: "Admin Hệ Thống",
+  createAdmin: "Tạo Admin",
+  fullNamePlaceholder: "Nhập họ và tên",
+  emailPlaceholder: "Nhập địa chỉ email admin",
+  passwordPlaceholder: "Nhập mật khẩu bảo mật (tối thiểu 12 ký tự)",
+  confirmPasswordPlaceholder: "Xác nhận mật khẩu",
+  emailRequired: "Email là bắt buộc",
+  emailInvalid: "Vui lòng nhập địa chỉ email hợp lệ",
+  emailExists: "Một quản trị viên với email này đã tồn tại",
+  fullNameRequired: "Họ và tên là bắt buộc",
+  passwordRequired: "Mật khẩu là bắt buộc",
+  passwordTooShort: "Mật khẩu phải có ít nhất 12 ký tự",
+  passwordComplexity: "Mật khẩu phải bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt",
+  confirmPasswordRequired: "Vui lòng xác nhận mật khẩu của bạn",
+  passwordMismatch: "Mật khẩu không khớp",
+  passwordWeak: "Yếu",
+  passwordFair: "Trung bình",
+  passwordGood: "Tốt",
+  passwordStrong: "Mạnh",
+  adminCreatedSuccess: "Admin {email} đã được tạo thành công!",
+  adminCreatedError: "Không thể tạo admin. Vui lòng thử lại."
+}
+
+
+

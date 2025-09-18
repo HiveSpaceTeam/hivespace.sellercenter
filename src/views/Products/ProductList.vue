@@ -31,7 +31,7 @@
 
               <div class="flex items-center justify-end">
                 <div class="flex items-center gap-2">
-                  <Button :onClick="openAddAdminModal" :startIcon="BigPlusIcon" variant="primary">
+                  <Button :onClick="addNewProduct" :startIcon="BigPlusIcon" variant="primary">
                     {{ $t('admins.addNewAdmin') }}
                   </Button>
                   <Button :startIcon="RefreshIcon" variant="outline" @click="refreshAdmins">
@@ -56,7 +56,7 @@
                 <tr class="border-b border-gray-200 dark:border-gray-700">
                   <th class="px-5 py-3 text-left w-1/8 sm:px-6">
                     <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.emailAddress')
-                      }}</p>
+                    }}</p>
                   </th>
                   <th class="px-5 py-3 text-left w-1/8 sm:px-6">
                     <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.fullName') }}
@@ -67,15 +67,15 @@
                   </th>
                   <th class="px-5 py-3 text-center w-1/8 sm:px-6" v-if="currentUser?.isSystemAdmin()">
                     <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.isSystemAdmin')
-                      }}</p>
+                    }}</p>
                   </th>
                   <th class="px-5 py-3 text-left w-1/8 sm:px-6">
                     <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.createdDate')
-                      }}</p>
+                    }}</p>
                   </th>
                   <th class="px-5 py-3 text-left w-1/8 sm:px-6">
                     <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.lastLoginDate')
-                      }}</p>
+                    }}</p>
                   </th>
                   <th class="px-5 py-3 text-left w-1/8 sm:px-6">
                     <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{
@@ -195,14 +195,13 @@ import Select from "@/components/common/Select.vue";
 import DropdownMenu from "@/components/common/DropdownMenu.vue";
 import Input from '@/components/common/Input.vue';
 import { useModal } from '@/composables/useModal'
-import AdminDetailModal from './Popups/AdminDetailModal.vue'
 
 import { HorizontalDots, TrashRedIcon, ToggleOffIcon, ToggleOnIcon, BigPlusIcon, RefreshIcon } from '@/icons'
 import { getCurrentUser } from "@/auth/user-manager";
 import type { AppUser } from "@/types/app-user";
 const { t } = useI18n();
 
-const currentPageTitle = computed(() => t('pages.adminManagement'));
+const currentPageTitle = computed(() => t('pages.productList'));
 
 // Options for the filter selects (i18n-backed)
 const statusOptions = computed(() => [
@@ -233,90 +232,90 @@ const currentUser = ref<AppUser | null>(null);
 
 // Sample admins data - in real app this would come from API
 const admins = ref([
-  {
-    id: 1,
-    email: 'admin.system@hivespace.com',
-    fullName: 'System Administrator',
-    adminType: 'System Admin',
-    status: 'Active',
-    isSystemAdmin: true,
-    createdDate: '2023-11-01',
-    lastLoginDate: '2024-03-22',
-    lastUpdatedDate: '2024-03-22',
-    avatar: '/images/user/user-01.jpg'
-  },
-  {
-    id: 2,
-    email: 'john.admin@hivespace.com',
-    fullName: 'John Anderson',
-    adminType: 'Regular Admin',
-    status: 'Active',
-    isSystemAdmin: false,
-    createdDate: '2024-01-15',
-    lastLoginDate: '2024-03-21',
-    lastUpdatedDate: '2024-03-21',
-    avatar: '/images/user/user-02.jpg'
-  },
-  {
-    id: 3,
-    email: 'sarah.manager@hivespace.com',
-    fullName: 'Sarah Johnson',
-    adminType: 'Regular Admin',
-    status: 'Active',
-    isSystemAdmin: false,
-    createdDate: '2024-01-20',
-    lastLoginDate: '2024-03-20',
-    lastUpdatedDate: '2024-03-20',
-    avatar: '/images/user/user-03.jpg'
-  },
-  {
-    id: 4,
-    email: 'mike.supervisor@hivespace.com',
-    fullName: 'Mike Thompson',
-    adminType: 'System Admin',
-    status: 'Active',
-    isSystemAdmin: true,
-    createdDate: '2023-12-05',
-    lastLoginDate: '2024-03-19',
-    lastUpdatedDate: '2024-03-19',
-    avatar: '/images/user/user-04.jpg'
-  },
-  {
-    id: 5,
-    email: 'lisa.admin@hivespace.com',
-    fullName: 'Lisa Wilson',
-    adminType: 'Regular Admin',
-    status: 'Inactive',
-    isSystemAdmin: false,
-    createdDate: '2024-02-10',
-    lastLoginDate: '2024-03-05',
-    lastUpdatedDate: '2024-03-15',
-    avatar: '/images/user/user-05.jpg'
-  },
-  {
-    id: 6,
-    email: 'david.tech@hivespace.com',
-    fullName: 'David Rodriguez',
-    adminType: 'System Admin',
-    status: 'Active',
-    isSystemAdmin: true,
-    createdDate: '2023-10-15',
-    lastLoginDate: '2024-03-22',
-    lastUpdatedDate: '2024-03-22',
-    avatar: '/images/user/user-06.jpg'
-  },
-  {
-    id: 7,
-    email: 'emma.support@hivespace.com',
-    fullName: 'Emma Davis',
-    adminType: 'Regular Admin',
-    status: 'Active',
-    isSystemAdmin: false,
-    createdDate: '2024-02-25',
-    lastLoginDate: '2024-03-18',
-    lastUpdatedDate: '2024-03-18',
-    avatar: '/images/user/user-07.jpg'
-  }
+  // {
+  //   id: 1,
+  //   email: 'admin.system@hivespace.com',
+  //   fullName: 'System Administrator',
+  //   adminType: 'System Admin',
+  //   status: 'Active',
+  //   isSystemAdmin: true,
+  //   createdDate: '2023-11-01',
+  //   lastLoginDate: '2024-03-22',
+  //   lastUpdatedDate: '2024-03-22',
+  //   avatar: '/images/user/user-01.jpg'
+  // },
+  // {
+  //   id: 2,
+  //   email: 'john.admin@hivespace.com',
+  //   fullName: 'John Anderson',
+  //   adminType: 'Regular Admin',
+  //   status: 'Active',
+  //   isSystemAdmin: false,
+  //   createdDate: '2024-01-15',
+  //   lastLoginDate: '2024-03-21',
+  //   lastUpdatedDate: '2024-03-21',
+  //   avatar: '/images/user/user-02.jpg'
+  // },
+  // {
+  //   id: 3,
+  //   email: 'sarah.manager@hivespace.com',
+  //   fullName: 'Sarah Johnson',
+  //   adminType: 'Regular Admin',
+  //   status: 'Active',
+  //   isSystemAdmin: false,
+  //   createdDate: '2024-01-20',
+  //   lastLoginDate: '2024-03-20',
+  //   lastUpdatedDate: '2024-03-20',
+  //   avatar: '/images/user/user-03.jpg'
+  // },
+  // {
+  //   id: 4,
+  //   email: 'mike.supervisor@hivespace.com',
+  //   fullName: 'Mike Thompson',
+  //   adminType: 'System Admin',
+  //   status: 'Active',
+  //   isSystemAdmin: true,
+  //   createdDate: '2023-12-05',
+  //   lastLoginDate: '2024-03-19',
+  //   lastUpdatedDate: '2024-03-19',
+  //   avatar: '/images/user/user-04.jpg'
+  // },
+  // {
+  //   id: 5,
+  //   email: 'lisa.admin@hivespace.com',
+  //   fullName: 'Lisa Wilson',
+  //   adminType: 'Regular Admin',
+  //   status: 'Inactive',
+  //   isSystemAdmin: false,
+  //   createdDate: '2024-02-10',
+  //   lastLoginDate: '2024-03-05',
+  //   lastUpdatedDate: '2024-03-15',
+  //   avatar: '/images/user/user-05.jpg'
+  // },
+  // {
+  //   id: 6,
+  //   email: 'david.tech@hivespace.com',
+  //   fullName: 'David Rodriguez',
+  //   adminType: 'System Admin',
+  //   status: 'Active',
+  //   isSystemAdmin: true,
+  //   createdDate: '2023-10-15',
+  //   lastLoginDate: '2024-03-22',
+  //   lastUpdatedDate: '2024-03-22',
+  //   avatar: '/images/user/user-06.jpg'
+  // },
+  // {
+  //   id: 7,
+  //   email: 'emma.support@hivespace.com',
+  //   fullName: 'Emma Davis',
+  //   adminType: 'Regular Admin',
+  //   status: 'Active',
+  //   isSystemAdmin: false,
+  //   createdDate: '2024-02-25',
+  //   lastLoginDate: '2024-03-18',
+  //   lastUpdatedDate: '2024-03-18',
+  //   avatar: '/images/user/user-07.jpg'
+  // }
 ]);
 
 // Computed properties
@@ -459,32 +458,9 @@ const updateLastUpdated = () => {
 
 // Open global AdminDetail modal and handle result
 type AdminModalResult = { action?: 'create' | 'cancel', data?: { email: string, isSystemAdmin: boolean } } | undefined
-const openAddAdminModal = async () => {
-  const existing = admins.value.map(a => a.email)
-  const result = await openModal(AdminDetailModal, {
-    title: t('admins.addNewAdmin'),
-    currentUserIsSystemAdmin: currentUser.value?.isSystemAdmin(),
-    existingEmails: existing
-  }) as AdminModalResult
-  if (result?.action === 'create' && result.data) {
-    const email = result.data.email
-    const isSystem = !!result.data.isSystemAdmin
-    const newAdminData = {
-      id: admins.value.length + 1,
-      email,
-      fullName: email.split('@')[0].replace('.', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()),
-      adminType: isSystem ? 'System Admin' : 'Regular Admin',
-      status: 'Active',
-      isSystemAdmin: isSystem,
-      createdDate: new Date().toISOString().split('T')[0],
-      lastLoginDate: 'Never',
-      lastUpdatedDate: new Date().toISOString().split('T')[0],
-      avatar: '/images/user/user-default.jpg'
-    }
-    admins.value.unshift(newAdminData)
-    updateLastUpdated()
-    alert(t('admins.adminCreatedSuccess', { email: newAdminData.email }))
-  }
+
+const addNewProduct = () => {
+
 }
 
 // Lifecycle

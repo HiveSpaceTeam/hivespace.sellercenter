@@ -14,29 +14,29 @@ const router = createRouter({
       component: () => import('@/views/Callback.vue'),
     },
     {
-      path: '/account',
+      path: '/product',
       children: [
         {
           path: '',
-          redirect: '/account/user-management',
+          redirect: '/product/list',
         },
         {
-          path: 'user-management',
-          name: 'User management',
-          component: () => import('@/views/Accounts/UserManagement.vue'),
+          path: 'list',
+          name: 'List product',
+          component: () => import('@/views/Products/ProductList.vue'),
           meta: { title: 'User management' },
         },
         {
-          path: 'admin-management',
-          name: 'Admin management',
-          component: () => import('@/views/Accounts/AdminManagement.vue'),
+          path: 'new',
+          name: 'New Product',
+          component: () => import('@/views/Products/AddProduct.vue'),
           meta: { title: 'Admin management' },
         },
       ],
     },
     {
       path: '/',
-      redirect: '/account/user-management',
+      redirect: '/product/list',
     },
     ...demoRoutes,
   ],
