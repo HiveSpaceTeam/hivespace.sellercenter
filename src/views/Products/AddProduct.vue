@@ -140,95 +140,38 @@
                                     <tbody>
                                         <tr v-for="productSku in product.productSkus" :key="productSku.id"
                                             class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-white/[0.05]">
-                                            <!-- Email Address -->
-                                            <td class="px-5 py-4 sm:px-6">
-                                                <div class="flex items-center">
-                                                    <div class="flex-shrink-0 h-10 w-10">
-                                                        <img class="h-10 w-10 rounded-full object-cover"
-                                                            :src="admin.avatar || '/images/user/default-avatar.jpg'"
-                                                            :alt="admin.email" />
-                                                    </div>
-                                                    <div class="ml-4">
-                                                        <div class="text-sm font-medium text-gray-900 dark:text-white">
-                                                            {{
-                                                                admin.email }}</div>
-                                                    </div>
-                                                </div>
-                                            </td>
 
                                             <!-- Full Name -->
-                                            <td class="px-5 py-4 sm:px-6">
-                                                <div class="text-sm text-gray-900 dark:text-white">{{ admin.fullName }}
+                                            <td v-for="(variant, variantIndex) in product.productVariants"
+                                                class="px-5 py-4 sm:px-6">
+                                                <div class="text-sm text-gray-900 dark:text-white">{{
+                                                    getVariantValueBySKU(productSku, variant) }}
                                                 </div>
                                             </td>
 
                                             <!-- Status -->
                                             <td class="px-5 py-4 sm:px-6">
-                                                <span
-                                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
-                                                    :class="admin.status === 'Active'
-                                                        ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300'
-                                                        : 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300'">{{
-                                                            admin.status }}</span>
+
                                             </td>
 
                                             <!-- Is System Admin -->
                                             <td class="px-5 py-4 sm:px-6" v-if="currentUser?.isSystemAdmin()">
-                                                <div class="flex items-center justify-center">
-                                                    <svg v-if="admin.isSystemAdmin" class="w-5 h-5 text-green-500"
-                                                        fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd"
-                                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                            clip-rule="evenodd"></path>
-                                                    </svg>
-                                                </div>
+
                                             </td>
 
-                                            <!-- Created Date -->
-                                            <td class="px-5 py-4 sm:px-6">
-                                                <div class="text-sm text-gray-900 dark:text-white">{{ admin.createdDate
-                                                    }}
-                                                </div>
-                                            </td>
 
-                                            <!-- Last Login Date -->
-                                            <td class="px-5 py-4 sm:px-6">
-                                                <div class="text-sm text-gray-900 dark:text-white">{{
-                                                    admin.lastLoginDate }}
-                                                </div>
-                                            </td>
+
+
 
                                             <!-- Last Updated Date -->
                                             <td class="px-5 py-4 sm:px-6">
                                                 <div class="text-sm text-gray-900 dark:text-white">{{
-                                                    admin.lastUpdatedDate
+                                                    admin?.lastUpdatedDate
                                                 }}</div>
                                             </td>
 
                                             <!-- Actions -->
-                                            <td class="px-5 py-4 sm:px-6 text-center">
-                                                <DropdownMenu>
-                                                    <template #icon>
-                                                        <HorizontalDots />
-                                                    </template>
 
-                                                    <template #menu>
-                                                        <button @click="tableHandleDelete(admin)"
-                                                            class="flex items-center w-full px-3 py-2 text-sm text-red-700 hover:bg-gray-50 dark:text-red-400 dark:hover:bg-gray-600">
-                                                            <TrashRedIcon />
-                                                            {{ actionText.delete }}
-                                                        </button>
-
-                                                        <button @click="tableHandleToggleStatus(admin)"
-                                                            class="flex items-center w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700">
-                                                            <ToggleOffIcon v-if="admin.status === 'Active'" />
-                                                            <ToggleOnIcon v-else />
-                                                            {{ admin.status === 'Active' ? actionText.deactivate :
-                                                                actionText.activate }}
-                                                        </button>
-                                                    </template>
-                                                </DropdownMenu>
-                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -305,7 +248,10 @@ import _ from 'lodash';
 
 const currentPageTitle = ref('Form Elements');
 const formData = ref({})
-const product = ref({})
+const product = ref({
+    productVariants: [],
+    productSkus: []
+})
 const quillRef = ref(null)
 
 const modules = ref({
@@ -341,7 +287,7 @@ const options = [
 
 const onClickAddNewVariant = () => {
     const defaultVariantValue = {
-        id: product.value.productVariants?.length ?? 0 + 1,
+        id: (product.value.productVariants?.length ?? 0) + 1,
         name: "",
         options: [
             {
@@ -357,33 +303,111 @@ const onClickAddNewVariant = () => {
     }
 }
 const onChangeVariantOption = (variantIndex, optionIndex) => {
+    if (!product.value?.productVariants?.[variantIndex]?.options) return;
+
+    // Add new empty option if needed
     if (optionIndex == product.value.productVariants[variantIndex].options.length - 1) {
         product.value.productVariants[variantIndex].options.push({
-            optionId: optionIndex + 1,
+            optionId: optionIndex + 2, // Use optionIndex + 2 to avoid duplicate IDs
             value: ''
-        })
+        });
     }
+
     const option = product.value.productVariants[variantIndex].options[optionIndex];
     const productVariant = product.value.productVariants[variantIndex];
-    if (!product.value.productSkus.some(x => x.skuVariants.some(v => v.value == option.value))) {
-        handleAddSku(productVariant, option);
-    }
+
+    if (!option?.value) return;
+
+    // Only generate new SKUs if this is a new option value
+    handleAddSku(productVariant, option);
 }
 
 const handleAddSku = (productVariant, option) => {
-    let otherVariants = product.value.productVariants.filter(x => x.id != productVariant.id)
-    productVariant.options = option;
-    otherVariants.push()
-    const newSkus = generateSkus();
-    product.value.productSkus.push({
-        price: 0,
-        quantity: 0,
-        skuNo: '',
-        skuVariants: product.value
-    })
-}
-const generateSkus = ()=>{
+    if (!product.value.productSkus) product.value.productSkus = [];
 
+    // Get all variants with valid options
+    const variantsForGeneration = product.value.productVariants.map(v => ({
+        id: v.id,
+        name: v.name,
+        options: (v.id === productVariant.id
+            ? [option] // Only use the current option for this variant
+            : (v.options || []).filter(o => o?.value)) // Filter out empty options
+    })).filter(v => (v.options || []).length > 0);
+
+    // Generate all possible combinations
+    const combinations = generateSkus(variantsForGeneration);
+
+    // Track existing combinations to avoid duplicates
+    const existingKeys = new Set((product.value.productSkus || []).map(sku =>
+        buildCombinationKey(sku.skuVariants || [])
+    ));
+
+    // Add only new combinations
+    combinations.forEach(combo => {
+        const key = buildCombinationKey(combo);
+        if (!existingKeys.has(key)) {
+            product.value.productSkus.push({
+                id: (product.value.productSkus.length || 0) + 1,
+                price: 0,
+                quantity: 0,
+                skuNo: '',
+                skuVariants: combo
+            });
+            existingKeys.add(key);
+        }
+    });
+}
+
+const buildCombinationKey = (combo) => {
+    return (combo || [])
+        .map(i => `${i.variantId}:${i.value}`)
+        .sort()
+        .join('|');
+}
+
+const generateSkus = (variants) => {
+    if (!variants || variants.length === 0) return [];
+
+    const toPairs = (variant) => (variant.options || [])
+        .filter(o => o?.value)
+        .map(o => ({
+            variantId: variant.id,
+            variantName: variant.name,
+            optionId: o.optionId,
+            value: o.value
+        }));
+
+    let result = [[]];
+    for (const variant of variants) {
+        const pairs = toPairs(variant);
+        if (pairs.length === 0) continue;
+
+        const next = [];
+        for (const acc of result) {
+            for (const p of pairs) {
+                // Check if this combination already contains this variant
+                const hasVariant = acc.some(item => item.variantId === p.variantId);
+
+                // Only add if this variant isn't already in the combination
+                if (!hasVariant) {
+                    next.push([...acc, p]);
+                }
+            }
+        }
+        result = next;
+    }
+    return result;
+}
+
+const getVariantValueBySKU = (productSku, variant) => {
+    if (!productSku || !Array.isArray(productSku.skuVariants) || !variant) return '';
+    const variantId = variant.id;
+    const variantName = (variant.name || '').toString().trim();
+    const matched = productSku.skuVariants.find(sv =>
+        (variantId !== undefined && sv.variantId === variantId) ||
+        (variantName && sv.variantName === variantName)
+    );
+    return matched?.value || '';
 }
 </script>
 <style scoped>
