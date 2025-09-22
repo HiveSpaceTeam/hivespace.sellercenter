@@ -7,7 +7,7 @@ import users from './en/users'
 import profile from './en/profile'
 import notifications from './en/notifications'
 import search from './en/search'
-
+import common from './en/common'
 export default {
   table,
   header,
@@ -17,7 +17,8 @@ export default {
   users,
   profile,
   notifications,
-  search
+  search,
+  common
 }
 
 

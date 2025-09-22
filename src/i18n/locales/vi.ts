@@ -4,6 +4,7 @@ import sidebar from './vi/sidebar'
 import pages from './vi/pages'
 import admins from './vi/admins'
 import product from './vi/product'
+import common from './vi/common'
 
 export default {
   table,
@@ -11,5 +12,6 @@ export default {
   sidebar,
   pages,
   admins,
-  product
+  product,
+  common
 }

@@ -118,8 +118,8 @@
                                                 class="px-5 py-3 text-left w-1/8 sm:px-6">
                                                 <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{
                                                     variant.name || $t('product.variantGroup') + ' ' + (variantIndex +
-                                                        1)
-                                                }}</p>
+                                                    1)
+                                                    }}</p>
                                             </th>
                                             <th class="px-5 py-3 text-left w-1/8 sm:px-6">
                                                 <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{
@@ -141,7 +141,6 @@
                                         <tr v-for="productSku in product.productSkus" :key="productSku.id"
                                             class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-white/[0.05]">
 
-                                            <!-- Full Name -->
                                             <td v-for="(variant, variantIndex) in product.productVariants"
                                                 class="px-5 py-4 sm:px-6">
                                                 <div class="text-sm text-gray-900 dark:text-white">{{
@@ -149,28 +148,20 @@
                                                 </div>
                                             </td>
 
-                                            <!-- Status -->
                                             <td class="px-5 py-4 sm:px-6">
-
+                                                <input type="text" v-model="productSku.price"
+                                                    class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
                                             </td>
 
-                                            <!-- Is System Admin -->
-                                            <td class="px-5 py-4 sm:px-6" v-if="currentUser?.isSystemAdmin()">
-
-                                            </td>
-
-
-
-
-
-                                            <!-- Last Updated Date -->
                                             <td class="px-5 py-4 sm:px-6">
-                                                <div class="text-sm text-gray-900 dark:text-white">{{
-                                                    admin?.lastUpdatedDate
-                                                    }}</div>
+                                                <input type="text" v-model="productSku.quantity"
+                                                    class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                                            </td>
+                                            <td class="px-5 py-4 sm:px-6">
+                                                <input type="text" v-model="productSku.skuNo"
+                                                    class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
                                             </td>
 
-                                            <!-- Actions -->
 
                                         </tr>
                                     </tbody>
@@ -179,24 +170,25 @@
 
                         </div>
 
-
-                        <div>
-                            <Input v-model="email" :label="$t('product.price')" :placeholder="$t('product.typeHere')"
-                                :inputClass="'pl-[62px]'">
-                            <template #prepend>
-                                <span
-                                    class="absolute left-0 top-1/2 -translate-y-1/2 border-r border-gray-200 px-3.5 py-3 text-gray-500 dark:border-gray-800 dark:text-gray-400">
-                                    <MailIcon />
-                                </span>
-                            </template>
-                            </Input>
-                        </div>
-                        <div>
-                            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                {{ $t('product.inventory') }}
-                            </label>
-                            <input type="text" :placeholder="$t('product.typeHere')" v-model="formData.input"
-                                class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                        <div class="space-y-6" v-if="product.productVariants.length == 0">
+                            <div>
+                                <Input v-model="email" :label="$t('product.price')"
+                                    :placeholder="$t('product.typeHere')" :inputClass="'pl-[62px]'">
+                                <template #prepend>
+                                    <span
+                                        class="absolute left-0 top-1/2 -translate-y-1/2 border-r border-gray-200 px-3.5 py-3 text-gray-500 dark:border-gray-800 dark:text-gray-400">
+                                        <MailIcon />
+                                    </span>
+                                </template>
+                                </Input>
+                            </div>
+                            <div>
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                    {{ $t('product.inventory') }}
+                                </label>
+                                <input type="text" :placeholder="$t('product.typeHere')" v-model="formData.input"
+                                    class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                            </div>
                         </div>
                     </div>
                 </ComponentCard>
@@ -216,6 +208,15 @@
                     <Dropzone />
                 </ComponentCard>
             </div>
+        </div>
+        <div
+            class="toolbar fixed bottom-0 left-0 w-full flex justify-end gap-3 p-4 bg-white dark:bg-gray-900 shadow-lg z-50">
+            <Button variant="outline" size="sm" @click="onCancel" className="min-w-[90px]">
+                {{ $t('common.cancel') }}
+            </Button>
+            <Button variant="primary" size="sm" @click="onSave" className="min-w-[90px]">
+                {{ $t('common.save') }}
+            </Button>
         </div>
     </AdminLayout>
 </template>
@@ -370,9 +371,17 @@ const getVariantValueBySKU = (productSku, variant) => {
     );
     return matched?.value || '';
 }
+
+const onCancel = () => {
+}
+const onSave = () => {
+    debugger
+    
+}
 </script>
 <style scoped>
 :deep(.ql-toolbar.ql-snow) {
     margin-bottom: 0px;
 }
+
 </style>

@@ -1,0 +1,20 @@
+export default {
+  menu: "Menu",
+  accounts: "Accounts",
+  accountList: "Account List",
+  addAccount: "Add Account",
+  actions: "Actions",
+  delete: "Delete",
+  activate: "Activate",
+  deactivate: "Deactivate",
+  yes: "Yes",
+  no: "No",
+  active: "Active",
+  inactive: "Inactive",
+  loading: "Loading...",
+  creating: "Creating...",
+  save: "Save",
+  cancel: "Cancel",
+  confirm: "Confirm",
+  close: "Close"
+}
