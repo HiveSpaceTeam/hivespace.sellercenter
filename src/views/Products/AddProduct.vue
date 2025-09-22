@@ -124,7 +124,7 @@
                                             <th class="px-5 py-3 text-left w-1/8 sm:px-6">
                                                 <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{
                                                     $t('product.price')
-                                                }}</p>
+                                                    }}</p>
                                             </th>
                                             <th class="px-5 py-3 text-left w-1/8 sm:px-6">
                                                 <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{
@@ -167,7 +167,7 @@
                                             <td class="px-5 py-4 sm:px-6">
                                                 <div class="text-sm text-gray-900 dark:text-white">{{
                                                     admin?.lastUpdatedDate
-                                                }}</div>
+                                                    }}</div>
                                             </td>
 
                                             <!-- Actions -->
@@ -276,22 +276,14 @@ const modules = ref({
         }
     }
 })
-const options = [
-    { value: 'apple', label: 'Apple' },
-    { value: 'banana', label: 'Banana' },
-    { value: 'cherry', label: 'Cherry' },
-    { value: 'date', label: 'Date' },
-    { value: 'elderberry', label: 'Elderberry' },
-    { value: 'graphs', label: 'Graphs' },
-]
 
 const onClickAddNewVariant = () => {
     const defaultVariantValue = {
-        id: (product.value.productVariants?.length ?? 0) + 1,
+        id: crypto.randomUUID(),
         name: "",
         options: [
             {
-                optionId: 1,
+                optionId: crypto.randomUUID(),
                 value: ''
             }
         ]
@@ -304,13 +296,13 @@ const onClickAddNewVariant = () => {
 }
 const onChangeVariantOption = (variantIndex, optionIndex) => {
     if (!product.value?.productVariants?.[variantIndex]?.options) return;
-
-    // Add new empty option if needed
+    let isOptionAdded = false;
     if (optionIndex == product.value.productVariants[variantIndex].options.length - 1) {
         product.value.productVariants[variantIndex].options.push({
-            optionId: optionIndex + 2, // Use optionIndex + 2 to avoid duplicate IDs
+            optionId: crypto.randomUUID(),
             value: ''
         });
+        isOptionAdded = true;
     }
 
     const option = product.value.productVariants[variantIndex].options[optionIndex];
@@ -318,86 +310,55 @@ const onChangeVariantOption = (variantIndex, optionIndex) => {
 
     if (!option?.value) return;
 
-    // Only generate new SKUs if this is a new option value
-    handleAddSku(productVariant, option);
+    updateProductSkus(productVariant, option, isOptionAdded);
 }
 
-const handleAddSku = (productVariant, option) => {
+const updateProductSkus = (productVariant, option, isOptionAdded) => {
     if (!product.value.productSkus) product.value.productSkus = [];
 
-    // Get all variants with valid options
-    const variantsForGeneration = product.value.productVariants.map(v => ({
-        id: v.id,
-        name: v.name,
-        options: (v.id === productVariant.id
-            ? [option] // Only use the current option for this variant
-            : (v.options || []).filter(o => o?.value)) // Filter out empty options
-    })).filter(v => (v.options || []).length > 0);
-
-    // Generate all possible combinations
-    const combinations = generateSkus(variantsForGeneration);
-
-    // Track existing combinations to avoid duplicates
-    const existingKeys = new Set((product.value.productSkus || []).map(sku =>
-        buildCombinationKey(sku.skuVariants || [])
-    ));
-
-    // Add only new combinations
-    combinations.forEach(combo => {
-        const key = buildCombinationKey(combo);
-        if (!existingKeys.has(key)) {
-            product.value.productSkus.push({
-                id: (product.value.productSkus.length || 0) + 1,
-                price: 0,
-                quantity: 0,
-                skuNo: '',
-                skuVariants: combo
-            });
-            existingKeys.add(key);
-        }
-    });
-}
-
-const buildCombinationKey = (combo) => {
-    return (combo || [])
-        .map(i => `${i.variantId}:${i.value}`)
-        .sort()
-        .join('|');
-}
-
-const generateSkus = (variants) => {
-    if (!variants || variants.length === 0) return [];
-
-    const toPairs = (variant) => (variant.options || [])
-        .filter(o => o?.value)
-        .map(o => ({
-            variantId: variant.id,
-            variantName: variant.name,
-            optionId: o.optionId,
-            value: o.value
-        }));
-
-    let result = [[]];
-    for (const variant of variants) {
-        const pairs = toPairs(variant);
-        if (pairs.length === 0) continue;
-
-        const next = [];
-        for (const acc of result) {
-            for (const p of pairs) {
-                // Check if this combination already contains this variant
-                const hasVariant = acc.some(item => item.variantId === p.variantId);
-
-                // Only add if this variant isn't already in the combination
-                if (!hasVariant) {
-                    next.push([...acc, p]);
-                }
+    if (!isOptionAdded) {
+        product.value.productSkus.forEach(productSku => {
+            let foundOption = productSku.skuVariants.find(x => x.optionId == option.optionId)
+            if (foundOption) {
+                foundOption.value = option.value;
             }
-        }
-        result = next;
+        })
+        return;
     }
-    return result;
-}
+
+    // Find all variants
+    const variants = product.value.productVariants || [];
+    // Build an array of arrays of options for each variant
+    const optionsList = variants.map(v => (v.options || []).filter(o => o.value && o.value.trim() !== '' && (o.optionId == option.optionId || productVariant.id !== v.id)));
+    // If any variant has no options, do nothing
+    if (optionsList.some(opts => opts.length === 0)) return;
+
+    // Helper: cartesian product
+    function cartesian(arr) {
+        return arr.reduce((a, b) => a.flatMap(d => b.map(e => [...d, e])), [[]]);
+    }
+
+    // Build all possible combinations
+    const combinations = cartesian(optionsList);
+
+    // Add new SKUs for new combinations
+    combinations.forEach(combo => {
+        // Build skuVariants for this combo
+        const skuVariants = combo.map((o, idx) => ({
+            variantId: variants[idx].id,
+            value: o.value,
+            optionId: o.optionId,
+        }));
+        // Add to productSkus
+        product.value.productSkus.push({
+            id: crypto.randomUUID(),
+            skuVariants,
+        });
+    });
+    product.value.productSkus = product.value.productSkus.filter(productSku => productSku.skuVariants.length === product.value.productVariants.length)
+
+};
+
 
 const getVariantValueBySKU = (productSku, variant) => {
     if (!productSku || !Array.isArray(productSku.skuVariants) || !variant) return '';
