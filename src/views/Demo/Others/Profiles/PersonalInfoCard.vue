@@ -50,15 +50,15 @@
 </template>
 
 <script setup>
-import EditIcon from '@/icons/EditIcon.vue';
-import PersonalInfoDetailModal from './Popups/PersonalInfoDetailModal.vue';
-import { useModal } from '@/composables/useModal';
+import EditIcon from '@/icons/EditIcon.vue'
+import PersonalInfoDetailModal from './Popups/PersonalInfoDetailModal.vue'
+import { useModal } from '@/composables/useModal'
 
-const { openModal } = useModal();
+const { openModal } = useModal()
 const showPersonalInfoModal = () => {
   openModal(PersonalInfoDetailModal, {
     title: 'Edit Personal Information',
-    description: 'Update your details to keep your profile up-to-date.'
-  });
-};
+    description: 'Update your details to keep your profile up-to-date.',
+  })
+}
 </script>

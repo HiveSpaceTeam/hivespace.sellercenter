@@ -1,4 +1,4 @@
-import iconsIndexPlugin from './scripts/eslint-plugin-icons-index';
+import iconsIndexPlugin from './scripts/eslint-plugin-icons-index'
 // Custom rule suggestion:
 // To enforce updating src/icons/index.ts when adding new icon files, consider using eslint-plugin-custom-rules or a script in your CI pipeline.
 // Example: Warn if a .vue file in src/icons is not exported in index.ts
@@ -26,7 +26,7 @@ export default defineConfigWithVueTs(
   pluginVue.configs['flat/essential'],
   vueTsConfigs.recommended,
   skipFormatting,
-  
+
   {
     name: 'app/vue-rules',
     files: ['**/*.vue'],

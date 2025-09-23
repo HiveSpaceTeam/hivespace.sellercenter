@@ -116,14 +116,6 @@ const getTimeArray = (value, unit) => {
   }))
 }
 
-const calcOverlayHeight = () => {
-  if (daysArray.value.length > 0) {
-    const remainingDaysPercentage = daysArray.value[0].remainingPercentage
-    return `${remainingDaysPercentage}%`
-  }
-  return '0%'
-}
-
 const resetTimeArrays = () => {
   daysArray.value = [{ value: '0', visible: true }]
   hoursArray.value = [{ value: '0', visible: true }]

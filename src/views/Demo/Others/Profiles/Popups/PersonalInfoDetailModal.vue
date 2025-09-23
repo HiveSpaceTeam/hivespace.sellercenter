@@ -62,15 +62,14 @@
       <Button variant="primary" type="button" :onClick="saveProfile">Save Changes</Button>
     </div>
   </div>
-
 </template>
 
 <script setup>
-import { reactive } from 'vue';
-import Input from '@/components/common/Input.vue';
-import Button from '@/components/common/Button.vue';
+import { reactive } from 'vue'
+import Input from '@/components/common/Input.vue'
+import Button from '@/components/common/Button.vue'
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close'])
 
 const form = reactive({
   facebook: 'https://www.facebook.com/PimjoHQ',
@@ -82,10 +81,10 @@ const form = reactive({
   email: 'emirhanboruch55@gmail.com',
   phone: '+09 363 398 46',
   bio: 'Team Manager',
-});
+})
 
 function saveProfile() {
   // TODO: Persist personal info edits
-  emit('close');
+  emit('close')
 }
 </script>

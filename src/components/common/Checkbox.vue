@@ -5,7 +5,7 @@
       'flex items-center text-sm font-medium select-none',
       disabled
         ? 'text-gray-400 dark:text-gray-500 cursor-not-allowed opacity-50' // All disabled styles, including opacity
-        : 'text-gray-700 dark:text-gray-400 cursor-pointer' // All enabled styles
+        : 'text-gray-700 dark:text-gray-400 cursor-pointer', // All enabled styles
     ]"
   >
     <div class="relative">
@@ -24,7 +24,7 @@
             ? 'bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-800'
             : modelValue
               ? 'border-brand-500 bg-brand-500'
-              : 'bg-transparent border-gray-300 dark:border-gray-700 hover:border-brand-500 dark:hover:border-brand-500'
+              : 'bg-transparent border-gray-300 dark:border-gray-700 hover:border-brand-500 dark:hover:border-brand-500',
         ]"
       >
         <span :class="modelValue ? '' : 'opacity-0'">
@@ -50,13 +50,16 @@ const props = defineProps({
   id: { type: String, default: '' },
 })
 
-const emits = defineEmits<{ (e: 'update:modelValue', v: boolean): void; (e: 'change', v: boolean): void }>()
+const emits = defineEmits<{
+  (e: 'update:modelValue', v: boolean): void
+  (e: 'change', v: boolean): void
+}>()
 
 const idComputed = computed(() => props.id || `checkbox-${Math.random().toString(36).slice(2, 9)}`)
 const boxBaseClass = 'mr-3 flex h-5 w-5 items-center justify-center rounded-md border-[1.25px]'
 
 function onChange(e: Event) {
-  if (props.disabled) return;
+  if (props.disabled) return
   const target = e.target as HTMLInputElement
   const checked = !!target.checked
   emits('update:modelValue', checked)

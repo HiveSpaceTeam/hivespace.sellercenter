@@ -28,13 +28,22 @@
               <div class="flex flex-wrap items-center gap-4 sm:gap-5">
                 <div v-for="(value, key) in calendarsEvents" :key="key" class="n-chk">
                   <div :class="`form-check form-check-${value} form-check-inline`">
-                    <label class="flex items-center text-sm text-gray-700 form-check-label dark:text-gray-400"
-                      :for="`modal-${key}`">
+                    <label
+                      class="flex items-center text-sm text-gray-700 form-check-label dark:text-gray-400"
+                      :for="`modal-${key}`"
+                    >
                       <span class="relative">
-                        <input type="radio" :name="'event-level'" :value="key" :id="`modal-${key}`" v-model="form.level"
-                          class="sr-only form-check-input" />
+                        <input
+                          type="radio"
+                          :name="'event-level'"
+                          :value="key"
+                          :id="`modal-${key}`"
+                          v-model="form.level"
+                          class="sr-only form-check-input"
+                        />
                         <span
-                          class="flex items-center justify-center w-5 h-5 mr-2 border border-gray-300 rounded-full box dark:border-gray-700">
+                          class="flex items-center justify-center w-5 h-5 mr-2 border border-gray-300 rounded-full box dark:border-gray-700"
+                        >
                           <span class="w-2 h-2 bg-white rounded-full dark:bg-transparent"></span>
                         </span>
                       </span>
@@ -49,20 +58,24 @@
       </div>
     </form>
     <div class="flex items-center gap-3 px-2 mt-6 lg:justify-end">
-      <Button variant="outline" type="button" :onClick="() => emit('close', { action: 'cancel' })">Close</Button>
-      <Button variant="primary" type="button" :onClick="saveEvent">{{ isEdit ? 'Update Changes' : 'Add Event'
+      <Button variant="outline" type="button" :onClick="() => emit('close', { action: 'cancel' })"
+        >Close</Button
+      >
+      <Button variant="primary" type="button" :onClick="saveEvent">{{
+        isEdit ? 'Update Changes' : 'Add Event'
       }}</Button>
-      <Button v-if="isEdit" variant="danger" type="button" :onClick="deleteEvent">Delete Event</Button>
+      <Button v-if="isEdit" variant="danger" type="button" :onClick="deleteEvent"
+        >Delete Event</Button
+      >
     </div>
   </div>
-
 </template>
 
 <script setup>
-import { reactive, computed, defineProps, defineEmits } from 'vue';
-import Input from '@/components/common/Input.vue';
-import Button from '@/components/common/Button.vue';
-import DatePicker from '@/components/common/DatePicker.vue';
+import { reactive, computed, defineProps, defineEmits } from 'vue'
+import Input from '@/components/common/Input.vue'
+import Button from '@/components/common/Button.vue'
+import DatePicker from '@/components/common/DatePicker.vue'
 
 const props = defineProps({
   eventId: { type: String, default: '' },
@@ -72,9 +85,9 @@ const props = defineProps({
   eventLevel: { type: String, default: '' },
   calendarsEvents: { type: Object, required: true },
   mode: { type: String, default: 'create' }, // 'create' | 'edit'
-});
+})
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close'])
 
 const form = reactive({
   id: props.eventId,
@@ -82,9 +95,9 @@ const form = reactive({
   startDate: props.eventStartDate,
   endDate: props.eventEndDate,
   level: props.eventLevel,
-});
+})
 
-const isEdit = computed(() => props.mode === 'edit');
+const isEdit = computed(() => props.mode === 'edit')
 
 function saveEvent() {
   emit('close', {
@@ -96,14 +109,14 @@ function saveEvent() {
       endDate: form.endDate,
       level: form.level,
     },
-  });
+  })
 }
 
 function deleteEvent() {
   emit('close', {
     action: 'delete',
     id: form.id,
-  });
+  })
 }
 </script>
 

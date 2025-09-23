@@ -22,7 +22,12 @@
             </div>
 
             <div>
-              <Input id="profile-instagram" v-model="form.instagram" label="Instagram" type="text" />
+              <Input
+                id="profile-instagram"
+                v-model="form.instagram"
+                label="Instagram"
+                type="text"
+              />
             </div>
           </div>
         </div>
@@ -33,7 +38,12 @@
 
           <div class="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
             <div class="col-span-2 lg:col-span-1">
-              <Input id="profile-firstName" v-model="form.firstName" label="First Name" type="text" />
+              <Input
+                id="profile-firstName"
+                v-model="form.firstName"
+                label="First Name"
+                type="text"
+              />
             </div>
 
             <div class="col-span-2 lg:col-span-1">
@@ -59,20 +69,20 @@
 </template>
 
 <script setup>
-import { reactive, defineProps, defineEmits } from 'vue';
-import Input from '@/components/common/Input.vue';
-import Button from '@/components/common/Button.vue';
+import { reactive, defineProps, defineEmits } from 'vue'
+import Input from '@/components/common/Input.vue'
+import Button from '@/components/common/Button.vue'
 
 defineProps({
   userId: Number,
-  userName: String
-});
+  userName: String,
+})
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close'])
 
 function saveProfile() {
   // TODO: Persist profile edits
-  emit('close');
+  emit('close')
 }
 
 const form = reactive({
@@ -84,7 +94,7 @@ const form = reactive({
   lastName: 'Chowdhury',
   email: 'randomuser@pimjo.com',
   bio: 'Team Manager',
-});
+})
 </script>
 
 <style scoped>

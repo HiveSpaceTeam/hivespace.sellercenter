@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import VueApexCharts from 'vue3-apexcharts'
 
 const series = ref([

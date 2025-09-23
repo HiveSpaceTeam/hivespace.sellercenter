@@ -1,28 +1,22 @@
 <template>
   <div class="w-full max-w-[700px] overflow-y-auto">
-
     <form class="space-y-4" @submit.prevent="onCreate">
       <!-- Full Name Field (Input component) -->
       <div>
         <Input id="adminFullName" v-model="form.fullName" type="text" :label="t('admins.fullName')"
-          :placeholder="t('admins.fullNamePlaceholder')" required @blur="validateFullName"
-          :inputClass="errors.fullName ? 'border-red-500' : ''" />
-        <p v-if="errors.fullName" class="form-error-text">{{ errors.fullName }}</p>
+          :placeholder="t('admins.fullNamePlaceholder')" required :error="errors.fullName" />
       </div>
       <!-- Email Field (Input component) -->
       <div>
         <Input id="adminEmail" v-model="form.email" type="email" :label="t('admins.email')"
-          :placeholder="t('admins.emailPlaceholder')" required @blur="validateEmail" autocomplete="false"
-          :inputClass="errors.email ? 'border-red-500' : ''" />
-        <p v-if="errors.email" class="form-error-text">{{ errors.email }}</p>
+          :placeholder="t('admins.emailPlaceholder')" required :error="errors.email" autocomplete="off" />
       </div>
 
       <!-- Password Field (Input component + append slot for toggle) -->
       <div>
         <Input id="adminPassword" v-model="form.password" :type="showPassword ? 'text' : 'password'"
-          :label="t('admins.password')" :placeholder="t('admins.passwordPlaceholder')"
-          :inputClass="['pr-10', errors.password ? 'border-red-500' : ''].join(' ')" required
-          autocomplete="new-password" @update:modelValue="validatePassword" @blur="validatePassword">
+          :label="t('admins.password')" :placeholder="t('admins.passwordPlaceholder')" inputClass="pr-10" required
+          autocomplete="new-password" :error="errors.password" @update:modelValue="validatePassword">
         <template #append>
           <button type="button" @click="showPassword = !showPassword"
             class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400">
@@ -41,15 +35,13 @@
             <span :class="['text-xs', passwordStrengthTextColor]">{{ passwordStrengthText }}</span>
           </div>
         </div>
-        <p v-if="errors.password" class="form-error-text">{{ errors.password }}</p>
       </div>
 
       <!-- Confirm Password Field (Input component) -->
       <div>
         <Input id="confirmPassword" v-model="form.confirmPassword" :type="showConfirmPassword ? 'text' : 'password'"
           :label="t('admins.confirmPassword')" :placeholder="t('admins.confirmPasswordPlaceholder')" required
-          @blur="validateConfirmPassword"
-          :inputClass="['pr-10', errors.confirmPassword ? 'border-red-500' : ''].join(' ')">
+          inputClass="pr-10" :error="errors.confirmPassword">
         <template #append>
           <button type="button" @click="showConfirmPassword = !showConfirmPassword"
             class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400">
@@ -58,9 +50,6 @@
           </button>
         </template>
         </Input>
-        <p v-if="errors.confirmPassword" class="form-error-text">
-          {{ errors.confirmPassword }}
-        </p>
       </div>
 
       <!-- Admin Type Field (only for System Admins) -->
@@ -88,17 +77,20 @@ import Input from '@/components/common/Input.vue'
 import Button from '@/components/common/Button.vue'
 import Checkbox from '@/components/common/Checkbox.vue'
 import { ShowPasswordIcon, HidePasswordIcon } from '@/icons'
+import type { CreateAdminRequest, ErrorResponse } from '@/types'
+import { useAppStore } from '@/stores/app'
+import { useAdminStore } from '@/stores/admin'
 
 const { t } = useI18n()
+const appStore = useAppStore()
+const adminStore = useAdminStore()
 
-const props = defineProps<{
-  currentUserIsSystemAdmin: boolean,
-  existingEmails?: string[]
+defineProps<{
+  currentUserIsSystemAdmin: boolean
 }>()
 
-type ClosePayload = { action?: 'create' | 'cancel', data?: { email: string, isSystemAdmin: boolean } }
 const emit = defineEmits<{
-  (e: 'close', payload?: ClosePayload): void
+  (e: 'close'): void
 }>()
 
 const form = reactive({
@@ -113,7 +105,7 @@ const errors = reactive({
   email: '',
   fullName: '',
   password: '',
-  confirmPassword: ''
+  confirmPassword: '',
 })
 
 const showPassword = ref(false)
@@ -157,12 +149,114 @@ const passwordStrengthTextColor = computed(() => {
 })
 
 const isFormValid = computed(() => {
-  return !!form.fullName && !!form.email && !!form.password && !!form.confirmPassword &&
-    !errors.fullName && !errors.email && !errors.password && !errors.confirmPassword &&
-    form.password === form.confirmPassword && passwordStrength.value >= 60
+  return (
+    !!form.fullName &&
+    !!form.email &&
+    !!form.password &&
+    !!form.confirmPassword &&
+    !errors.fullName &&
+    !errors.email &&
+    !errors.password &&
+    !errors.confirmPassword &&
+    form.password === form.confirmPassword &&
+    passwordStrength.value >= 60
+  )
 })
 
-function validateEmail() {
+const clearFieldErrors = () => {
+  errors.email = ''
+  errors.fullName = ''
+  errors.password = ''
+  errors.confirmPassword = ''
+}
+
+const handleFieldValidationErrors = (errorData: ErrorResponse): boolean => {
+  if (!errorData?.errors || !Array.isArray(errorData.errors)) {
+    return false
+  }
+
+  let hasFieldErrors = false
+
+  errorData.errors.forEach((err: { code: string; source?: string }) => {
+    const errorCode = err.code
+    const source = err.source
+
+    // Translate with explicit fallback if key is missing
+    const key = `backendErrors.${errorCode}`
+    const translated = t(key)
+    const errorMessage = translated === key ? (t('errors.UNKNOWN_ERROR') as string) : (translated as string)
+
+    // Check if the source exists in errors object (backend returns camelCase)
+    if (source && source in errors) {
+      (errors as Record<string, string>)[source] = errorMessage
+      hasFieldErrors = true
+    }
+  })
+
+  return hasFieldErrors
+}
+
+const showSuccessNotification = (email: string) => {
+  appStore.notifySuccess(
+    t('admins.alerts.success.title'),
+    t('admins.alerts.success.message', { email }),
+  )
+}
+
+const showErrorNotification = () => {
+  appStore.notifyError(
+    t('admins.alerts.error.title'),
+    t('admins.alerts.error.message')
+  )
+}
+
+const validateAllFields = (): boolean => {
+  return validateFullName() && validateEmail() && validatePassword() && validateConfirmPassword()
+}
+
+const createAdminData = (): CreateAdminRequest => {
+  return {
+    fullName: form.fullName.trim(),
+    email: form.email.toLowerCase().trim(),
+    password: form.password,
+    confirmPassword: form.confirmPassword,
+    isSystemAdmin: form.isSystemAdmin,
+  }
+}
+
+const onCreate = async () => {
+  // Clear previous errors and validate all fields
+  clearFieldErrors()
+
+  if (!validateAllFields()) {
+    return
+  }
+
+  const adminData = createAdminData()
+
+  try {
+    // Call the store to create admin (store handles loading)
+    const createdAdmin = await adminStore.createAdmin(adminData)
+
+    // Show success notification and close modal
+    showSuccessNotification(createdAdmin.email)
+    emit('close')
+  } catch (error: unknown) {
+    // Handle API error response (API interceptor returns ErrorResponse directly)
+    const errorData = error as ErrorResponse
+
+    // Try to handle field-specific validation errors first
+    const hasFieldErrors = handleFieldValidationErrors(errorData)
+
+    // If no field errors, show general error notification
+    if (!hasFieldErrors) {
+      showErrorNotification()
+    }
+  }
+}
+
+// Validation functions
+const validateEmail = () => {
   const email = form.email
   if (!email) {
     errors.email = t('admins.emailRequired') as string
@@ -173,15 +267,11 @@ function validateEmail() {
     errors.email = t('admins.emailInvalid') as string
     return false
   }
-  if (props.existingEmails && props.existingEmails.some(e => e.toLowerCase() === email.toLowerCase())) {
-    errors.email = t('admins.emailExists') as string
-    return false
-  }
   errors.email = ''
   return true
 }
 
-function validateFullName() {
+const validateFullName = () => {
   const name = form.fullName?.trim()
   if (!name) {
     errors.fullName = t('admins.fullNameRequired') as string
@@ -191,7 +281,7 @@ function validateFullName() {
   return true
 }
 
-function validatePassword() {
+const validatePassword = () => {
   const password = form.password
   if (!password) {
     errors.password = t('admins.passwordRequired') as string
@@ -213,7 +303,7 @@ function validatePassword() {
   return true
 }
 
-function validateConfirmPassword() {
+const validateConfirmPassword = () => {
   const confirm = form.confirmPassword
   if (!confirm) {
     errors.confirmPassword = t('admins.confirmPasswordRequired') as string
@@ -225,17 +315,5 @@ function validateConfirmPassword() {
   }
   errors.confirmPassword = ''
   return true
-}
-
-function onCreate() {
-  const ok = validateFullName() && validateEmail() && validatePassword() && validateConfirmPassword()
-  if (!ok) return
-  emit('close', {
-    action: 'create',
-    data: {
-      email: form.email,
-      isSystemAdmin: form.isSystemAdmin,
-    }
-  })
 }
 </script>

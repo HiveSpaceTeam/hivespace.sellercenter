@@ -1,5 +1,8 @@
 <template>
-  <label :for="toggleId" class="flex cursor-pointer select-none items-center text-sm font-medium text-gray-700 dark:text-gray-400 gap-4">
+  <label
+    :for="toggleId"
+    class="flex cursor-pointer select-none items-center text-sm font-medium text-gray-700 dark:text-gray-400 gap-4"
+  >
     <div class="relative">
       <input
         type="checkbox"

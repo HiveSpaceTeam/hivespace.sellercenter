@@ -14,7 +14,13 @@
       </ComponentCard>
       <ComponentCard title="Avatar with Offline indicator">
         <div class="flex flex-col items-center justify-center gap-5 sm:flex-row">
-          <Avatar :src="avatarSrc" status="offline" :size="size" v-for="size in sizes" :key="size" />
+          <Avatar
+            :src="avatarSrc"
+            status="offline"
+            :size="size"
+            v-for="size in sizes"
+            :key="size"
+          />
         </div>
       </ComponentCard>
       <ComponentCard title="Avatar with busy indicator">

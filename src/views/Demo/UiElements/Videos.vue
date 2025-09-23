@@ -23,12 +23,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue';
-import AdminLayout from '@/components/layout/AdminLayout.vue';
-import ComponentCard from '@/components/common/ComponentCard.vue';
-import YouTubeEmbed from '@/components/common/YouTubeEmbed.vue';
-const currentPageTitle = ref('Videos');
+import { ref } from 'vue'
+import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
+import AdminLayout from '@/components/layout/AdminLayout.vue'
+import ComponentCard from '@/components/common/ComponentCard.vue'
+import YouTubeEmbed from '@/components/common/YouTubeEmbed.vue'
+const currentPageTitle = ref('Videos')
 </script>
 
 <style></style>

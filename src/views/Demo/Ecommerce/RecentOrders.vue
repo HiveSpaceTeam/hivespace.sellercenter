@@ -1,19 +1,16 @@
 <template>
   <div
-    class="overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6">
+    class="overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6"
+  >
     <div class="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between">
       <div>
         <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Recent Orders</h3>
       </div>
 
       <div class="flex items-center gap-3">
-        <Button :startIcon="FilterIcon" size="sm" variant="outline">
-          Filter
-        </Button>
+        <Button :startIcon="FilterIcon" size="sm" variant="outline"> Filter </Button>
 
-        <Button size="sm" variant="outline">
-          See all
-        </Button>
+        <Button size="sm" variant="outline"> See all </Button>
       </div>
     </div>
 
@@ -36,7 +33,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(product, index) in products" :key="index" class="border-t border-gray-100 dark:border-gray-800">
+          <tr
+            v-for="(product, index) in products"
+            :key="index"
+            class="border-t border-gray-100 dark:border-gray-800"
+          >
             <td class="py-3 whitespace-nowrap">
               <div class="flex items-center gap-3">
                 <div class="h-[50px] w-[50px] overflow-hidden rounded-md">
@@ -46,7 +47,9 @@
                   <p class="font-medium text-gray-800 text-theme-sm dark:text-white/90">
                     {{ product.name }}
                   </p>
-                  <span class="text-gray-500 text-theme-xs dark:text-gray-400">{{ product.variants }} Variants</span>
+                  <span class="text-gray-500 text-theme-xs dark:text-gray-400"
+                    >{{ product.variants }} Variants</span
+                  >
                 </div>
               </div>
             </td>
@@ -57,15 +60,17 @@
               <p class="text-gray-500 text-theme-sm dark:text-gray-400">{{ product.price }}</p>
             </td>
             <td class="py-3 whitespace-nowrap">
-              <span :class="{
-                'rounded-full px-2 py-0.5 text-theme-xs font-medium': true,
-                'bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500':
-                  product.status === 'Delivered',
-                'bg-warning-50 text-warning-600 dark:bg-warning-500/15 dark:text-orange-400':
-                  product.status === 'Pending',
-                'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500':
-                  product.status === 'Canceled',
-              }">
+              <span
+                :class="{
+                  'rounded-full px-2 py-0.5 text-theme-xs font-medium': true,
+                  'bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500':
+                    product.status === 'Delivered',
+                  'bg-warning-50 text-warning-600 dark:bg-warning-500/15 dark:text-orange-400':
+                    product.status === 'Pending',
+                  'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500':
+                    product.status === 'Canceled',
+                }"
+              >
                 {{ product.status }}
               </span>
             </td>
@@ -77,10 +82,9 @@
 </template>
 
 <script setup>
-
-import { ref } from 'vue';
-import Button from '@/components/common/Button.vue';
-import FilterIcon from '@/icons/FilterIcon.vue';
+import { ref } from 'vue'
+import Button from '@/components/common/Button.vue'
+import FilterIcon from '@/icons/FilterIcon.vue'
 
 const products = ref([
   {
@@ -123,5 +127,5 @@ const products = ref([
     price: '$240.00',
     status: 'Delivered',
   },
-]);
+])
 </script>

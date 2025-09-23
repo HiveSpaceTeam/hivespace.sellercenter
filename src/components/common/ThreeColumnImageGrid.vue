@@ -1,6 +1,12 @@
 <template>
   <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-    <img v-for="(src, i) in images" :key="i" :src="src" class="w-full h-auto rounded-lg object-cover" alt="Image" />
+    <img
+      v-for="(src, i) in images"
+      :key="i"
+      :src="src"
+      class="w-full h-auto rounded-lg object-cover"
+      alt="Image"
+    />
   </div>
 </template>
 

@@ -1,0 +1,29 @@
+{
+  "showingResults": "Showing {count} of {total} users",
+  "lastUpdated": "Last updated:",
+  "username": "Username",
+  "email": "Email",
+  "seller": "Seller",
+  "fullName": "Full Name",
+  "status": "Status",
+  "createdDate": "Created Date",
+  "lastLoginDate": "Last Login Date",
+  "actionsColumn": "Actions",
+  "searchPlaceholder": "Search by email...",
+  "loading": "Loading...",
+  "delete": "Delete",
+  "activate": "Activate",
+  "deactivate": "Deactivate",
+  "allStatus": "All Status",
+  "active": "Active",
+  "inactive": "Inactive",
+  "allUsers": "All Users",
+  "sellersOnly": "Sellers Only",
+  "nonSellers": "Non-Sellers",
+  "values": {
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    }
+  }
+}

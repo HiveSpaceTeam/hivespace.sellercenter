@@ -11,26 +11,22 @@
               <!-- Search Input -->
               <div class="w-full sm:w-64">
                 <Input type="text" :value="searchQuery" @input="handleSearchInput"
-                  :placeholder="$t('table.searchPlaceholder')" autocomplete="off" />
+                  :placeholder="$t('users.searchPlaceholder')" autocomplete="off" />
               </div>
 
               <!-- Status Filter -->
               <div class="sm:w-48">
-                <Select v-model="statusFilter" :options="statusOptions"
-                  :buttonClass="'w-full text-left px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white flex justify-between items-center'" />
+                <Select v-model="statusFilter" :options="statusOptions" />
               </div>
 
               <!-- Seller Filter -->
               <div class="sm:w-48">
-                <Select v-model="sellerFilter" :options="sellerOptions"
-                  :buttonClass="'w-full text-left px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white flex justify-between items-center'" />
+                <Select v-model="sellerFilter" :options="sellerOptions" />
               </div>
               <!-- Refresh Button -->
               <div class="sm:ml-auto">
                 <Button :startIcon="RefreshIcon" variant="outline" @click="refreshUsers">
-                  {{
-                    $t('actions.refresh')
-                  }}
+                  {{ $t('common.actions.refresh') }}
                 </Button>
               </div>
             </div>
@@ -39,7 +35,7 @@
           <!-- Loading State -->
           <div v-if="loading" class="p-8 text-center">
             <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-            <p class="mt-2 text-gray-600 dark:text-gray-400">{{ $t('table.loading') }}</p>
+            <p class="mt-2 text-gray-600 dark:text-gray-400">{{ $t('users.loading') }}</p>
           </div>
 
           <!-- Table -->
@@ -48,30 +44,44 @@
               <thead>
                 <tr class="border-b border-gray-200 dark:border-gray-700">
                   <th class="px-5 py-3 text-left w-1/8 sm:px-6">
-                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.username') }}</p>
-                  </th>
-                  <th class="px-5 py-3 text-left w-1/8 sm:px-6">
-                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.fullName') }}</p>
-                  </th>
-                  <th class="px-5 py-3 text-left w-1/8 sm:px-6">
-                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.email') }}</p>
-                  </th>
-                  <th class="px-5 py-3 text-left w-1/8 sm:px-6">
-                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.status') }}</p>
-                  </th>
-                  <th class="px-5 py-3 text-center w-1/8 sm:px-6">
-                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.seller') }}</p>
-                  </th>
-                  <th class="px-5 py-3 text-left w-1/8 sm:px-6">
-                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.createdDate') }}
+                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                      {{ $t('users.username') }}
                     </p>
                   </th>
                   <th class="px-5 py-3 text-left w-1/8 sm:px-6">
-                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.lastLoginDate')
-                    }}</p>
+                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                      {{ $t('users.fullName') }}
+                    </p>
+                  </th>
+                  <th class="px-5 py-3 text-left w-1/8 sm:px-6">
+                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                      {{ $t('users.email') }}
+                    </p>
+                  </th>
+                  <th class="px-5 py-3 text-left w-1/8 sm:px-6">
+                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                      {{ $t('users.status') }}
+                    </p>
                   </th>
                   <th class="px-5 py-3 text-center w-1/8 sm:px-6">
-                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.actions') }}</p>
+                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                      {{ $t('users.seller') }}
+                    </p>
+                  </th>
+                  <th class="px-5 py-3 text-left w-1/8 sm:px-6">
+                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                      {{ $t('users.createdDate') }}
+                    </p>
+                  </th>
+                  <th class="px-5 py-3 text-left w-1/8 sm:px-6">
+                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                      {{ $t('users.lastLoginDate') }}
+                    </p>
+                  </th>
+                  <th class="px-5 py-3 text-center w-1/8 sm:px-6">
+                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                      {{ $t('users.actionsColumn') }}
+                    </p>
                   </th>
                 </tr>
               </thead>
@@ -105,7 +115,8 @@
 
                   <!-- Status -->
                   <td class="px-5 py-4 sm:px-6">
-                    <Badge :size="'sm'" :color="user.status === 'Active' ? 'success' : 'error'">{{ user.status }}
+                    <Badge :size="'sm'" :color="user.status === 'Active' ? 'success' : 'error'">
+                      {{ user.displayStatus }}
                     </Badge>
                   </td>
 
@@ -116,14 +127,16 @@
                     </div>
                   </td>
 
-                  <!-- Created Date -->
+                  <!-- Created Date (field: createdAt) -->
                   <td class="px-5 py-4 sm:px-6">
-                    <div class="text-sm text-gray-900 dark:text-white">{{ user.createdDate }}</div>
+                    <div class="text-sm text-gray-900 dark:text-white">{{ user.createdAt }}</div>
                   </td>
 
-                  <!-- Last Login Date -->
+                  <!-- Last Login Date (field: lastLoginAt) -->
                   <td class="px-5 py-4 sm:px-6">
-                    <div class="text-sm text-gray-900 dark:text-white">{{ user.lastLoginDate }}</div>
+                    <div class="text-sm text-gray-900 dark:text-white">
+                      {{ user.lastLoginAt }}
+                    </div>
                   </td>
                   <!-- Actions -->
                   <td class="px-5 py-4 sm:px-6 text-center">
@@ -157,55 +170,61 @@
         <!-- Footer -->
         <div class="mt-4">
           <div class="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
-            <span>{{ $t('users.showingResults', { count: filteredUsersCount, total: users.length }) }}</span>
+            <span>{{
+              $t('users.showingResults', { count: filteredUsersCount, total: users.length })
+            }}</span>
             <span>{{ $t('users.lastUpdated') }} {{ lastUpdated }}</span>
           </div>
         </div>
       </ComponentCard>
     </div>
-
   </AdminLayout>
 </template>
 
 <script setup lang="ts">
-defineOptions({ name: 'UserManagement' });
-import { computed, ref, onMounted } from "vue";
-import { useI18n } from "vue-i18n";
-import PageBreadcrumb from "@/components/common/PageBreadcrumb.vue";
-import AdminLayout from "@/components/layout/AdminLayout.vue";
-import ComponentCard from "@/components/common/ComponentCard.vue";
-import DropdownMenu from "@/components/common/DropdownMenu.vue";
-import Select from "@/components/common/Select.vue";
+defineOptions({ name: 'UserManagement' })
+import { computed, ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
+import AdminLayout from '@/components/layout/AdminLayout.vue'
+import ComponentCard from '@/components/common/ComponentCard.vue'
+import DropdownMenu from '@/components/common/DropdownMenu.vue'
+import Select from '@/components/common/Select.vue'
 import Button from '@/components/common/Button.vue'
 import Badge from '@/components/common/Badge.vue'
-import Input from '@/components/common/Input.vue';
-import { RefreshIcon, CheckGreenIcon, ToggleOffIcon, ToggleOnIcon, TrashRedIcon, HorizontalDots } from '@/icons'
+import Input from '@/components/common/Input.vue'
+import {
+  RefreshIcon,
+  CheckGreenIcon,
+  ToggleOffIcon,
+  ToggleOnIcon,
+  TrashRedIcon,
+  HorizontalDots,
+} from '@/icons'
+
+const { t } = useI18n()
 
 // Options for the filter selects (i18n-backed)
 const statusOptions = computed(() => [
-  { value: 'all', label: t('table.filter.allStatus') },
-  { value: 'active', label: t('table.filter.active') },
-  { value: 'inactive', label: t('table.filter.inactive') }
-]);
+  { value: 'all', label: t('users.allStatus') },
+  { value: 'active', label: t('users.active') },
+  { value: 'inactive', label: t('users.inactive') },
+])
 
 const sellerOptions = computed(() => [
-  { value: 'all', label: t('table.filter.allUsers') },
-  { value: 'seller', label: t('table.filter.sellersOnly') },
-  { value: 'non-seller', label: t('table.filter.nonSellers') }
-]);
+  { value: 'all', label: t('users.allUsers') },
+  { value: 'seller', label: t('users.sellersOnly') },
+  { value: 'non-seller', label: t('users.nonSellers') },
+])
 
-const { t } = useI18n();
-
-const currentPageTitle = computed(() => t('pages.userManagement'));
+const currentPageTitle = computed(() => t('pages.userManagement'))
 
 // State management
-const loading = ref(false);
-const searchQuery = ref('');
-const statusFilter = ref('all');
-const sellerFilter = ref('all');
-const lastUpdated = ref('');
-
-
+const loading = ref(false)
+const searchQuery = ref('')
+const statusFilter = ref('all')
+const sellerFilter = ref('all')
+const lastUpdated = ref('')
 
 // Sample users data - in real app this would come from API
 const users = ref([
@@ -216,9 +235,9 @@ const users = ref([
     email: 'john.doe@example.com',
     hasSeller: true,
     status: 'Active',
-    createdDate: '2024-01-15',
-    lastLoginDate: '2024-03-20',
-    avatar: '/images/user/user-01.jpg'
+    createdAt: '2024-01-15',
+    lastLoginAt: '2024-03-20',
+    avatar: '/images/user/user-01.jpg',
   },
   {
     id: 2,
@@ -227,9 +246,9 @@ const users = ref([
     email: 'jane.smith@example.com',
     hasSeller: false,
     status: 'Active',
-    createdDate: '2024-02-03',
-    lastLoginDate: '2024-03-19',
-    avatar: '/images/user/user-02.jpg'
+    createdAt: '2024-02-03',
+    lastLoginAt: '2024-03-19',
+    avatar: '/images/user/user-02.jpg',
   },
   {
     id: 3,
@@ -238,9 +257,9 @@ const users = ref([
     email: 'mike.brown@example.com',
     hasSeller: true,
     status: 'Inactive',
-    createdDate: '2023-12-10',
-    lastLoginDate: '2024-02-28',
-    avatar: '/images/user/user-03.jpg'
+    createdAt: '2023-12-10',
+    lastLoginAt: '2024-02-28',
+    avatar: '/images/user/user-03.jpg',
   },
   {
     id: 4,
@@ -249,9 +268,9 @@ const users = ref([
     email: 'sarah.wilson@example.com',
     hasSeller: true,
     status: 'Active',
-    createdDate: '2024-01-28',
-    lastLoginDate: '2024-03-21',
-    avatar: '/images/user/user-04.jpg'
+    createdAt: '2024-01-28',
+    lastLoginAt: '2024-03-21',
+    avatar: '/images/user/user-04.jpg',
   },
   {
     id: 5,
@@ -260,48 +279,53 @@ const users = ref([
     email: 'david.lee@example.com',
     hasSeller: false,
     status: 'Active',
-    createdDate: '2024-02-14',
-    lastLoginDate: '2024-03-18',
-    avatar: '/images/user/user-05.jpg'
-  }
-]);
+    createdAt: '2024-02-14',
+    lastLoginAt: '2024-03-18',
+    avatar: '/images/user/user-05.jpg',
+  },
+])
 
 // Computed properties
 const filteredUsers = computed(() => {
-  let filtered = users.value;
+  let filtered = users.value
 
   if (searchQuery.value) {
-    const query = searchQuery.value.toLowerCase();
-    filtered = filtered.filter(user =>
-      user.username.toLowerCase().includes(query) ||
-      user.fullName.toLowerCase().includes(query) ||
-      user.email.toLowerCase().includes(query)
-    );
+    const query = searchQuery.value.toLowerCase()
+    filtered = filtered.filter(
+      (user) =>
+        user.username.toLowerCase().includes(query) ||
+        user.fullName.toLowerCase().includes(query) ||
+        user.email.toLowerCase().includes(query),
+    )
   }
 
   if (statusFilter.value !== 'all') {
-    const status = statusFilter.value === 'active' ? 'Active' : 'Inactive';
-    filtered = filtered.filter(user => user.status === status);
+    const status = statusFilter.value === 'active' ? 'Active' : 'Inactive'
+    filtered = filtered.filter((user) => user.status === status)
   }
 
   if (sellerFilter.value !== 'all') {
-    const isSeller = sellerFilter.value === 'seller';
-    filtered = filtered.filter(user => user.hasSeller === isSeller);
+    const isSeller = sellerFilter.value === 'seller'
+    filtered = filtered.filter((user) => user.hasSeller === isSeller)
   }
 
-  return filtered;
-});
+  // Map to display format with i18n values
+  return filtered.map((user) => ({
+    ...user,
+    displayStatus: user.status === 'Active'
+      ? t('users.values.status.active')
+      : t('users.values.status.inactive'),
+  }))
+})
 
-const filteredUsersCount = computed(() => filteredUsers.value.length);
-
-
+const filteredUsersCount = computed(() => filteredUsers.value.length)
 
 // Event handlers
 // Dropdown menu component used per-row (handled in template)
 
-const actionDelete = computed(() => t('actions.delete'))
-const actionActivate = computed(() => t('actions.activate'))
-const actionDeactivate = computed(() => t('actions.deactivate'))
+const actionDelete = computed(() => t('common.actions.delete'))
+const actionActivate = computed(() => t('common.actions.activate'))
+const actionDeactivate = computed(() => t('common.actions.deactivate'))
 
 // Accept either an id (number) or a user object { id }
 const handleDeleteUser = (userOrId: number | { id: number }) => {
@@ -345,26 +369,24 @@ function handleSearchInput(e: Event) {
 // Filters are bound via v-model on Select; no manual handlers required here.
 
 const refreshUsers = () => {
-  loading.value = true;
+  loading.value = true
   // Simulate API refresh
   setTimeout(() => {
-    loading.value = false;
-    updateLastUpdated();
-    console.log('Users refreshed');
-  }, 1000);
-};
+    loading.value = false
+    updateLastUpdated()
+    console.log('Users refreshed')
+  }, 1000)
+}
 
 const updateLastUpdated = () => {
-  lastUpdated.value = new Date().toLocaleString();
-};
-
-
+  lastUpdated.value = new Date().toLocaleString()
+}
 
 // Lifecycle
 onMounted(() => {
-  updateLastUpdated();
-  console.log('UserManagement component mounted');
-});
+  updateLastUpdated()
+  console.log('UserManagement component mounted')
+})
 
 // small template-facing wrappers
 function handleDelete(user: { id: number }) {

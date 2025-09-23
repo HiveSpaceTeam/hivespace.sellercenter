@@ -1,7 +1,17 @@
 <template>
   <div class="flex flex-col gap-5">
-    <RadioGroup v-model="selectedRadio1" :options="radioOptions1" name="radioGroupExample1" direction="horizontal" />
-    <RadioGroup v-model="selectedRadio2" :options="radioOptions2" name="radioGroupExample2" direction="vertical" />
+    <RadioGroup
+      v-model="selectedRadio1"
+      :options="radioOptions1"
+      name="radioGroupExample1"
+      direction="horizontal"
+    />
+    <RadioGroup
+      v-model="selectedRadio2"
+      :options="radioOptions2"
+      name="radioGroupExample2"
+      direction="vertical"
+    />
     <!-- New single Radio for demo -->
     <div>
       <Radio v-model="selectedSingleRadio" value="single" name="singleRadioExample">

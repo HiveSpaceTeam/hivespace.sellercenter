@@ -6,15 +6,23 @@
         Select Input
       </label>
       <div class="">
-        <Select v-model="singleSelect" :options="options"
+        <Select
+          v-model="singleSelect"
+          :options="options"
           :buttonClass="'h-11 w-full text-left px-4 py-2.5 border rounded-lg bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white flex justify-between items-center'"
-          placeholder="Select Option" />
+          placeholder="Select Option"
+        />
       </div>
     </div>
 
     <!-- Multiple Select Input -->
     <div>
-      <MultipleSelect v-model="selectedItems" :options="options" class="w-full" label="Multi select"/>
+      <MultipleSelect
+        v-model="selectedItems"
+        :options="options"
+        class="w-full"
+        label="Multi select"
+      />
     </div>
   </div>
 </template>

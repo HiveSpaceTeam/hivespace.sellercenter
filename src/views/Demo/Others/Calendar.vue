@@ -1,7 +1,9 @@
 <template>
   <AdminLayout>
     <PageBreadcrumb :pageTitle="currentPageTitle" />
-    <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+    <div
+      class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
+    >
       <div class="custom-calendar">
         <FullCalendar ref="calendarRef" class="min-h-screen" :options="calendarOptions" />
       </div>
@@ -111,39 +113,47 @@
 </template>
 
 <script setup lang="ts">
-import AdminLayout from '@/components/layout/AdminLayout.vue';
-import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue';
+import AdminLayout from '@/components/layout/AdminLayout.vue'
+import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
 
-const currentPageTitle = ref('Calendar');
-import { ref, reactive, onMounted, watch } from 'vue';
-import FullCalendar from '@fullcalendar/vue3';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import type { CalendarOptions, EventClickArg, DateSelectArg, EventContentArg, EventInput } from '@fullcalendar/core';
-import { useModal } from '@/composables/useModal';
-import EventDetailModal from '@/views/Demo/Others/Popups/EventDetailModal.vue';
+const currentPageTitle = ref('Calendar')
+import { ref, reactive, onMounted, watch } from 'vue'
+import FullCalendar from '@fullcalendar/vue3'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import timeGridPlugin from '@fullcalendar/timegrid'
+import interactionPlugin from '@fullcalendar/interaction'
+import type {
+  CalendarOptions,
+  EventClickArg,
+  DateSelectArg,
+  EventContentArg,
+  EventInput,
+} from '@fullcalendar/core'
+import { useModal } from '@/composables/useModal'
+import EventDetailModal from '@/views/Demo/Others/Popups/EventDetailModal.vue'
 
-const calendarRef = ref(null);
-type CalendarLevel = 'Danger' | 'Success' | 'Primary' | 'Warning' | string;
-interface EventExtProps { calendar: CalendarLevel }
-interface EventItem {
-  id: string;
-  title: string;
-  start: string;
-  end?: string;
-  allDay?: boolean;
-  extendedProps: EventExtProps;
+const calendarRef = ref(null)
+type CalendarLevel = 'Danger' | 'Success' | 'Primary' | 'Warning' | string
+interface EventExtProps {
+  calendar: CalendarLevel
 }
-const events = ref<EventInput[]>([]);
-const { openModal } = useModal();
+interface EventItem {
+  id: string
+  title: string
+  start: string
+  end?: string
+  allDay?: boolean
+  extendedProps: EventExtProps
+}
+const events = ref<EventInput[]>([])
+const { openModal } = useModal()
 
 const calendarsEvents = reactive({
   Danger: 'danger',
   Success: 'success',
   Primary: 'primary',
   Warning: 'warning',
-});
+})
 
 onMounted(() => {
   events.value = [
@@ -166,17 +176,29 @@ onMounted(() => {
       end: new Date(Date.now() + 259200000).toISOString().split('T')[0],
       extendedProps: { calendar: 'Primary' },
     },
-  ];
-});
+  ]
+})
 
-interface OpenEventPayload { mode: 'create' | 'edit'; data?: Partial<EventItem> }
+interface OpenEventPayload {
+  mode: 'create' | 'edit'
+  data?: Partial<EventItem>
+}
 type ModalResult =
-  | { action: 'save'; data: { id?: string; title: string; startDate: string; endDate?: string; level: CalendarLevel } }
+  | {
+      action: 'save'
+      data: {
+        id?: string
+        title: string
+        startDate: string
+        endDate?: string
+        level: CalendarLevel
+      }
+    }
   | { action: 'delete'; id: string }
-  | { action: 'cancel' };
+  | { action: 'cancel' }
 
 async function openEventModal(payload: OpenEventPayload) {
-  const data = payload.data ?? {};
+  const data = payload.data ?? {}
   const result = await openModal(EventDetailModal, {
     title: payload.mode === 'edit' ? 'Edit Event' : 'Add Event',
     description: 'Plan your next big moment: schedule or edit an event to stay on track',
@@ -187,16 +209,18 @@ async function openEventModal(payload: OpenEventPayload) {
     eventEndDate: data.end || '',
     eventLevel: data.extendedProps?.calendar || '',
     calendarsEvents,
-  });
+  })
 
-  if (!result || typeof result !== 'object') return;
-  const r = result as ModalResult;
+  if (!result || typeof result !== 'object') return
+  const r = result as ModalResult
   if (r.action === 'save') {
-    const { id, title, startDate, endDate, level } = r.data;
+    const { id, title, startDate, endDate, level } = r.data
     if (payload.mode === 'edit' && id) {
       events.value = events.value.map((ev) =>
-        ev.id === id ? { ...ev, title, start: startDate, end: endDate, extendedProps: { calendar: level } } : ev,
-      );
+        ev.id === id
+          ? { ...ev, title, start: startDate, end: endDate, extendedProps: { calendar: level } }
+          : ev,
+      )
     } else {
       events.value.push({
         id: Date.now().toString(),
@@ -205,10 +229,10 @@ async function openEventModal(payload: OpenEventPayload) {
         end: endDate,
         allDay: true,
         extendedProps: { calendar: level },
-      });
+      })
     }
   } else if (r.action === 'delete') {
-    events.value = events.value.filter((ev) => ev.id !== r.id);
+    events.value = events.value.filter((ev) => ev.id !== r.id)
   } // cancel -> no-op
 }
 
@@ -216,11 +240,11 @@ const handleDateSelect = (selectInfo: DateSelectArg) => {
   openEventModal({
     mode: 'create',
     data: { start: selectInfo.startStr, end: selectInfo.endStr || selectInfo.startStr },
-  });
-};
+  })
+}
 
 const handleEventClick = (clickInfo: EventClickArg) => {
-  const ev = clickInfo.event;
+  const ev = clickInfo.event
   openEventModal({
     mode: 'edit',
     data: {
@@ -229,14 +253,17 @@ const handleEventClick = (clickInfo: EventClickArg) => {
       start: ev.start ? ev.start.toISOString().split('T')[0] : '',
       end: ev.end ? ev.end.toISOString().split('T')[0] : '',
       // extendedProps is Dictionary in types; safely coerce
-      extendedProps: { calendar: (ev.extendedProps as unknown as EventExtProps)?.calendar as CalendarLevel },
+      extendedProps: {
+        calendar: (ev.extendedProps as unknown as EventExtProps)?.calendar as CalendarLevel,
+      },
     },
-  });
-};
+  })
+}
 
 const renderEventContent = (eventInfo: EventContentArg) => {
-  const level = ((eventInfo.event.extendedProps as unknown as EventExtProps)?.calendar as string) || '';
-  const colorClass = `fc-bg-${level.toLowerCase()}`;
+  const level =
+    ((eventInfo.event.extendedProps as unknown as EventExtProps)?.calendar as string) || ''
+  const colorClass = `fc-bg-${level.toLowerCase()}`
   return {
     html: `
       <div class="event-fc-color flex fc-event-main ${colorClass} p-1 rounded-sm">
@@ -245,8 +272,8 @@ const renderEventContent = (eventInfo: EventContentArg) => {
         <div class="fc-event-title">${eventInfo.event.title}</div>
       </div>
     `,
-  };
-};
+  }
+}
 
 const calendarOptions = reactive<CalendarOptions>({
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
@@ -267,9 +294,9 @@ const calendarOptions = reactive<CalendarOptions>({
       click: () => openEventModal({ mode: 'create' }),
     },
   },
-});
+})
 
 watch(events, (val) => {
-  calendarOptions.events = (val as EventInput[]);
-});
+  calendarOptions.events = val as EventInput[]
+})
 </script>
