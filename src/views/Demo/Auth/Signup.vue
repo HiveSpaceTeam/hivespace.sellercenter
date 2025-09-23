@@ -115,7 +115,7 @@
                     >
                       Password<span class="text-error-500">*</span>
                     </label>
-                      <div class="relative">
+                    <div class="relative">
                       <input
                         v-model="password"
                         :type="showPassword ? 'text' : 'password'"
@@ -154,9 +154,9 @@
                             "
                             class="mr-3 flex h-5 w-5 items-center justify-center rounded-md border-[1.25px]"
                           >
-                              <span :class="agreeToTerms ? '' : 'opacity-0'">
-                                <CheckIcon />
-                              </span>
+                            <span :class="agreeToTerms ? '' : 'opacity-0'">
+                              <CheckIcon />
+                            </span>
                           </div>
                         </div>
                         <p class="inline-block font-normal text-gray-500 dark:text-gray-400">

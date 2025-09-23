@@ -4,9 +4,7 @@
     <form class="flex flex-col">
       <div class="custom-scrollbar overflow-y-auto p-2">
         <div>
-          <h5 class="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
-            Address
-          </h5>
+          <h5 class="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">Address</h5>
 
           <div class="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
             <div>
@@ -14,11 +12,21 @@
             </div>
 
             <div>
-              <Input id="address-citystate" v-model="form.cityState" label="City/State" type="text" />
+              <Input
+                id="address-citystate"
+                v-model="form.cityState"
+                label="City/State"
+                type="text"
+              />
             </div>
 
             <div>
-              <Input id="address-postal" v-model="form.postalCode" label="Postal Code" type="text" />
+              <Input
+                id="address-postal"
+                v-model="form.postalCode"
+                label="Postal Code"
+                type="text"
+              />
             </div>
 
             <div>
@@ -38,22 +46,22 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue';
-import Input from '@/components/common/Input.vue';
-import Button from '@/components/common/Button.vue';
+import { reactive } from 'vue'
+import Input from '@/components/common/Input.vue'
+import Button from '@/components/common/Button.vue'
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close'])
 
 const form = reactive({
   country: 'United States',
   cityState: 'Phoenix, Arizona, United States',
   postalCode: 'ERT 2489',
   taxId: 'AS4568384',
-});
+})
 
 function saveAddress() {
   // TODO: Persist address edits
-  emit('close');
+  emit('close')
 }
 </script>
 

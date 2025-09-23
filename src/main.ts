@@ -1,4 +1,4 @@
-import '@vueup/vue-quill/dist/vue-quill.snow.css';
+import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import './assets/main.css'
 // Import Swiper styles
 import 'swiper/css'
@@ -14,9 +14,13 @@ import { createApp } from 'vue'
 import App from '@/App.vue'
 import router from '@/router'
 import VueApexCharts from 'vue3-apexcharts'
+import { createPinia } from 'pinia'
 
 const app = createApp(App)
 const vfm = createVfm()
+const pinia = createPinia()
+
+app.use(pinia)
 app.use(vfm)
 app.use(router)
 app.use(i18n)

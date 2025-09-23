@@ -43,13 +43,13 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue';
-import AdminLayout from '@/components/layout/AdminLayout.vue';
-import ComponentCard from '@/components/common/ComponentCard.vue';
-import Button from '@/components/common/Button.vue';
-import { BoxIcon } from '@/icons';
-const currentPageTitle = ref('Buttons');
+import { ref } from 'vue'
+import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
+import AdminLayout from '@/components/layout/AdminLayout.vue'
+import ComponentCard from '@/components/common/ComponentCard.vue'
+import Button from '@/components/common/Button.vue'
+import { BoxIcon } from '@/icons'
+const currentPageTitle = ref('Buttons')
 </script>
 
 <style></style>

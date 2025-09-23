@@ -11,7 +11,9 @@
 
       <!-- Icons Grid -->
       <div class="bg-white dark:bg-gray-900 rounded-lg shadow-md p-6">
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
+        <div
+          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4"
+        >
           <div
             v-for="(icon, name) in icons"
             :key="name"
@@ -19,10 +21,14 @@
             class="flex flex-col items-center justify-center p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors duration-200 group"
             :title="`Click to copy: ${name}`"
           >
-            <div class="w-8 h-8 mb-2 text-gray-600 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
+            <div
+              class="w-8 h-8 mb-2 text-gray-600 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200"
+            >
               <component :is="icon" />
             </div>
-            <span class="text-xs text-gray-500 dark:text-gray-400 text-center break-all group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
+            <span
+              class="text-xs text-gray-500 dark:text-gray-400 text-center break-all group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200"
+            >
               {{ name }}
             </span>
           </div>
@@ -82,7 +88,7 @@ const copyIconName = async (iconName: string) => {
     textArea.select()
     document.execCommand('copy')
     document.body.removeChild(textArea)
-    
+
     showToast.value = true
     setTimeout(() => {
       showToast.value = false

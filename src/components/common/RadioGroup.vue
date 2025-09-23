@@ -19,13 +19,15 @@ import { computed } from 'vue'
 import Radio from './Radio.vue'
 
 const props = defineProps<{
-  modelValue: string | number | boolean | null;
-  options: { label: string; value: string | number; disabled?: boolean }[]; // Added disabled to option interface
-  name?: string;
-  direction?: 'vertical' | 'horizontal';
-}>();
+  modelValue: string | number | boolean | null
+  options: { label: string; value: string | number; disabled?: boolean }[] // Added disabled to option interface
+  name?: string
+  direction?: 'vertical' | 'horizontal'
+}>()
 
-const emit = defineEmits(['update:modelValue']);
+defineEmits(['update:modelValue'])
 
-const groupName = computed(() => props.name || `radio-group-${Math.random().toString(36).substring(2, 9)}`);
+const groupName = computed(
+  () => props.name || `radio-group-${Math.random().toString(36).substring(2, 9)}`,
+)
 </script>
