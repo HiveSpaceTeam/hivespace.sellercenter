@@ -34,9 +34,30 @@ const router = createRouter({
         },
       ],
     },
+  {
+      path: '/product',
+      children: [
+        {
+          path: '',
+          redirect: '/product/list',
+        },
+        {
+          path: 'list',
+          name: 'List product',
+          component: () => import('@/views/Products/ProductList.vue'),
+          meta: { title: 'User management' },
+        },
+        {
+          path: 'new',
+          name: 'New Product',
+          component: () => import('@/views/Products/AddProduct.vue'),
+          meta: { title: 'Admin management' },
+        },
+      ],
+    },
     {
       path: '/',
-      redirect: '/account/user-management',
+      redirect: '/product/list',
     },
     ...demoRoutes,
   ],

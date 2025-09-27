@@ -15,6 +15,7 @@ import viUsers from './locales/vi/users.json'
 import viPages from './locales/vi/pages.json'
 import viErrors from './locales/vi/errors.json'
 import viBackendErrors from './locales/vi/backend-errors.json'
+import viProduct from './locales/vi/product.json'
 
 // Merge translations for each language
 const en = {
@@ -28,6 +29,7 @@ const en = {
 
 const vi = {
   common: viCommon,
+  product: viProduct,
   admins: viAdmins,
   users: viUsers,
   pages: viPages,
