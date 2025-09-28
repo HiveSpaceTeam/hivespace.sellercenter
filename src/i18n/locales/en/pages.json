@@ -17,5 +17,10 @@
   },
   "common": {
     "backHome": "Back to Home Page"
+  },
+  "default": {
+    "welcome": "Welcome to HiveSpace Seller Center. This is the home page placeholder.",
+    "signIn": "Sign in",
+    "signUp": "Sign up"
   }
 }

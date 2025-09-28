@@ -11,13 +11,12 @@
 
     <div class="mx-auto w-full max-w-[242px] text-center sm:max-w-[562px]">
       <img src="/images/logo/logo-light.svg" alt="home" class="w-full h-auto" />
-      <p class="mt-10 mb-6 text-base text-gray-700 dark:text-gray-400 sm:text-lg"> Welcome to HiveSpace Seller Center.
-        This is the home page placeholder. </p>
+      <p class="mt-10 mb-6 text-base text-gray-700 dark:text-gray-400 sm:text-lg"> {{ t('pages.default.welcome') }} </p>
       <Button :disabled="isSigningIn" @click="signIn" variant="primary">
-        Sign in
+        {{ t('pages.default.signIn') }}
       </Button>
       <Button class="ml-4" @click="signIn" variant="outline">
-        Sign up
+        {{ t('pages.default.signUp') }}
       </Button>
     </div>
 
@@ -32,9 +31,11 @@ import { useRouter } from 'vue-router'
 import Button from '@/components/common/Button.vue'
 import { onMounted, ref } from 'vue'
 import type { AppUser } from '@/types/app-user'
+import { useI18n } from 'vue-i18n'
 
 const router = useRouter()
 const isSigningIn = ref(false)
+const { t } = useI18n()
 
 // Helper: check current local user once and navigate to account if present.
 async function checkUserAndRedirect(): Promise<AppUser | null> {
