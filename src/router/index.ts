@@ -89,7 +89,6 @@ router.beforeEach(async (to, from, next) => {
     return
   }
 
-  // If visiting root and a local user exists, send them to user management.
   if (to.path === '/') {
     next()
     return

@@ -18,37 +18,10 @@ const userManager = new UserManager(oidcSettings)
 
 // Helper: persist an updated user object into the same WebStorageStateStore
 // used by the UserManager so the library's getUser() returns the rotated tokens.
-export async function storeUpdatedUser(appUser: AppUser): Promise<void> {
+export async function storeUpdatedUser(user: User): Promise<void> {
   try {
-    const authority = String(oidcSettings.authority)
-    const clientId = String(oidcSettings.client_id)
-
-    // The oidc-client-ts WebStorageStateStore prepends its own prefix (usually 'oidc.')
-    // to keys passed into set(). The library expects a key of the form
-    //   'user:{authority}:{clientId}'
-    // and will store it as 'oidc.user:{authority}:{clientId}'. If we write a key
-    // that already includes the 'oidc.' prefix (for example 'oidc.user:...') the
-    // store implementation will add another 'oidc.' resulting in a double-prefixed
-    // key like 'oidc.oidc.user:...'. To avoid creating duplicates, pass the base
-    // key (without the 'oidc.' prefix) to store.set().
-    const storageKeyBase = `user:${authority}:${clientId}`
-
-    // Access the configured userStore (fall back to a localStorage store)
-    // The UserManager exposes its settings via userManager.settings
-    const store = (userManager.settings?.userStore ?? new WebStorageStateStore({ store: window.localStorage })) as WebStorageStateStore
-
-    // WebStorageStateStore expects set(key, value) where it will prefix the key.
-    await store.set(storageKeyBase, JSON.stringify(appUser))
-
-    // Cleanup: remove any accidentally created double-prefixed key from older runs.
-    try {
-      const doublePrefixed = `oidc.oidc.user:${authority}:${clientId}`
-      if (window?.localStorage?.getItem(doublePrefixed)) {
-        window.localStorage.removeItem(doublePrefixed)
-      }
-    } catch {
-      // ignore localStorage access errors
-    }
+    // Persist the full OIDC User (including tokens/metadata) in the configured store
+    await userManager.storeUser(user)
   } catch (err) {
     // Best-effort; do not throw. Log for diagnostics.
     console.error('storeUpdatedUser failed', err)

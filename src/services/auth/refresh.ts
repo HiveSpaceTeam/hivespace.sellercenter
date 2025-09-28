@@ -16,10 +16,15 @@ export async function refreshTokenIfNeeded(user: AppUser | null): Promise<AppUse
     if (!user) return null
 
     const now = Math.floor(Date.now() / 1000)
-    const expiresAt = (user.expires_at as number) || Math.floor((user.expires_in as number || 0) + now)
+
+    // Treat stored expires_at as the authoritative expiry when present.
+    // Coerce to number and treat missing/non-numeric values as expired so we
+    // attempt a refresh immediately.
+    const priorExpiresAt = Number(user.expires_at)
+    const expiresAt = Number.isFinite(priorExpiresAt) ? priorExpiresAt : NaN
 
     // If token is valid for at least 60 more seconds, no action
-    if (expiresAt - now > 60) return user
+    if (Number.isFinite(expiresAt) && expiresAt - now > 60) return user
 
     const refreshToken = (user.refresh_token as string) || undefined
     if (!refreshToken) return null
@@ -55,13 +60,23 @@ export async function refreshTokenIfNeeded(user: AppUser | null): Promise<AppUse
 
         const data = (await resp.json()) as TokenResponse
 
+        // Build the updated user. Only set a new expires_at when the server
+        // returned a fresh expires_in value. Otherwise carry forward the prior
+        // numeric expires_at (if any) and do not recompute it from previously
+        // persisted expires_in which would incorrectly extend lifetime.
+        const newExpiresIn = typeof data.expires_in === 'number' ? data.expires_in : (user.expires_in as number | undefined)
+        const newExpiresAt = typeof data.expires_in === 'number'
+            ? Math.floor(Date.now() / 1000) + data.expires_in
+            : (Number.isFinite(priorExpiresAt) ? priorExpiresAt : undefined)
+
         const updatedUser: AppUser = {
             ...user,
             access_token: data.access_token || (user as unknown as Record<string, string>)['access_token'],
             refresh_token: data.refresh_token || (user as unknown as Record<string, string>)['refresh_token'],
             id_token: data.id_token || (user as unknown as Record<string, string>)['id_token'],
-            expires_in: data.expires_in || (user.expires_in as number | undefined),
-            expires_at: Math.floor(Date.now() / 1000) + (data.expires_in || (user.expires_in as number || 0)),
+            expires_in: newExpiresIn,
+            // expires_at may be undefined when there's no authoritative expiry
+            expires_at: newExpiresAt as unknown as number | undefined,
         } as AppUser
 
         try {
