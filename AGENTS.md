@@ -101,7 +101,7 @@ The `npm run type-check` command currently fails with 11 errors. **This is expec
 **Workaround**: These are primarily in demo/example files. Fix only if working on those specific components.
 
 #### Dev Server Port
-If port 5174 is busy, Vite automatically uses 5174. This is normal behavior.
+Vite automatically uses 5174
 
 ### Environment Setup
 

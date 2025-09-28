@@ -22,8 +22,19 @@ onMounted(async () => {
     let redirectTo = userState?.redirectTo ?? '/'
 
     // Sanitize redirectTo: only allow internal paths starting with '/'
-    if (typeof redirectTo !== 'string' || !redirectTo.startsWith('/') || redirectTo.includes('//')) {
+    if (typeof redirectTo !== 'string') {
       redirectTo = '/'
+    } else {
+      try {
+        const url = new URL(redirectTo, window.location.origin)
+        if (url.origin !== window.location.origin || !url.pathname.startsWith('/')) {
+          redirectTo = '/'
+        } else {
+          redirectTo = `${url.pathname}${url.search}${url.hash}`
+        }
+      } catch {
+        redirectTo = '/'
+      }
     }
 
     router.replace(redirectTo)

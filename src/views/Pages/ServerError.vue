@@ -13,8 +13,9 @@
       <h1 class="mb-8 font-bold text-gray-800 text-title-md dark:text-white/90 xl:text-title-2xl"> ERROR </h1>
       <img src="/images/error/500.svg" alt="500" class="dark:hidden" />
       <img src="/images/error/500-dark.svg" alt="500" class="hidden dark:block" />
-      <p class="mt-10 mb-6 text-base text-gray-700 dark:text-gray-400 sm:text-lg"> We can’t seem to find the page you
-        are looking for! </p>
+      <p class="mt-10 mb-6 text-base text-gray-700 dark:text-gray-400 sm:text-lg">
+        Something went wrong on our end. Please try again in a moment or contact support if the issue persists.
+      </p>
       <a href="/"
         class="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-5 py-3.5 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
         Back to home page </a>

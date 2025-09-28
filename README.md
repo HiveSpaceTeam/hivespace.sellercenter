@@ -85,7 +85,7 @@ Before getting started, ensure you have the following installed:
    ```bash
    npm run dev
    ```
-   Server runs on `http://localhost:5174` (or 5174 if 5174 is busy)
+   Server runs on `http://localhost:5174`
 
 ### 🔧 Available Commands
 
