@@ -54,7 +54,6 @@ export const login = (): Promise<void> => {
   return userManager.signinRedirect()
 }
 
-
 export const logout = (redirectTo?: string, useState = true): Promise<void> => {
   const defaultPostLogout = config.auth.oidc.postLogoutRedirectUri
 

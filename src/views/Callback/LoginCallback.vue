@@ -9,7 +9,6 @@ import { useRouter } from 'vue-router';
 import { handleLoginCallback, logout } from '@/auth/user-manager';
 
 const router = useRouter();
-
 onMounted(async () => {
   try {
     const result = await handleLoginCallback();

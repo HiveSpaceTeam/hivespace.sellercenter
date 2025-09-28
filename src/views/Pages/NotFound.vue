@@ -22,7 +22,6 @@
 </template>
 
 <script setup lang="ts">
-// Presentational 404 page — no script logic required
 </script>
 
 <style scoped>
