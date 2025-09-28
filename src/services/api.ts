@@ -1,4 +1,6 @@
-import { getCurrentUser, login } from '@/auth/user-manager'
+import { getCurrentUser, login, logout } from '@/auth/user-manager'
+import refreshTokenIfNeeded from '@/services/auth/refresh'
+import type { AppUser } from '@/types/app-user'
 import axios from 'axios'
 import type {
   AxiosInstance,
@@ -51,15 +53,43 @@ const generateCorrelationId = (): string =>
 // Simple retry utility
 const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms))
 
+// Helper: ensure currentUser is fresh or trigger logout when refresh is rejected
+const ensureFreshUser = async (user: AppUser | null): Promise<AppUser | null> => {
+  try {
+    const refreshed = await refreshTokenIfNeeded(user)
+    if (refreshed) return refreshed
+
+    // refreshTokenIfNeeded returned null. If we had a refresh_token, this likely
+    // indicates the refresh grant was rejected (invalid_grant). Force logout.
+    if (user?.refresh_token) {
+      try {
+        await logout()
+      } catch {
+        // best-effort
+      }
+      return null
+    }
+
+    return user
+  } catch (err) {
+    console.error('Error during token refresh check', err)
+    return user
+  }
+}
+
 // Request interceptor with better error handling
 apiClient.interceptors.request.use(
   async (requestConfig) => {
     try {
-      const currentUser = await getCurrentUser()
+      let currentUser: AppUser | null = await getCurrentUser()
 
-      // Add authorization if available
+      // Ensure we have a fresh user or have logged out on invalid_grant
+      currentUser = await ensureFreshUser(currentUser)
+
+      // Add authorization if available (ensure headers object exists)
+      requestConfig.headers = requestConfig.headers ?? {}
       if (currentUser?.access_token) {
-        requestConfig.headers.Authorization = `Bearer ${currentUser.access_token}`
+        (requestConfig.headers as Record<string, string>).Authorization = `Bearer ${currentUser.access_token}`
       }
 
       // Add tracing headers
