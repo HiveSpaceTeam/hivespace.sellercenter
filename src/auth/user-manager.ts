@@ -36,20 +36,20 @@ export const getCurrentUser = async (): Promise<AppUser | null> => {
 // Ensure we push a safe in-app history entry before navigating to the IdP.
 // This prevents the browser Back button from landing on the IdP URL or error pages.
 export const login = (): Promise<void> => {
-  try {
-    // Use history.replaceState to avoid adding an extra entry if already on a transient route,
-    // then push a known internal transition state so Back returns into the SPA.
-    // We choose '/auth/transition' as a lightweight internal route that the app can handle.
-    const transitionPath = '/auth/transition'
-    if (window && window.history && window.location) {
-      // Only push if the current location isn't already the transition path.
-      if (window.location.pathname !== transitionPath) {
-        window.history.pushState({}, '', transitionPath)
-      }
-    }
-  } catch {
-    // ignore — best-effort history manipulation
-  }
+  // try {
+  //   // Use history.replaceState to avoid adding an extra entry if already on a transient route,
+  //   // then push a known internal transition state so Back returns into the SPA.
+  //   // We choose '/auth/transition' as a lightweight internal route that the app can handle.
+  //   const transitionPath = '/auth/transition'
+  //   if (window && window.history && window.location) {
+  //     // Only push if the current location isn't already the transition path.
+  //     if (window.location.pathname !== transitionPath) {
+  //       window.history.pushState({}, '', transitionPath)
+  //     }
+  //   }
+  // } catch {
+  //   // ignore — best-effort history manipulation
+  // }
 
   return userManager.signinRedirect()
 }
