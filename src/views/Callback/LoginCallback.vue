@@ -12,10 +12,11 @@ const router = useRouter();
 onMounted(async () => {
   try {
     const result = await handleLoginCallback();
-    const state = result?.state;
-    const returnToUrl =
-      typeof state === 'string' && state.startsWith('/') ? state : '/';
-    router.push(returnToUrl);
+    let returnToUrl = '/account/user-management';
+    if (result.state !== undefined) {
+      returnToUrl = result.state;
+    }
+    router.push({ path: returnToUrl });
   } catch (error) {
     // Handle error, e.g., redirect to error page or show message
     await logout();
