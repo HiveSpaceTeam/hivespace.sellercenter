@@ -85,7 +85,7 @@ Before getting started, ensure you have the following installed:
    ```bash
    npm run dev
    ```
-   Server runs on `http://localhost:5173` (or 5174 if 5173 is busy)
+   Server runs on `http://localhost:5174`
 
 ### 🔧 Available Commands
 
@@ -128,9 +128,9 @@ VITE_API_VERSION=v1
 
 # Authentication (OIDC)
 VITE_APP_CLIENT_ID=your-oidc-client-id
-VITE_AUTH_CALLBACK_URL=http://localhost:5173/auth/callback
-VITE_APP_REDIRECT_URI=http://localhost:5173/auth/callback
-VITE_APP_POST_LOGOUT_REDIRECT_URI=http://localhost:5173
+VITE_AUTH_CALLBACK_URL=http://localhost:5174/auth/callback
+VITE_APP_REDIRECT_URI=http://localhost:5174/auth/callback
+VITE_APP_POST_LOGOUT_REDIRECT_URI=http://localhost:5174
 
 # Application
 VITE_APP_NAME=HiveSpace Seller Center
@@ -572,16 +572,15 @@ The authentication system is configured through environment variables and the ce
 ```env
 # OIDC Client Configuration
 VITE_APP_CLIENT_ID=your-oidc-client-id
-VITE_AUTH_CALLBACK_URL=http://localhost:5173/auth/callback
-VITE_APP_REDIRECT_URI=http://localhost:5173/auth/callback
-VITE_APP_POST_LOGOUT_REDIRECT_URI=http://localhost:5173
+VITE_AUTH_CALLBACK_URL=http://localhost:5174/auth/callback
+VITE_APP_REDIRECT_URI=http://localhost:5174/auth/callback
+VITE_APP_POST_LOGOUT_REDIRECT_URI=http://localhost:5174
 
 # Advanced OIDC Settings (Optional)
 VITE_APP_RESPONSE_TYPE=code
 VITE_APP_RESPONSE_MODE=query
 VITE_APP_SCOPE=openid profile email
-VITE_APP_AUTOMATIC_SILENT_RENEW=false
-VITE_APP_SILENT_REDIRECT_URI=http://localhost:5173/auth/silent-callback
+
 ```
 
 **OIDC Settings** (from `user-manager.ts`):
@@ -594,8 +593,8 @@ const oidcSettings = {
   scope: config.auth.oidc.scope,                     // Requested scopes
   post_logout_redirect_uri: config.auth.oidc.postLogoutRedirectUri,
   response_mode: config.auth.oidc.responseMode,      // How to receive tokens
-  automaticSilentRenew: config.auth.oidc.automaticSilentRenew,
-  silent_redirect_uri: config.auth.oidc.silentRedirectUri,
+  // Note: automatic silent iframe renewal has been removed. The app uses explicit
+  // refresh-token flows and server-based token rotation where available.
   userStore: new WebStorageStateStore({ store: window.localStorage })
 }
 ```
@@ -731,37 +730,11 @@ router.beforeEach(async (to, from, next) => {
 
 ### 🔄 Token Management
 
-**Automatic Token Renewal**:
-- Configured via `automaticSilentRenew: true` in OIDC settings
-- Uses silent iframe renewal to refresh tokens before expiration
-- Handles token refresh transparently without user interaction
-
-**Storage**:
-- Uses `localStorage` for token storage (configurable)
-- Tokens are automatically included in API requests via Axios interceptors
-
-**API Integration** (from `services/api.ts`):
-```typescript
-// Axios request interceptor automatically adds auth token
-apiClient.interceptors.request.use(async (config) => {
-  const user = await getCurrentUser()
-  if (user?.access_token) {
-    config.headers.Authorization = `Bearer ${user.access_token}`
-  }
-  return config
-})
-
-// Axios response interceptor handles 401 errors
-apiClient.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      login() // Redirect to login on unauthorized
-    }
-    return Promise.reject(error)
-  }
-)
-```
+This project uses refresh tokens (when the identity provider issues them) and an explicit
+refresh flow to obtain new access tokens. The codebase performs refresh-token exchanges
+and persists rotated tokens back into the application's user store. API requests are
+automatically decorated with the current access token by the Axios interceptors in
+`src/services/api.ts` and the app enforces re-authentication when refresh fails.
 
 ### 🔧 Development & Testing
 
@@ -813,7 +786,7 @@ userManager.events.addAccessTokenExpired(() => {
 **Token Security**:
 - Tokens are automatically included in API requests
 - Short-lived access tokens with refresh capability
-- Silent renewal prevents interruption of user experience
+- Explicit refresh-token flows are used instead of silent iframe renewal
 - Automatic logout on token expiration
 
 **Role-Based Access**:
@@ -836,7 +809,7 @@ userManager.events.addAccessTokenExpired(() => {
 - Ensure identity server is returning to correct URL
 
 **Token expiration issues**:
-- Enable `automaticSilentRenew` for seamless token refresh
+- Use refresh tokens (when provided by the IdP) and handle refresh failures by re-authenticating
 - Handle token expiration gracefully in API calls
 - Implement proper error handling for expired tokens
 
@@ -1107,7 +1080,7 @@ const handleDelete = async () => {
 ### Development Server Issues
 
 **Port Already in Use**:
-- Vite automatically tries port 5174 if 5173 is busy
+- Vite automatically tries port 5174 if 5174 is busy
 - Check console output for the actual port being used
 
 **Build Failures**:

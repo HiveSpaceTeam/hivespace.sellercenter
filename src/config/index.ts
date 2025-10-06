@@ -26,8 +26,6 @@ export interface AppConfig {
       readonly responseType: string
       readonly responseMode: string
       readonly scope: string
-      readonly automaticSilentRenew: boolean
-      readonly silentRedirectUri: string
     }
     readonly callbackUrl: string
   }
@@ -113,24 +111,20 @@ const createConfig = (): AppConfig => {
       oidc: {
         clientId: getEnvVar('VITE_APP_CLIENT_ID'),
         redirectUri: validateUrl(
-          getEnvVar('VITE_APP_REDIRECT_URI', 'http://localhost:5173/auth/callback'),
+          getEnvVar('VITE_APP_REDIRECT_URI', 'http://localhost:5174/callback/login'),
           'Redirect URI',
         ),
         postLogoutRedirectUri: validateUrl(
-          getEnvVar('VITE_APP_POST_LOGOUT_REDIRECT_URI', 'http://localhost:5173'),
+          getEnvVar('VITE_APP_POST_LOGOUT_REDIRECT_URI', 'http://localhost:5174/callback/logout'),
           'Post Logout Redirect URI',
         ),
         responseType: getEnvVar('VITE_APP_RESPONSE_TYPE', 'code'),
         responseMode: getEnvVar('VITE_APP_RESPONSE_MODE', 'query'),
-        scope: getEnvVar('VITE_APP_SCOPE', 'openid profile email'),
-        automaticSilentRenew: parseBoolean(getEnvVar('VITE_APP_AUTOMATIC_SILENT_RENEW'), false),
-        silentRedirectUri: validateUrl(
-          getEnvVar('VITE_APP_SILENT_REDIRECT_URI', 'http://localhost:5173/auth/silent-callback'),
-          'Silent Redirect URI',
-        ),
+        // Request refresh tokens for the SPA using offline_access
+        scope: getEnvVar('VITE_APP_SCOPE', 'openid profile email offline_access'),
       },
       callbackUrl: validateUrl(
-        getEnvVar('VITE_AUTH_CALLBACK_URL', 'http://localhost:5173/auth/callback'),
+        getEnvVar('VITE_AUTH_CALLBACK_URL', 'http://localhost:5174/auth/callback'),
         'Auth Callback URL',
       ),
     },

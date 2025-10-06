@@ -51,7 +51,7 @@ This is the **HiveSpace Seller Center**, a modern Vue 3 admin dashboard built on
 # Always run first - installs all dependencies
 npm install
 
-# Start development server (usually runs on http://localhost:5173, may use 5174 if 5173 is busy)
+# Start development server (usually runs on http://localhost:5174, may use 5174 if 5174 is busy)
 npm run dev
 ```
 
@@ -101,7 +101,7 @@ The `npm run type-check` command currently fails with 11 errors. **This is expec
 **Workaround**: These are primarily in demo/example files. Fix only if working on those specific components.
 
 #### Dev Server Port
-If port 5173 is busy, Vite automatically uses 5174. This is normal behavior.
+Vite automatically uses 5174
 
 ### Environment Setup
 
@@ -113,7 +113,7 @@ Create `.env` in project root (copy from `docs/env.example.md`):
 VITE_API_BASE_URL=https://localhost:7001/api
 VITE_API_TIMEOUT=30000
 # Authentication (OIDC)
-VITE_AUTH_CALLBACK_URL=http://localhost:5173/callback
+VITE_AUTH_CALLBACK_URL=http://localhost:5174/callback
 # Application
 VITE_APP_NAME=HiveSpace Seller Center
 VITE_APP_VERSION=1.0.0
@@ -234,7 +234,7 @@ await authStore.login(credentials)
 4. `npm run dev` - Test development server starts
 
 **Manual Testing:**
-- Navigate to `http://localhost:5173` (or 5174) after `npm run dev`
+- Navigate to `http://localhost:5174` (or 5174) after `npm run dev`
 - Test key user flows in the admin dashboard
 - Verify toast notifications and modal dialogs work
 - Check responsive design on different screen sizes
