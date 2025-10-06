@@ -45,7 +45,7 @@
                             <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                 {{ $t('product.productDescription') }}
                             </label>
-                            <QuillEditor :style="'height:300px'" ref="quillRef" :modules="modules" toolbar="full" />
+                            <QuillEditor :style="'height:350px'" ref="quillRef" :modules="modules" toolbar="full" />
                         </div>
 
                     </div>
@@ -315,16 +315,6 @@ const modules = ref({
             return new Promise(() => {
                 const formData = new FormData();
                 formData.append("image", file);
-
-                // axios.post('/upload-image', formData)
-                //   .then(res => {
-                //     console.log(res)
-                //     resolve(res.data.url);
-                //   })
-                //   .catch(err => {
-                //     reject("Upload failed");
-                //     console.error("Error:", err)
-                //   })
             })
         }
     }

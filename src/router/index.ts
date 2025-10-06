@@ -89,13 +89,13 @@ const router = createRouter({
         {
           path: 'new',
           name: 'New Product',
-          component: () => import('@/views/Products/AddProduct.vue'),
-          meta: { title: 'Admin management' },
+          component: () => import('@/views/Products/UpsertProduct.vue'),
+          meta: { title: 'Add product' },
         },
         {
           path: ':id',
           name: 'Edit Product',
-          component: () => import('@/views/Products/AddProduct.vue'),
+          component: () => import('@/views/Products/UpsertProduct.vue'),
           meta: { title: 'Edit product' },
         },
       ],
