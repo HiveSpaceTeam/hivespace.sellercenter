@@ -54,116 +54,37 @@
             <table class="min-w-full">
               <thead>
                 <tr class="border-b border-gray-200 dark:border-gray-700">
-                  <th class="px-5 py-3 text-left w-1/8 sm:px-6">
-                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.emailAddress')
-                    }}</p>
+                  <th class="px-5 py-3 text-left w-1/3 sm:px-6">
+                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.name') }}</p>
                   </th>
-                  <th class="px-5 py-3 text-left w-1/8 sm:px-6">
-                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.fullName') }}
-                    </p>
+                  <th class="px-5 py-3 text-left w-1/3 sm:px-6">
+                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.price') }}</p>
                   </th>
-                  <th class="px-5 py-3 text-left w-1/8 sm:px-6">
-                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.status') }}</p>
+                  <th class="px-5 py-3 text-left w-1/3 sm:px-6">
+                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.quantity') }}</p>
                   </th>
-                  <th class="px-5 py-3 text-center w-1/8 sm:px-6" v-if="currentUser?.isSystemAdmin()">
-                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.isSystemAdmin')
-                    }}</p>
-                  </th>
-                  <th class="px-5 py-3 text-left w-1/8 sm:px-6">
-                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.createdDate')
-                    }}</p>
-                  </th>
-                  <th class="px-5 py-3 text-left w-1/8 sm:px-6">
-                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.lastLoginDate')
-                    }}</p>
-                  </th>
-                  <th class="px-5 py-3 text-left w-1/8 sm:px-6">
-                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{
-                      $t('table.lastUpdatedDate') }}</p>
-                  </th>
-                  <th class="px-5 py-3 text-center w-1/8 sm:px-6">
-                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.actions') }}
-                    </p>
+                  <th class="px-5 py-3 text-left w-1/4 sm:px-6">
+                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.actions') }}</p>
                   </th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="admin in filteredAdmins" :key="admin.id"
+                <tr v-for="product in products" :key="product.id"
                   class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-white/[0.05]">
-                  <!-- Email Address -->
                   <td class="px-5 py-4 sm:px-6">
-                    <div class="flex items-center">
-                      <div class="flex-shrink-0 h-10 w-10">
-                        <img class="h-10 w-10 rounded-full object-cover"
-                          :src="admin.avatar || '/images/user/default-avatar.jpg'" :alt="admin.email" />
-                      </div>
-                      <div class="ml-4">
-                        <div class="text-sm font-medium text-gray-900 dark:text-white">{{ admin.email }}</div>
-                      </div>
+                    <div class="text-sm font-medium text-gray-900 dark:text-white">{{ product.name }}</div>
+                  </td>
+                  <td class="px-5 py-4 sm:px-6">
+                    <div class="text-sm text-gray-900 dark:text-white">{{ formatPriceRange(product) }}</div>
+                  </td>
+                  <td class="px-5 py-4 sm:px-6">
+                    <div class="text-sm text-gray-900 dark:text-white">{{ totalQuantity(product) }}</div>
+                  </td>
+                  <td class="px-5 py-4 sm:px-6">
+                    <div class="flex items-center gap-2">
+                      <Button :startIcon="EditIcon" variant="outline" @click="editProduct(product)"></Button>
+                      <Button :startIcon="TrashRedIcon" variant="outline" @click="removeProduct(product)"></Button>
                     </div>
-                  </td>
-
-                  <!-- Full Name -->
-                  <td class="px-5 py-4 sm:px-6">
-                    <div class="text-sm text-gray-900 dark:text-white">{{ admin.fullName }}</div>
-                  </td>
-
-                  <!-- Status -->
-                  <td class="px-5 py-4 sm:px-6">
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" :class="admin.status === 'Active'
-                      ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300'
-                      : 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300'">{{ admin.status }}</span>
-                  </td>
-
-                  <!-- Is System Admin -->
-                  <td class="px-5 py-4 sm:px-6" v-if="currentUser?.isSystemAdmin()">
-                    <div class="flex items-center justify-center">
-                      <svg v-if="admin.isSystemAdmin" class="w-5 h-5 text-green-500" fill="currentColor"
-                        viewBox="0 0 20 20">
-                        <path fill-rule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clip-rule="evenodd"></path>
-                      </svg>
-                    </div>
-                  </td>
-
-                  <!-- Created Date -->
-                  <td class="px-5 py-4 sm:px-6">
-                    <div class="text-sm text-gray-900 dark:text-white">{{ admin.createdDate }}</div>
-                  </td>
-
-                  <!-- Last Login Date -->
-                  <td class="px-5 py-4 sm:px-6">
-                    <div class="text-sm text-gray-900 dark:text-white">{{ admin.lastLoginDate }}</div>
-                  </td>
-
-                  <!-- Last Updated Date -->
-                  <td class="px-5 py-4 sm:px-6">
-                    <div class="text-sm text-gray-900 dark:text-white">{{ admin.lastUpdatedDate }}</div>
-                  </td>
-
-                  <!-- Actions -->
-                  <td class="px-5 py-4 sm:px-6 text-center">
-                    <DropdownMenu>
-                      <template #icon>
-                        <HorizontalDots />
-                      </template>
-
-                      <template #menu>
-                        <button @click="tableHandleDelete(admin)"
-                          class="flex items-center w-full px-3 py-2 text-sm text-red-700 hover:bg-gray-50 dark:text-red-400 dark:hover:bg-gray-600">
-                          <TrashRedIcon />
-                          {{ actionText.delete }}
-                        </button>
-
-                        <button @click="tableHandleToggleStatus(admin)"
-                          class="flex items-center w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700">
-                          <ToggleOffIcon v-if="admin.status === 'Active'" />
-                          <ToggleOnIcon v-else />
-                          {{ admin.status === 'Active' ? actionText.deactivate : actionText.activate }}
-                        </button>
-                      </template>
-                    </DropdownMenu>
                   </td>
                 </tr>
               </tbody>
@@ -195,8 +116,11 @@ import Select from "@/components/common/Select.vue";
 import DropdownMenu from "@/components/common/DropdownMenu.vue";
 import Input from '@/components/common/Input.vue';
 import { useModal } from '@/composables/useModal'
+import { productService } from '@/services'
+import { useRouter } from 'vue-router'
+import type { Product, ProductSearchRequest, PagedResponse } from '@/types'
 
-import { HorizontalDots, TrashRedIcon, ToggleOffIcon, ToggleOnIcon, BigPlusIcon, RefreshIcon } from '@/icons'
+import { BigPlusIcon, RefreshIcon, EditIcon, TrashRedIcon } from '@/icons'
 import { getCurrentUser } from "@/auth/user-manager";
 import type { AppUser } from "@/types/app-user";
 const { t } = useI18n();
@@ -222,101 +146,21 @@ const searchQuery = ref('');
 const statusFilter = ref('all');
 const adminTypeFilter = ref('all');
 const lastUpdated = ref('');
+const products = ref<Product[]>([])
+const pageIndex = ref(1)
+const pageSize = ref(10)
+const totalCount = ref(0)
 
 // Global modal handler
 const { openModal } = useModal()
+const router = useRouter()
 
 // Current User (simulate current admin user)
 const currentUser = ref<AppUser | null>(null);
 
 
-// Sample admins data - in real app this would come from API
-const admins = ref([
-  // {
-  //   id: 1,
-  //   email: 'admin.system@hivespace.com',
-  //   fullName: 'System Administrator',
-  //   adminType: 'System Admin',
-  //   status: 'Active',
-  //   isSystemAdmin: true,
-  //   createdDate: '2023-11-01',
-  //   lastLoginDate: '2024-03-22',
-  //   lastUpdatedDate: '2024-03-22',
-  //   avatar: '/images/user/user-01.jpg'
-  // },
-  // {
-  //   id: 2,
-  //   email: 'john.admin@hivespace.com',
-  //   fullName: 'John Anderson',
-  //   adminType: 'Regular Admin',
-  //   status: 'Active',
-  //   isSystemAdmin: false,
-  //   createdDate: '2024-01-15',
-  //   lastLoginDate: '2024-03-21',
-  //   lastUpdatedDate: '2024-03-21',
-  //   avatar: '/images/user/user-02.jpg'
-  // },
-  // {
-  //   id: 3,
-  //   email: 'sarah.manager@hivespace.com',
-  //   fullName: 'Sarah Johnson',
-  //   adminType: 'Regular Admin',
-  //   status: 'Active',
-  //   isSystemAdmin: false,
-  //   createdDate: '2024-01-20',
-  //   lastLoginDate: '2024-03-20',
-  //   lastUpdatedDate: '2024-03-20',
-  //   avatar: '/images/user/user-03.jpg'
-  // },
-  // {
-  //   id: 4,
-  //   email: 'mike.supervisor@hivespace.com',
-  //   fullName: 'Mike Thompson',
-  //   adminType: 'System Admin',
-  //   status: 'Active',
-  //   isSystemAdmin: true,
-  //   createdDate: '2023-12-05',
-  //   lastLoginDate: '2024-03-19',
-  //   lastUpdatedDate: '2024-03-19',
-  //   avatar: '/images/user/user-04.jpg'
-  // },
-  // {
-  //   id: 5,
-  //   email: 'lisa.admin@hivespace.com',
-  //   fullName: 'Lisa Wilson',
-  //   adminType: 'Regular Admin',
-  //   status: 'Inactive',
-  //   isSystemAdmin: false,
-  //   createdDate: '2024-02-10',
-  //   lastLoginDate: '2024-03-05',
-  //   lastUpdatedDate: '2024-03-15',
-  //   avatar: '/images/user/user-05.jpg'
-  // },
-  // {
-  //   id: 6,
-  //   email: 'david.tech@hivespace.com',
-  //   fullName: 'David Rodriguez',
-  //   adminType: 'System Admin',
-  //   status: 'Active',
-  //   isSystemAdmin: true,
-  //   createdDate: '2023-10-15',
-  //   lastLoginDate: '2024-03-22',
-  //   lastUpdatedDate: '2024-03-22',
-  //   avatar: '/images/user/user-06.jpg'
-  // },
-  // {
-  //   id: 7,
-  //   email: 'emma.support@hivespace.com',
-  //   fullName: 'Emma Davis',
-  //   adminType: 'Regular Admin',
-  //   status: 'Active',
-  //   isSystemAdmin: false,
-  //   createdDate: '2024-02-25',
-  //   lastLoginDate: '2024-03-18',
-  //   lastUpdatedDate: '2024-03-18',
-  //   avatar: '/images/user/user-07.jpg'
-  // }
-]);
+// Admins data placeholder (current UI is admin-oriented). Typed to avoid TS 'never' inference.
+const admins = ref<Admin[]>([]);
 
 // Computed properties
 const filteredAdminsCount = computed(() => {
@@ -392,6 +236,41 @@ type Admin = {
   avatar?: string;
 }
 
+// Helpers for product display
+const totalQuantity = (product: Product): number => {
+  if (!product?.skus?.length) return 0
+  return product.skus.reduce((sum, sku) => {
+    const q = typeof sku.quantity === 'string' ? Number(sku.quantity) : (sku.quantity || 0)
+    return sum + (isNaN(q) ? 0 : q)
+  }, 0)
+}
+
+const formatPriceRange = (product: Product): string => {
+  if (!product?.skus?.length) return '-'
+  const prices: number[] = []
+  for (const sku of product.skus) {
+    const p = sku.price
+    if (p == null) continue
+    if (typeof p === 'number') {
+      prices.push(p)
+    } else if (typeof p === 'string') {
+      const n = Number(p)
+      if (!isNaN(n)) prices.push(n)
+    } else if (typeof p === 'object' && typeof p.amount === 'number') {
+      prices.push(p.amount)
+    }
+  }
+  if (!prices.length) return '-'
+  const min = Math.min(...prices)
+  const max = Math.max(...prices)
+  if (min === max) return formatCurrency(min)
+  return `${formatCurrency(min)} - ${formatCurrency(max)}`
+}
+
+const formatCurrency = (value: number): string => {
+  return new Intl.NumberFormat(undefined, { style: 'currency', currency: 'USD' }).format(value)
+}
+
 const tableHandleDelete = (admin: Admin) => {
   handleDeleteAdmin(admin.id)
 }
@@ -442,14 +321,40 @@ const handleSearch = (query: string) => {
 
 // Filters are bound via v-model on Select; no manual handlers required here.
 
-const refreshAdmins = () => {
-  loading.value = true;
-  // Simulate API refresh
-  setTimeout(() => {
-    loading.value = false;
-    updateLastUpdated();
-    console.log('Admins refreshed');
-  }, 1000);
+// Product actions
+const editProduct = (product: Product) => {
+  if (!product?.id) return
+  router.push({ path: `/product/${product.id}` })
+}
+
+const removeProduct = (product: Product) => {
+  // TODO: call delete API when available
+  console.log('Remove product', product.id)
+}
+
+const fetchProducts = async () => {
+  loading.value = true
+  try {
+    const params: ProductSearchRequest = {
+      keyword: searchQuery.value || undefined,
+      sort: 'ASC',
+      pageIndex: pageIndex.value,
+      pageSize: pageSize.value,
+    }
+    const result: PagedResponse<Product> = await productService.getProducts(params)
+    products.value = (result.items ?? result.data) ?? []
+    totalCount.value = (result.totalCount ?? result.total) ?? 0
+    updateLastUpdated()
+  } catch (err) {
+    // Errors are centrally handled in api service; keep console for dev context
+    console.error('Failed to fetch products', err)
+  } finally {
+    loading.value = false
+  }
+}
+
+const refreshAdmins = async () => {
+  await fetchProducts()
 };
 
 const updateLastUpdated = () => {
@@ -466,7 +371,7 @@ const addNewProduct = () => {
 // Lifecycle
 onMounted(async () => {
   currentUser.value = await getCurrentUser();
-  updateLastUpdated();
-  console.log('AdminManagement component mounted');
+  await fetchProducts()
+  console.log('ProductList mounted');
 });
 </script>

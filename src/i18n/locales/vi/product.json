@@ -11,5 +11,9 @@
   "variantGroup": "Nhóm phân loại",
   "variant": "Phân loại",
   "option": "Tùy chọn",
-  "sku": "Sku phân loại"
+  "sku": "Sku phân loại",
+  "enterValue": "Vui lòng điền vào",
+  "pleaseSelect": "Vui lòng chọn",
+  "selectCategoryFirst": "Có thể điều chỉnh sau khi chọn ngành hàng",
+  "categoryAttributes": "Thông tin chi tiết"
 }

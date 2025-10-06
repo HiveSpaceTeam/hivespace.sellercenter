@@ -166,8 +166,6 @@ const menuGroups = computed<MenuGroup[]>(() => [
             name: t('common.sidebar.accounts'),
             icon: TableIcon,
             subItems: [
-              { name: t('pages.userManagement'), path: '/account/user-management', pro: false },
-              { name: t('pages.adminManagement'), path: '/account/admin-management', pro: false },
               { name: t('pages.productList'), path: "/product/list", pro: false },
               { name: t('pages.addNewProduct'), path: "/product/new", pro: false },
             ],

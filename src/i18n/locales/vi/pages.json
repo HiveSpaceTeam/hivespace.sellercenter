@@ -2,5 +2,7 @@
   "userManagement": "Quản lý người dùng",
   "adminManagement": "Quản lý quản trị viên",
   "listOfUsers": "Danh sách người dùng",
-  "listOfAdmins": "Danh sách quản trị viên"
+  "listOfAdmins": "Danh sách quản trị viên",
+  "productList": "Danh sách sản phẩm",
+  "addNewProduct": "Thêm sản phẩm mới"
 }

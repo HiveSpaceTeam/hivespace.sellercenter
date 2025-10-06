@@ -172,6 +172,30 @@
   },
   "search": {
     "placeholder": "Search or type command..."
+  },
+  "product": {
+    "basicInfo": "Basic Information",
+    "productName": "Product Name",
+    "productCategory": "Product Category",
+    "selectCategory": "Select Category",
+    "productDescription": "Product Description",
+    "categoryAttributes": "Category Attributes",
+    "attributes": "attributes",
+    "noAttributesFound": "No attributes found for this category",
+    "selectCategoryFirst": "Please select a category first",
+    "enterValue": "Enter value",
+    "addValue": "Add Value",
+    "maxValues": "Max values",
+    "mandatory": "Mandatory",
+    "variant": "Variant",
+    "option": "Option",
+    "fill": "Fill",
+    "addNewVariant": "Add New Variant",
+    "variantGroup": "Variant Group",
+    "price": "Price",
+    "inventory": "Inventory",
+    "sku": "SKU",
+    "typeHere": "Type here"
   }
 }
 

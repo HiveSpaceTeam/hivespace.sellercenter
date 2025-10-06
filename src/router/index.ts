@@ -53,6 +53,12 @@ const router = createRouter({
           component: () => import('@/views/Products/AddProduct.vue'),
           meta: { title: 'Admin management' },
         },
+        {
+          path: ':id',
+          name: 'Edit Product',
+          component: () => import('@/views/Products/AddProduct.vue'),
+          meta: { title: 'Edit product' },
+        },
       ],
     },
     {
