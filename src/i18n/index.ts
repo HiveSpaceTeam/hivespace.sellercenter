@@ -26,6 +26,7 @@ const en = {
   pages: enPages,
   errors: enErrors,
   backendErrors: enBackendErrors,
+  product: enProduct,
 }
 
 const vi = {
