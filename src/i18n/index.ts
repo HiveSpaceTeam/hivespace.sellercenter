@@ -7,6 +7,7 @@ import enUsers from './locales/en/users.json'
 import enPages from './locales/en/pages.json'
 import enErrors from './locales/en/errors.json'
 import enBackendErrors from './locales/en/backend-errors.json'
+import enProduct from './locales/en/product.json'
 
 // Import Vietnamese translation files
 import viCommon from './locales/vi/common.json'
