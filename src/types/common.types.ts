@@ -84,3 +84,6 @@ export interface UploadProgress {
   total: number
   percentage: number
 }
+
+declare module 'quill-image-uploader';
+declare module 'lodash';

@@ -73,6 +73,33 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: '/product',
+      children: [
+        {
+          path: '',
+          redirect: '/product/list',
+        },
+        {
+          path: 'list',
+          name: 'List product',
+          component: () => import('@/views/Products/ProductList.vue'),
+          meta: { title: 'User management' },
+        },
+        {
+          path: 'new',
+          name: 'New Product',
+          component: () => import('@/views/Products/UpsertProduct.vue'),
+          meta: { title: 'Add product' },
+        },
+        {
+          path: ':id',
+          name: 'Edit Product',
+          component: () => import('@/views/Products/UpsertProduct.vue'),
+          meta: { title: 'Edit product' },
+        },
+      ],
+    },
     // Grouped block (callbacks, pages, default, demo, notFound)
     ...mainRoutes,
   ],

@@ -9,6 +9,7 @@
 
 // Unified Admin (store-facing) types
 export * from './admin.types'
+export * from './product.types'
 
 // API common types (kept under api for backend contracts)
 export * from './common.types'

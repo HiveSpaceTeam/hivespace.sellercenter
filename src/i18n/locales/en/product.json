@@ -1,0 +1,19 @@
+{
+  "basicInfo": "Basic Information",
+  "productName": "Product Name",
+  "productCategory": "Product Category",
+  "productDescription": "Product Description",
+  "price": "Price",
+  "typeHere": "Type here",
+  "fill": "Enter",
+  "inventory": "Inventory",
+  "addNewVariant": "Add Variant Group",
+  "variantGroup": "Variant Group",
+  "variant": "Variant",
+  "option": "Option",
+  "sku": "Variant SKU",
+  "enterValue": "Please fill in",
+  "pleaseSelect": "Please select",
+  "selectCategoryFirst": "Can be adjusted after selecting a category",
+  "categoryAttributes": "Detailed Information"
+}

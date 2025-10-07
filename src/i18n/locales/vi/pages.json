@@ -3,6 +3,8 @@
   "adminManagement": "Quản lý quản trị viên",
   "listOfUsers": "Danh sách người dùng",
   "listOfAdmins": "Danh sách quản trị viên",
+  "productList": "Danh sách sản phẩm",
+  "addNewProduct": "Thêm sản phẩm mới",
   "maintenance": {
     "title": "BẢO TRÌ",
     "message": "Trang web đang được bảo trì. Chúng tôi sẽ sớm quay trở lại. Cảm ơn bạn đã kiên nhẫn."
