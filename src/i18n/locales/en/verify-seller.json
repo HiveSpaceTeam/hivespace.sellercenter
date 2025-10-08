@@ -1,0 +1,49 @@
+{
+  "title": "Seller Verification",
+  "subtitle": "Complete your seller profile to start selling on HiveSpace",
+  "storeInformation": "Store Information",
+  "phoneVerification": "Phone Number Verification",
+  "fields": {
+    "storeName": "Store Name",
+    "storeDescription": "Store Description",
+    "storeLogo": "Store Logo",
+    "storeAddress": "Store Address",
+    "phoneNumber": "Phone Number",
+    "verificationCode": "Verification Code"
+  },
+  "placeholders": {
+    "storeName": "Enter your store name",
+    "storeDescription": "Describe your store and products",
+    "storeAddress": "Enter your store address",
+    "phoneNumber": "Enter phone number",
+    "verificationCode": "Enter code"
+  },
+  "actions": {
+    "sendCode": "Send",
+    "sending": "Sending...",
+    "submit": "Continue",
+    "submitting": "Submitting...",
+    "editAddress": "Edit"
+  },
+  "errors": {
+    "storeNameRequired": "Store name is required",
+    "storeDescriptionRequired": "Store description is required",
+    "storeLogoRequired": "Store logo is required",
+    "storeAddressRequired": "Store address is required",
+    "phoneNumberRequired": "Phone number is required",
+    "phoneNumberInvalid": "Please enter a valid phone number",
+    "verificationCodeRequired": "Verification code is required",
+    "verificationCodeInvalid": "Please enter a valid 6-digit code",
+    "invalidFileType": "Please upload an image file",
+    "fileTooLarge": "File size must be less than 5MB"
+  },
+  "messages": {
+    "success": "Success!",
+    "error": "Error!",
+    "codeSent": "Verification code sent to {phone}",
+    "sendCodeFailed": "Failed to send verification code. Please try again.",
+    "verificationSuccess": "Seller verification completed successfully!",
+    "verificationFailed": "Verification failed. Please check your information and try again.",
+    "validationFailed": "Please fill in all required fields correctly."
+  }
+}
