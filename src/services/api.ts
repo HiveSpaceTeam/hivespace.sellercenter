@@ -1,5 +1,5 @@
 import { getCurrentUser, login, logout } from '@/auth/user-manager'
-import refreshTokenIfNeeded from '@/services/auth/refresh'
+import refreshToken from '@/services/refresh.service'
 import type { AppUser } from '@/types/app-user'
 import axios from 'axios'
 import type {
@@ -56,7 +56,7 @@ const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout
 // Helper: ensure currentUser is fresh or trigger logout when refresh is rejected
 const ensureFreshUser = async (user: AppUser | null): Promise<AppUser | null> => {
   try {
-    const refreshed = await refreshTokenIfNeeded(user)
+    const refreshed = await refreshToken(user)
     if (refreshed) return refreshed
 
     // refreshTokenIfNeeded returned null. If we had a refresh_token, this likely

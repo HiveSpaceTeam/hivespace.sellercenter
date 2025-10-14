@@ -1,6 +1,22 @@
 <template>
   <div class="w-full max-w-[700px] overflow-y-auto">
     <form class="space-y-4" @submit.prevent="onCreate">
+      <!-- Common/General Error -->
+      <div v-if="errors.common.length > 0"
+        class="p-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert">
+        <div class="font-medium">{{ t('common.error') }}</div>
+        <template v-if="errors.common.length === 1">
+          <div>{{ errors.common[0] }}</div>
+        </template>
+        <template v-else>
+          <ul class="mt-2 ml-4 list-disc list-inside space-y-1">
+            <li v-for="(error, index) in errors.common" :key="index">
+              {{ error }}
+            </li>
+          </ul>
+        </template>
+      </div>
+
       <!-- Full Name Field (Input component) -->
       <div>
         <Input id="adminFullName" v-model="form.fullName" type="text" :label="t('admins.fullName')"
@@ -80,6 +96,7 @@ import { ShowPasswordIcon, HidePasswordIcon } from '@/icons'
 import type { CreateAdminRequest, ErrorResponse } from '@/types'
 import { useAppStore } from '@/stores/app'
 import { useAdminStore } from '@/stores/admin'
+import { useFieldValidation } from '@/composables/useFieldValidation'
 
 const { t } = useI18n()
 const appStore = useAppStore()
@@ -101,12 +118,24 @@ const form = reactive({
   isSystemAdmin: false,
 })
 
-const errors = reactive({
+// Form error types
+interface FormErrors {
+  common: string[],
+  fullName: string,
+  email: string,
+  password: string,
+  confirmPassword: string,
+}
+
+const errors = reactive<FormErrors>({
   email: '',
   fullName: '',
   password: '',
   confirmPassword: '',
+  common: [] // Array for general/non-field-specific errors
 })
+
+const { handleFieldValidationErrors: handleValidationErrors, clearFieldErrors: clearErrors } = useFieldValidation()
 
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
@@ -163,39 +192,6 @@ const isFormValid = computed(() => {
   )
 })
 
-const clearFieldErrors = () => {
-  errors.email = ''
-  errors.fullName = ''
-  errors.password = ''
-  errors.confirmPassword = ''
-}
-
-const handleFieldValidationErrors = (errorData: ErrorResponse): boolean => {
-  if (!errorData?.errors || !Array.isArray(errorData.errors)) {
-    return false
-  }
-
-  let hasFieldErrors = false
-
-  errorData.errors.forEach((err: { code: string; source?: string }) => {
-    const errorCode = err.code
-    const source = err.source
-
-    // Translate with explicit fallback if key is missing
-    const key = `backendErrors.${errorCode}`
-    const translated = t(key)
-    const errorMessage = translated === key ? (t('errors.UNKNOWN_ERROR') as string) : (translated as string)
-
-    // Check if the source exists in errors object (backend returns camelCase)
-    if (source && source in errors) {
-      (errors as Record<string, string>)[source] = errorMessage
-      hasFieldErrors = true
-    }
-  })
-
-  return hasFieldErrors
-}
-
 const showSuccessNotification = (email: string) => {
   appStore.notifySuccess(
     t('admins.alerts.success.title'),
@@ -211,6 +207,8 @@ const showErrorNotification = () => {
 }
 
 const validateAllFields = (): boolean => {
+  // Clear previous errors before validation
+  clearErrors(errors)
   return validateFullName() && validateEmail() && validatePassword() && validateConfirmPassword()
 }
 
@@ -226,7 +224,7 @@ const createAdminData = (): CreateAdminRequest => {
 
 const onCreate = async () => {
   // Clear previous errors and validate all fields
-  clearFieldErrors()
+  clearErrors(errors)
 
   if (!validateAllFields()) {
     return
@@ -245,10 +243,10 @@ const onCreate = async () => {
     // Handle API error response (API interceptor returns ErrorResponse directly)
     const errorData = error as ErrorResponse
 
-    // Try to handle field-specific validation errors first
-    const hasFieldErrors = handleFieldValidationErrors(errorData)
+    // Handle field-specific validation errors and common errors
+    const hasFieldErrors = handleValidationErrors(errorData, errors)
 
-    // If no field errors, show general error notification
+    // Show notification only if no field or common errors were handled
     if (!hasFieldErrors) {
       showErrorNotification()
     }

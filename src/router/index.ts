@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import demoRoutes from './demoRoutes'
-import { getCurrentUser } from '@/auth/user-manager'
+import { getCurrentUser, logout } from '@/auth/user-manager'
 
 // Single grouped collection for several related routes (callbacks, error pages,
 // maintenance, default and 404). We keep the same order and meta fields so
@@ -73,6 +73,12 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: '/register-seller',
+      name: 'Register Seller',
+      component: () => import('@/views/RegisterSeller.vue'),
+      meta: { title: 'Register Seller' },
+    },
     // Grouped block (callbacks, pages, default, demo, notFound)
     ...mainRoutes,
   ],
@@ -82,7 +88,6 @@ export default router
 
 router.beforeEach(async (to, from, next) => {
   document.title = `${to.meta.title}`
-
   // Let callback/error routes through without auth checks
   if (to.meta.allowAnonymous) {
     next()
@@ -98,6 +103,16 @@ router.beforeEach(async (to, from, next) => {
   const user = await getCurrentUser()
   if (!user) {
     next('/')
+    return
+  }
+
+  if (user.isAdmin() || user.isSystemAdmin()) {
+    await logout()
+    return
+  }
+
+  if (!user.isSeller() && !to.path.startsWith('/register-seller')) {
+    next('/register-seller')
     return
   }
 
