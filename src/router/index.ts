@@ -35,7 +35,7 @@ const mainRoutes = [
     path: '/',
     name: 'Default',
     component: () => import('@/views/Default.vue'),
-    meta: { title: 'HiveSpace - Seller Center' },
+    meta: { title: 'HiveSpace - Seller Center', allowAnonymous: true },
   },
   ...demoRoutes,
   {
@@ -94,15 +94,10 @@ router.beforeEach(async (to, from, next) => {
     return
   }
 
-  if (to.path === '/') {
-    next()
-    return
-  }
-
   // For other routes, enforce presence of a local user; if missing, route to '/'
   const user = await getCurrentUser()
   if (!user) {
-    next('/')
+    await login()
     return
   }
 
