@@ -35,7 +35,7 @@
 
       <button type="button" @click="triggerFileInput"
         class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors focus:outline-none">
-        {{ buttonText }}
+        {{ defaultButtonText }}
       </button>
 
       <!-- File info -->
@@ -65,7 +65,7 @@
 
       <button type="button" @click="triggerFileInput"
         class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors focus:outline-none">
-        {{ buttonText }}
+        {{ defaultButtonText }}
       </button>
 
       <!-- Image Preview (Right of button) -->
@@ -140,11 +140,13 @@ const props = withDefaults(defineProps<Props>(), {
   accept: 'image/*',
   maxSize: 5 * 1024 * 1024, // 5MB default
   previewDirection: 'top',
-  buttonText: t('component.fileInput.chooseFile'),
+  buttonText: undefined,
   required: false,
   previewSize: 'md',
   previewShape: 'circle'
 })
+
+const defaultButtonText = computed(() => props.buttonText || t('component.fileInput.chooseFile'))
 
 const emit = defineEmits<Emits>()
 
