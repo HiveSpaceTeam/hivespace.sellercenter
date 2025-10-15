@@ -103,6 +103,7 @@ router.beforeEach(async (to, from, next) => {
 
   if (user.isAdmin() || user.isSystemAdmin()) {
     await logout()
+    next(false)
     return
   }
 
