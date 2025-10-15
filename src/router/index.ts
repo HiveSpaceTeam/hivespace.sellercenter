@@ -73,6 +73,12 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: '/register-seller',
+      name: 'Register Seller',
+      component: () => import('@/views/RegisterSeller.vue'),
+      meta: { title: 'Register Seller' },
+    },
     // Grouped block (callbacks, pages, default, demo, notFound)
     ...mainRoutes,
   ],
@@ -82,7 +88,6 @@ export default router
 
 router.beforeEach(async (to, from, next) => {
   document.title = `${to.meta.title}`
-
   // Let callback/error routes through without auth checks
   if (to.meta.allowAnonymous) {
     next()
@@ -96,10 +101,16 @@ router.beforeEach(async (to, from, next) => {
     return
   }
 
-  // if (!user.isSeller()) {
-  //   await logout()
-  //   return next(false)
-  // }
+  if (user.isAdmin() || user.isSystemAdmin()) {
+    await logout()
+    next(false)
+    return
+  }
+
+  if (!user.isSeller() && !to.path.startsWith('/register-seller')) {
+    next('/register-seller')
+    return
+  }
 
   next()
 })
