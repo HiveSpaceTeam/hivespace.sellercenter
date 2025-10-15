@@ -9,15 +9,7 @@ type RedirectArgs = {
   useState?: boolean
 }
 
-interface IdTokenProfile {
-  sub: string
-  iss: string
-  aud: string | string[]
-  exp: number
-  iat: number
-  role?: string | string[]
-  [key: string]: unknown
-}
+type IdTokenProfile = User['profile']
 
 type UserData = {
   id_token: string | undefined
@@ -36,6 +28,10 @@ const LOCAL_STORAGE_KEY = 'hivespace.user_cache'
 const USER_CACHE_DURATION = 5 * 60 * 1000 // 5 minutes
 
 // OIDC Configuration
+const userStore = typeof window !== 'undefined'
+  ? new WebStorageStateStore({ store: window.localStorage })
+  : undefined
+
 const oidcSettings: UserManagerSettings = {
   authority: `${config.api.baseUrl}/identity`,
   client_id: config.auth.oidc.clientId,
@@ -44,11 +40,10 @@ const oidcSettings: UserManagerSettings = {
   scope: config.auth.oidc.scope,
   post_logout_redirect_uri: config.auth.oidc.postLogoutRedirectUri,
   response_mode: config.auth.oidc.responseMode as 'query' | 'fragment' | undefined,
-  userStore: new WebStorageStateStore({ store: window.localStorage }),
+  ...(userStore && { userStore }),
   // Additional recommended settings
   monitorSession: true,
   loadUserInfo: true,
-  automaticSilentRenew: true,
 }
 
 // UserManager instance
@@ -56,7 +51,6 @@ const userManager = new UserManager(oidcSettings)
 
 // User cache for performance
 let userCache: { user: AppUser | null; timestamp: number } | null = null
-
 // Utility Functions
 const clearUserCache = (): void => {
   userCache = null

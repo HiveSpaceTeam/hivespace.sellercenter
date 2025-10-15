@@ -112,6 +112,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 interface Props {
   label?: string
@@ -133,11 +134,13 @@ interface Emits {
   (e: 'error', message: string): void
 }
 
+const { t } = useI18n()
+
 const props = withDefaults(defineProps<Props>(), {
   accept: 'image/*',
   maxSize: 5 * 1024 * 1024, // 5MB default
   previewDirection: 'top',
-  buttonText: 'Choose File',
+  buttonText: t('component.fileInput.chooseFile'),
   required: false,
   previewSize: 'md',
   previewShape: 'circle'

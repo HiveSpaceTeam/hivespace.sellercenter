@@ -8,6 +8,7 @@ import enPages from './locales/en/pages.json'
 import enErrors from './locales/en/errors.json'
 import enBackendErrors from './locales/en/backend-errors.json'
 import enRegisterSeller from './locales/en/register-seller.json'
+import enComponent from './locales/en/component.json'
 
 // Import Vietnamese translation files
 import viCommon from './locales/vi/common.json'
@@ -17,6 +18,7 @@ import viPages from './locales/vi/pages.json'
 import viErrors from './locales/vi/errors.json'
 import viBackendErrors from './locales/vi/backend-errors.json'
 import viRegisterSeller from './locales/vi/register-seller.json'
+import viComponent from './locales/vi/component.json'
 
 // Merge translations for each language
 const en = {
@@ -27,6 +29,7 @@ const en = {
   errors: enErrors,
   backendErrors: enBackendErrors,
   registerSeller: enRegisterSeller,
+  component: enComponent,
 }
 
 const vi = {
@@ -37,6 +40,7 @@ const vi = {
   errors: viErrors,
   backendErrors: viBackendErrors,
   registerSeller: viRegisterSeller,
+  component: viComponent,
 }
 
 const i18n = createI18n({

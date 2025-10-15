@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import demoRoutes from './demoRoutes'
-import { getCurrentUser, logout } from '@/auth/user-manager'
+import { getCurrentUser, login, logout } from '@/auth/user-manager'
 
 // Single grouped collection for several related routes (callbacks, error pages,
 // maintenance, default and 404). We keep the same order and meta fields so
