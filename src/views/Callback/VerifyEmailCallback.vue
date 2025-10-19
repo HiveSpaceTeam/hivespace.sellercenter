@@ -90,7 +90,7 @@
       </div>
 
       <p class="absolute text-sm text-center text-gray-500 -translate-x-1/2 bottom-6 left-1/2 dark:text-gray-400">
-        © 2025 - HiveSpace
+        © {{ currentYear }} - HiveSpace
       </p>
     </div>
   </div>
@@ -116,6 +116,7 @@ const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 const appStore = useAppStore()
+const currentYear = new Date().getFullYear()
 
 // State management
 const isLoading = ref(true)
@@ -163,13 +164,27 @@ const stopRedirectCountdown = () => {
 // Handle redirect to return URL
 const handleRedirect = () => {
   stopRedirectCountdown()
-  if (returnUrl.value) {
-    // Check if it's an absolute URL or relative path
+  if (!returnUrl.value) return
+
+  try {
+    // Absolute URL (includes protocol)
     if (returnUrl.value.startsWith('http')) {
-      window.location.href = returnUrl.value
+      const parsed = new URL(returnUrl.value)
+      // Only allow same-origin absolute redirects
+      if (parsed.origin === window.location.origin) {
+        window.location.href = parsed.toString()
+      } else {
+        // External origins are not allowed — navigate to a safe default
+        router.push('/')
+      }
     } else {
-      router.push(returnUrl.value)
+      // Relative path — ensure leading slash
+      const path = returnUrl.value.startsWith('/') ? returnUrl.value : `/${returnUrl.value}`
+      router.push(path)
     }
+  } catch {
+    // Malformed URL — fallback to safe default
+    router.push('/')
   }
 }
 
@@ -186,7 +201,6 @@ const goToVerifyEmail = () => {
 // Verify email with token
 const verifyEmailToken = async (token: string) => {
   try {
-    debugger
     await accountService.confirmEmailVerification(token)
 
     // Success
@@ -200,7 +214,9 @@ const verifyEmailToken = async (token: string) => {
     )
 
     const currentUser = await getCurrentUser()
-    await refreshToken(currentUser, true)
+    if (currentUser) {
+      await refreshToken(currentUser, true)
+    }
 
     // Start countdown if return URL exists
     if (returnUrl.value) {
@@ -214,15 +230,13 @@ const verifyEmailToken = async (token: string) => {
     isError.value = true
     isLoading.value = false
 
-    // Extract error message
-    if (error instanceof Error) {
-      errorMessage.value = error.message
-    }
+    // Do not expose raw server error messages to users; use generic translation
+    errorMessage.value = ''
 
-    // Show error notification
+    // Show error notification with a generic message
     appStore.notifyError(
       t('verifyEmailCallback.error.title'),
-      errorMessage.value || t('verifyEmailCallback.error.subtitle')
+      t('verifyEmailCallback.error.subtitle')
     )
   }
 }

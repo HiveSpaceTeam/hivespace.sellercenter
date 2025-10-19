@@ -138,7 +138,7 @@
       </div>
 
       <p class="absolute text-sm text-center text-gray-500 -translate-x-1/2 bottom-6 left-1/2 dark:text-gray-400">
-        © 2025 - HiveSpace
+        © {{ currentYear }} - HiveSpace
       </p>
     </div>
   </div>
@@ -167,7 +167,7 @@ const router = useRouter()
 const { t } = useI18n()
 const appStore = useAppStore()
 const { handleFieldValidationErrors, clearFieldErrors } = useFieldValidation()
-
+const currentYear = new Date().getFullYear()
 // Constants
 const COOLDOWN_SECONDS = 60
 
@@ -359,7 +359,7 @@ onMounted(async () => {
         await router.push('/register-seller')
         return
       }
-      
+
       // Pre-fill email from current user if available
       if (currentUser.profile?.email) {
         formData.email = currentUser.profile.email
