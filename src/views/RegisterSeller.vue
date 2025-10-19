@@ -116,7 +116,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/stores/app'
@@ -266,4 +266,19 @@ const handleSubmit = async () => {
     isSubmitting.value = false
   }
 }
+
+// Initialize component
+onMounted(async () => {
+  try {
+    // Check if user is already a seller
+    const currentUser = await getCurrentUser()
+    if (currentUser?.isSeller()) {
+      // If already a seller, redirect to user management
+      await router.push('/account/user-management')
+      return
+    }
+  } catch (error) {
+    console.warn('Could not check user seller status:', error)
+  }
+})
 </script>

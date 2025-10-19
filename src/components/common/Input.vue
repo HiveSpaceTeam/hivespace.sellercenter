@@ -58,7 +58,7 @@ const props = withDefaults(
   defineProps<{
     modelValue?: string
     label?: string
-    labelPosition?: 'left' | 'right' | 'top' | 'bottom'
+    labelPosition?: 'left' | 'top'
     id?: string
     type?: string
     placeholder?: string
@@ -105,11 +105,17 @@ const baseClass =
 
 const errorClass = 'border-red-500 focus:border-red-500 focus:ring-red-500/10'
 
+const disabledClass = 'disabled:border-gray-100 disabled:bg-gray-50 disabled:placeholder:text-gray-300 disabled:cursor-not-allowed dark:disabled:border-gray-800 dark:disabled:bg-white/[0.03] dark:disabled:placeholder:text-white/15'
+
 const computedClass = computed(() => {
   const classes = [baseClass]
 
   if (props.error) {
     classes.push(errorClass)
+  }
+
+  if (props.disabled) {
+    classes.push(disabledClass)
   }
 
   if (props.inputClass) {

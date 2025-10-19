@@ -10,9 +10,11 @@
 // Unified Admin (store-facing) types
 export * from './admin.types'
 
+// Account types
+export * from './account.types'
+
 // Store types
 export * from './store.types'
-export * from './admin.types'
 
 // API common types (kept under api for backend contracts)
 export * from './common.types'
