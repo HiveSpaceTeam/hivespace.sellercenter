@@ -20,6 +20,12 @@ const mainRoutes = [
     meta: { allowAnonymous: true },
   },
   {
+    path: '/verify-email-callback',
+    name: 'Verify Email Callback',
+    component: () => import('@/views/Callback/VerifyEmailCallback.vue'),
+    meta: { title: 'Verify Email', allowAnonymous: true },
+  },
+  {
     path: '/server-error',
     name: 'ServerError',
     component: () => import('@/views/Pages/ServerError.vue'),
@@ -79,6 +85,12 @@ const router = createRouter({
       component: () => import('@/views/RegisterSeller.vue'),
       meta: { title: 'Register Seller' },
     },
+    {
+      path: '/verify-email',
+      name: 'Verify Email',
+      component: () => import('@/views/VerifyEmail.vue'),
+      meta: { title: 'Verify Email' },
+    },
     // Grouped block (callbacks, pages, default, demo, notFound)
     ...mainRoutes,
   ],
@@ -107,10 +119,21 @@ router.beforeEach(async (to, from, next) => {
     return
   }
 
-  if (!user.isSeller() && !to.path.startsWith('/register-seller')) {
-    next('/register-seller')
-    return
+  // Check if user is not a seller
+  if (!user.isSeller()) {
+    // Priority 1: If not seller and email is not verified, redirect to verify-email
+    if (!user.profile.email_verified && !to.path.startsWith('/verify-email')) {
+      next('/verify-email')
+      return
+    }
+
+    // Priority 2: If not seller and email is verified, redirect to register-seller
+    if (user.profile.email_verified && !to.path.startsWith('/register-seller')) {
+      next('/register-seller')
+      return
+    }
   }
 
+  // If all conditions are met (user is a seller or on correct route), allow navigation
   next()
 })
