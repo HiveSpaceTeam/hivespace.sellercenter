@@ -18,7 +18,7 @@ export interface ProductSku {
     value: string
     optionId: string
   }[]
-  price?: number | string | { amount: number; currency: number }
+  price: { amount: number; currency: number }
   quantity?: number | string
   skuNo?: string
 }

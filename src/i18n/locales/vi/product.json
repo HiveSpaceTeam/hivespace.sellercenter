@@ -1,9 +1,11 @@
 {
   "basicInfo": "Thông tin cơ bản",
+  "addProduct": "Thêm sản phẩm mới",
   "productName": "Tên sản phẩm",
   "productCategory": "Ngành hàng",
   "productDescription": "Mô tả sản phẩm",
   "price": "Giá",
+  "quantity": "Số lượng",
   "typeHere": "Nhập vào",
   "fill": "Nhập",
   "inventory": "Kho hàng",
@@ -15,5 +17,17 @@
   "enterValue": "Vui lòng điền vào",
   "pleaseSelect": "Vui lòng chọn",
   "selectCategoryFirst": "Có thể điều chỉnh sau khi chọn ngành hàng",
-  "categoryAttributes": "Thông tin chi tiết"
+  "categoryAttributes": "Thông tin chi tiết",
+  "searchPlaceholder": "Tìm tên sản phẩm, SKU sản phẩm",
+  "productStatus": {
+    "active": "Đang hoạt động",
+    "inactive": "Không hoạt động",
+    "allStatus": "Tất cả trạng thái"
+  },
+  "deleteProduct": "Xóa sản phẩm",
+  "deleteProductConfirm": "Bạn có chắc chắn muốn xóa \"{name}\"? Hành động này không thể hoàn tác.",
+  "productDeleted": "Đã xóa sản phẩm",
+  "productDeletedMessage": "Sản phẩm \"{name}\" đã được xóa thành công.",
+  "deleteError": "Xóa thất bại",
+  "deleteErrorMessage": "Không thể xóa sản phẩm. Vui lòng thử lại."
 }

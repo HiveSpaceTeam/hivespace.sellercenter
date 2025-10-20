@@ -2,7 +2,7 @@
   <AdminLayout>
     <PageBreadcrumb :pageTitle="currentPageTitle" />
     <div class="space-y-5 sm:space-y-6">
-      <ComponentCard :title="$t('pages.listOfAdmins')">
+      <ComponentCard :title="$t('pages.productList')">
         <!-- Table Content -->
         <div
           class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
@@ -13,7 +13,7 @@
               <div class="flex items-center justify-end gap-2">
                 <div class="w-full sm:w-64">
                   <Input type="text" :value="searchQuery" @input="tableHandleSearchInput"
-                    :placeholder="$t('table.searchPlaceholder')" autocomplete="off" />
+                    :placeholder="$t('product.searchPlaceholder')" autocomplete="off" />
                 </div>
 
                 <!-- Status Filter -->
@@ -32,10 +32,10 @@
               <div class="flex items-center justify-end">
                 <div class="flex items-center gap-2">
                   <Button :onClick="addNewProduct" :startIcon="BigPlusIcon" variant="primary">
-                    {{ $t('admins.addNewAdmin') }}
+                    {{ $t('product.addProduct') }}
                   </Button>
                   <Button :startIcon="RefreshIcon" variant="outline" @click="refreshAdmins">
-                    {{ $t('actions.refresh') }}
+                    {{ $t('common.actions.refresh') }}
                   </Button>
                 </div>
               </div>
@@ -55,16 +55,16 @@
               <thead>
                 <tr class="border-b border-gray-200 dark:border-gray-700">
                   <th class="px-5 py-3 text-left w-1/3 sm:px-6">
-                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.name') }}</p>
+                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('product.productName') }}</p>
                   </th>
                   <th class="px-5 py-3 text-left w-1/3 sm:px-6">
-                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.price') }}</p>
+                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('product.price') }}</p>
                   </th>
                   <th class="px-5 py-3 text-left w-1/3 sm:px-6">
-                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.quantity') }}</p>
+                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('product.quantity') }}</p>
                   </th>
                   <th class="px-5 py-3 text-left w-1/4 sm:px-6">
-                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('table.actions') }}</p>
+                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('common.action') }}</p>
                   </th>
                 </tr>
               </thead>
@@ -116,8 +116,10 @@ import Select from "@/components/common/Select.vue";
 import DropdownMenu from "@/components/common/DropdownMenu.vue";
 import Input from '@/components/common/Input.vue';
 import { useModal } from '@/composables/useModal'
+import { useConfirmModal } from '@/composables/useConfirmModal'
 import { productService } from '@/services'
 import { useRouter } from 'vue-router'
+import { useAppStore } from '@/stores/app'
 import type { Product, ProductSearchRequest, PagedResponse } from '@/types'
 
 import { BigPlusIcon, RefreshIcon, EditIcon, TrashRedIcon } from '@/icons'
@@ -129,9 +131,9 @@ const currentPageTitle = computed(() => t('pages.productList'));
 
 // Options for the filter selects (i18n-backed)
 const statusOptions = computed(() => [
-  { value: 'all', label: t('table.filter.allStatus') },
-  { value: 'active', label: t('table.filter.active') },
-  { value: 'inactive', label: t('table.filter.inactive') }
+  { value: 'all', label: t('product.productStatus.allStatus') },
+  { value: 'active', label: t('product.productStatus.active') },
+  { value: 'inactive', label: t('product.productStatus.inactive') }
 ]);
 
 const adminTypeOptions = computed(() => [
@@ -153,7 +155,9 @@ const totalCount = ref(0)
 
 // Global modal handler
 const { openModal } = useModal()
+const { deleteConfirm } = useConfirmModal()
 const router = useRouter()
+const appStore = useAppStore()
 
 // Current User (simulate current admin user)
 const currentUser = ref<AppUser | null>(null);
@@ -327,9 +331,48 @@ const editProduct = (product: Product) => {
   router.push({ path: `/product/${product.id}` })
 }
 
-const removeProduct = (product: Product) => {
-  // TODO: call delete API when available
-  console.log('Remove product', product.id)
+const removeProduct = async (product: Product) => {
+  if (!product?.id) return
+
+  try {
+    // Show confirmation modal
+    const confirmed = await deleteConfirm(
+      t('product.deleteProduct'),
+      t('product.deleteProductConfirm', { name: product.name })
+    )
+
+    if (!confirmed) return
+
+    // Set loading state
+    loading.value = true
+
+    // Call delete API
+    await productService.deleteProduct(product.id.toString())
+
+    // Remove product from local list
+    products.value = products.value.filter(p => p.id !== product.id)
+    totalCount.value = Math.max(0, totalCount.value - 1)
+
+    // Show success notification
+    appStore.notifySuccess(
+      t('product.productDeleted'),
+      t('product.productDeletedMessage', { name: product.name })
+    )
+
+    // Update last updated timestamp
+    updateLastUpdated()
+
+  } catch (error) {
+    console.error('Failed to delete product:', error)
+    
+    // Show error notification
+    appStore.notifyError(
+      t('product.deleteError'),
+      t('product.deleteErrorMessage')
+    )
+  } finally {
+    loading.value = false
+  }
 }
 
 const fetchProducts = async () => {
@@ -365,7 +408,7 @@ const updateLastUpdated = () => {
 type AdminModalResult = { action?: 'create' | 'cancel', data?: { email: string, isSystemAdmin: boolean } } | undefined
 
 const addNewProduct = () => {
-
+  router.push({ path: '/product/new' })
 }
 
 // Lifecycle

@@ -15,5 +15,19 @@
   "enterValue": "Please fill in",
   "pleaseSelect": "Please select",
   "selectCategoryFirst": "Can be adjusted after selecting a category",
-  "categoryAttributes": "Detailed Information"
+  "categoryAttributes": "Detailed Information",
+  "addProduct": "Add Product",
+  "quantity": "Quantity",
+  "searchPlaceholder": "Search product name, SKU",
+  "productStatus": {
+    "active": "Active",
+    "inactive": "Inactive",
+    "allStatus": "All Status"
+  },
+  "deleteProduct": "Delete Product",
+  "deleteProductConfirm": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+  "productDeleted": "Product Deleted",
+  "productDeletedMessage": "Product \"{name}\" has been successfully deleted.",
+  "deleteError": "Delete Failed",
+  "deleteErrorMessage": "Failed to delete the product. Please try again."
 }

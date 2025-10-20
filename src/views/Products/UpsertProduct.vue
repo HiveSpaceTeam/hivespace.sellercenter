@@ -20,7 +20,7 @@
                                 {{ $t('product.productCategory') }}
                             </label>
                             <div class="relative z-20 bg-transparent">
-                                <select v-model="formData.selectInput" :disabled="isLoadingCategories"
+                                <select @change="onChangeCategory" v-model="formData.selectInput" :disabled="isLoadingCategories"
                                     class="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 disabled:opacity-50 disabled:cursor-not-allowed"
                                     :class="{ 'text-gray-800 dark:text-white/90': formData.selectInput }">
                                     <option value="" disabled selected>
@@ -77,7 +77,6 @@
                                 {{ attribute.name }}
                                 <span v-if="attribute.isMandatory" class="text-red-500 ml-1">*</span>
                             </label>
-
                             <!-- Textbox -->
                             <template v-if="attribute.inputType === 1">
                                 <!-- Single textbox -->
@@ -192,7 +191,7 @@
                                             </td>
 
                                             <td class="px-5 py-4 sm:px-6">
-                                                <input type="text" v-model="productSku.price"
+                                                <input type="text" v-model="productSku.price.amount"
                                                     class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
                                             </td>
 
@@ -383,7 +382,7 @@ const updateProductSkus = (productVariant: ProductVariant, option: { optionId: s
 
     // Build all possible combinations
     const combinations = cartesian(optionsList);
-
+    
     // Add new SKUs for new combinations
     combinations.forEach(combo => {
         // Build skuVariants for this combo
@@ -396,6 +395,7 @@ const updateProductSkus = (productVariant: ProductVariant, option: { optionId: s
         product.value.skus.push({
             id: crypto.randomUUID(),
             skuVariants,
+            price: { amount: 0, currency: 0 },
         });
     });
     product.value.skus = product.value.skus.filter(productSku => productSku.skuVariants.length === product.value.variants.length)
@@ -404,6 +404,7 @@ const updateProductSkus = (productVariant: ProductVariant, option: { optionId: s
 
 
 const getVariantValueBySKU = (productSku: ProductSku, variant: ProductVariant) => {
+    debugger
     if (!productSku || !Array.isArray(productSku.skuVariants) || !variant) return '';
     const variantId = variant.id;
     const matched = productSku.skuVariants.find(sv => sv.variantId === variantId);
@@ -475,16 +476,6 @@ const fetchCategoryAttributes = async (categoryId: string) => {
 }
 
 
-// Watch for category selection changes
-watch(() => formData.value.selectInput, (newCategoryId) => {
-    if (newCategoryId) {
-        fetchCategoryAttributes(newCategoryId)
-    } else {
-        categoryAttributes.value = []
-        attributeValues.value = {}
-    }
-})
-
 // Load categories on component mount
 onMounted(async () => {
     fetchCategories()
@@ -554,7 +545,6 @@ const loadProductDetails = async (id: string) => {
                     values[attrId] = attr.freeTextValue ? String(attr.freeTextValue) : ''
                 }
             }
-
             attributeValues.value = values
             attributeMultiValues.value = multiValues
         }
@@ -644,6 +634,15 @@ const onSave = async () => {
         // Optionally, reset form or navigate
     } catch (error: any) {
         appStore.notifyError('Error', error?.message || 'Failed to save product')
+    }
+}
+
+const onChangeCategory = ()=>{
+    if (formData.value.selectInput) {
+        fetchCategoryAttributes(formData.value.selectInput)
+    } else {
+        categoryAttributes.value = []
+        attributeValues.value = {}
     }
 }
 </script>

@@ -38,6 +38,14 @@ class ProductService {
     const url = buildApiUrl(`${PRODUCT_ENDPOINTS.PRODUCTS}/${id}`)
     await apiService.put<void>(url, payload)
   }
+
+  /**
+   * Delete a product
+   */
+  async deleteProduct(id: string): Promise<void> {
+    const url = buildApiUrl(`${PRODUCT_ENDPOINTS.PRODUCTS}/${id}`)
+    await apiService.delete<void>(url)
+  }
 }
 
 export const productService = new ProductService()

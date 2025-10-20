@@ -1,6 +1,8 @@
 {
   "menu": "Menu",
   "cancel": "Hủy",
+  "save": "Lưu",
+  "action": "Hành động",
   "actions": {
     "delete": "Xóa",
     "activate": "Kích hoạt",
