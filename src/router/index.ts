@@ -53,27 +53,6 @@ const router = createRouter({
   },
   routes: [
     {
-      path: '/account',
-      children: [
-        {
-          path: '',
-          redirect: '/account/user-management',
-        },
-        {
-          path: 'user-management',
-          name: 'User management',
-          component: () => import('@/views/Accounts/UserManagement.vue'),
-          meta: { title: 'User management' },
-        },
-        {
-          path: 'admin-management',
-          name: 'Admin management',
-          component: () => import('@/views/Accounts/AdminManagement.vue'),
-          meta: { title: 'Admin management' },
-        },
-      ],
-    },
-    {
       path: '/product',
       children: [
         {

@@ -1,5 +1,5 @@
 <template>
-  <AdminLayout>
+  <DictionaryLayout>
     <PageBreadcrumb :pageTitle="currentPageTitle" />
     <div class="space-y-5 sm:space-y-6">
       <ComponentCard :title="$t('pages.productList')">
@@ -22,11 +22,7 @@
                     :buttonClass="'w-full text-left px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white flex justify-between items-center'" />
                 </div>
 
-                <!-- Admin Type Filter -->
-                <div class="sm:w-48" v-if="currentUser?.isSystemAdmin()">
-                  <Select v-model="adminTypeFilter" :options="adminTypeOptions"
-                    :buttonClass="'w-full text-left px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white flex justify-between items-center'" />
-                </div>
+              
               </div>
 
               <div class="flex items-center justify-end">
@@ -34,7 +30,7 @@
                   <Button :onClick="addNewProduct" :startIcon="BigPlusIcon" variant="primary">
                     {{ $t('product.addProduct') }}
                   </Button>
-                  <Button :startIcon="RefreshIcon" variant="outline" @click="refreshAdmins">
+                  <Button :startIcon="RefreshIcon" variant="outline" @click="refreshTables">
                     {{ $t('common.actions.refresh') }}
                   </Button>
                 </div>
@@ -93,23 +89,18 @@
         </div>
         <!-- Footer -->
         <template #footer>
-          <div class="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
-            <span>{{ $t('admins.showingResults', { count: filteredAdminsCount, total: admins.length }) }}</span>
-            <span>{{ $t('admins.lastUpdated') }} {{ lastUpdated }}</span>
-          </div>
         </template>
       </ComponentCard>
     </div>
 
-    <!-- Add Admin Modal moved to global modal system -->
-  </AdminLayout>
+  </DictionaryLayout>
 </template>
 
 <script setup lang="ts">
 import { computed, ref, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import PageBreadcrumb from "@/components/common/PageBreadcrumb.vue";
-import AdminLayout from "@/components/layout/AdminLayout.vue";
+import DictionaryLayout from "@/components/layout/DictionaryLayout.vue";
 import ComponentCard from "@/components/common/ComponentCard.vue";
 import Button from "@/components/common/Button.vue";
 import Select from "@/components/common/Select.vue";
@@ -136,17 +127,11 @@ const statusOptions = computed(() => [
   { value: 'inactive', label: t('product.productStatus.inactive') }
 ]);
 
-const adminTypeOptions = computed(() => [
-  { value: 'all', label: t('table.filter.allAdmins') },
-  { value: 'regular', label: t('table.filter.regularAdmin') },
-  { value: 'system', label: t('table.filter.systemAdmin') }
-]);
 
 // State management
 const loading = ref(false);
 const searchQuery = ref('');
 const statusFilter = ref('all');
-const adminTypeFilter = ref('all');
 const lastUpdated = ref('');
 const products = ref<Product[]>([])
 const pageIndex = ref(1)
@@ -159,65 +144,9 @@ const { deleteConfirm } = useConfirmModal()
 const router = useRouter()
 const appStore = useAppStore()
 
-// Current User (simulate current admin user)
 const currentUser = ref<AppUser | null>(null);
 
 
-// Admins data placeholder (current UI is admin-oriented). Typed to avoid TS 'never' inference.
-const admins = ref<Admin[]>([]);
-
-// Computed properties
-const filteredAdminsCount = computed(() => {
-  let filtered = admins.value;
-
-  if (searchQuery.value) {
-    const query = searchQuery.value.toLowerCase();
-    filtered = filtered.filter(admin =>
-      admin.email.toLowerCase().includes(query)
-    );
-  }
-
-  if (statusFilter.value !== 'all') {
-    const status = statusFilter.value === 'active' ? 'Active' : 'Inactive';
-    filtered = filtered.filter(admin => admin.status === status);
-  }
-
-  if (adminTypeFilter.value !== 'all') {
-    const adminType = adminTypeFilter.value === 'system' ? 'System Admin' : 'Regular Admin';
-    filtered = filtered.filter(admin => admin.adminType === adminType);
-  }
-
-  return filtered.length;
-});
-
-// Removed local password strength and validation computation; handled in modal
-
-// Table: filtered list + local menu state
-const filteredAdmins = computed(() => {
-  let filtered = admins.value
-
-  // Search filter
-  if (searchQuery.value) {
-    const query = searchQuery.value.toLowerCase()
-    filtered = filtered.filter(admin =>
-      admin.email.toLowerCase().includes(query)
-    )
-  }
-
-  // Status filter
-  if (statusFilter.value !== 'all') {
-    const status = statusFilter.value === 'active' ? 'Active' : 'Inactive'
-    filtered = filtered.filter(admin => admin.status === status)
-  }
-
-  // Admin type filter
-  if (adminTypeFilter.value !== 'all') {
-    const adminType = adminTypeFilter.value === 'system' ? 'System Admin' : 'Regular Admin'
-    filtered = filtered.filter(admin => admin.adminType === adminType)
-  }
-
-  return filtered
-})
 
 
 const actionText = {
@@ -226,19 +155,6 @@ const actionText = {
   deactivate: t('table.deactivate')
 }
 
-// lightweight Admin type for handlers
-type Admin = {
-  id: number;
-  email: string;
-  fullName?: string;
-  adminType?: string;
-  status?: string;
-  isSystemAdmin?: boolean;
-  createdDate?: string;
-  lastLoginDate?: string;
-  lastUpdatedDate?: string;
-  avatar?: string;
-}
 
 // Helpers for product display
 const totalQuantity = (product: Product): number => {
@@ -275,13 +191,7 @@ const formatCurrency = (value: number): string => {
   return new Intl.NumberFormat(undefined, { style: 'currency', currency: 'USD' }).format(value)
 }
 
-const tableHandleDelete = (admin: Admin) => {
-  handleDeleteAdmin(admin.id)
-}
 
-const tableHandleToggleStatus = (admin: Admin) => {
-  handleToggleStatus(admin.id)
-}
 
 const tableHandleSearchInput = (event: Event) => {
   const target = event.target as HTMLInputElement
@@ -289,34 +199,6 @@ const tableHandleSearchInput = (event: Event) => {
 }
 
 
-// Dropdown menu is handled by DropdownMenu component which manages its own outside clicks
-
-// Event handlers
-const handleDeleteAdmin = (adminId: number) => {
-  loading.value = true;
-  // Simulate API call
-  setTimeout(() => {
-    admins.value = admins.value.filter(admin => admin.id !== adminId);
-    loading.value = false;
-    updateLastUpdated();
-    console.log('Admin deleted:', adminId);
-  }, 500);
-};
-
-const handleToggleStatus = (adminId: number) => {
-  loading.value = true;
-  // Simulate API call
-  setTimeout(() => {
-    const admin = admins.value.find(a => a.id === adminId);
-    if (admin) {
-      admin.status = admin.status === 'Active' ? 'Inactive' : 'Active';
-      admin.lastUpdatedDate = new Date().toISOString().split('T')[0];
-    }
-    loading.value = false;
-    updateLastUpdated();
-    console.log('Status toggled for admin:', adminId);
-  }, 500);
-};
 
 const handleSearch = (query: string) => {
   searchQuery.value = query;
@@ -396,7 +278,7 @@ const fetchProducts = async () => {
   }
 }
 
-const refreshAdmins = async () => {
+const refreshTables = async () => {
   await fetchProducts()
 };
 
@@ -404,8 +286,7 @@ const updateLastUpdated = () => {
   lastUpdated.value = new Date().toLocaleString();
 };
 
-// Open global AdminDetail modal and handle result
-type AdminModalResult = { action?: 'create' | 'cancel', data?: { email: string, isSystemAdmin: boolean } } | undefined
+
 
 const addNewProduct = () => {
   router.push({ path: '/product/new' })
