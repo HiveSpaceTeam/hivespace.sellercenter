@@ -11,6 +11,7 @@ import enRegisterSeller from './locales/en/register-seller.json'
 import enComponent from './locales/en/component.json'
 import enVerifyEmail from './locales/en/verifyEmail.json'
 import enVerifyEmailCallback from './locales/en/verifyEmailCallback.json'
+import enProduct from './locales/en/product.json'
 
 // Import Vietnamese translation files
 import viCommon from './locales/vi/common.json'
@@ -23,6 +24,7 @@ import viRegisterSeller from './locales/vi/register-seller.json'
 import viComponent from './locales/vi/component.json'
 import viVerifyEmail from './locales/vi/verifyEmail.json'
 import viVerifyEmailCallback from './locales/vi/verifyEmailCallback.json'
+import viProduct from './locales/vi/product.json'
 
 // Merge translations for each language
 const en = {
@@ -36,10 +38,12 @@ const en = {
   component: enComponent,
   verifyEmail: enVerifyEmail,
   verifyEmailCallback: enVerifyEmailCallback,
+  product: enProduct,
 }
 
 const vi = {
   common: viCommon,
+  product: viProduct,
   admins: viAdmins,
   users: viUsers,
   pages: viPages,

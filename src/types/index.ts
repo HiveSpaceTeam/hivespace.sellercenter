@@ -9,6 +9,7 @@
 
 // Unified Admin (store-facing) types
 export * from './admin.types'
+export * from './product.types'
 
 // Account types
 export * from './account.types'

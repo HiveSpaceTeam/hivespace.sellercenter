@@ -44,7 +44,7 @@ async function checkUserAndRedirect(): Promise<AppUser | null> {
     const user = await getCurrentUser()
     if (user) {
       // If the user already appears signed in locally, go to user management
-      await router.push('/account/user-management')
+      await router.push('/product/list')
       return user
     }
     return null
