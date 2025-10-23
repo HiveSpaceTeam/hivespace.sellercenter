@@ -11,6 +11,12 @@
 export * from './admin.types'
 export * from './product.types'
 
+// Account types
+export * from './account.types'
+
+// Store types
+export * from './store.types'
+
 // API common types (kept under api for backend contracts)
 export * from './common.types'
 

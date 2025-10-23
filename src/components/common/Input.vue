@@ -1,5 +1,31 @@
 <template>
-  <div>
+  <div v-if="labelPosition === 'left'" :class="[
+    'flex items-center gap-4'
+  ]">
+    <label v-if="label" :for="id" :class="[
+      'text-sm font-medium text-gray-700 dark:text-gray-400 min-w-0 whitespace-nowrap',
+      required ? 'required-label' : ''
+    ]">
+      {{ label }}
+    </label>
+    <div class="flex-1">
+      <div class="relative">
+        <slot name="prepend" />
+
+        <input :id="id" :type="type" :placeholder="placeholder" :value="modelValue" :disabled="disabled"
+          :required="required" @input="onInput" @focus="onFocus" @blur="onBlur" :class="computedClass" v-bind="attrs" />
+
+        <slot name="append" />
+      </div>
+
+      <!-- Error message display -->
+      <p v-if="error" class="form-error-text mt-1 text-sm text-red-600 dark:text-red-400">
+        {{ error }}
+      </p>
+    </div>
+  </div>
+
+  <div v-else>
     <label v-if="label" :for="id" :class="[
       'mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400',
       required ? 'required-label' : '',
@@ -32,6 +58,7 @@ const props = withDefaults(
   defineProps<{
     modelValue?: string
     label?: string
+    labelPosition?: 'left' | 'top'
     id?: string
     type?: string
     placeholder?: string
@@ -43,6 +70,7 @@ const props = withDefaults(
   {
     modelValue: '',
     label: '',
+    labelPosition: 'top',
     id: undefined,
     type: 'text',
     placeholder: '',
@@ -77,11 +105,17 @@ const baseClass =
 
 const errorClass = 'border-red-500 focus:border-red-500 focus:ring-red-500/10'
 
+const disabledClass = 'disabled:border-gray-100 disabled:bg-gray-50 disabled:placeholder:text-gray-300 disabled:cursor-not-allowed dark:disabled:border-gray-800 dark:disabled:bg-white/[0.03] dark:disabled:placeholder:text-white/15'
+
 const computedClass = computed(() => {
   const classes = [baseClass]
 
   if (props.error) {
     classes.push(errorClass)
+  }
+
+  if (props.disabled) {
+    classes.push(disabledClass)
   }
 
   if (props.inputClass) {

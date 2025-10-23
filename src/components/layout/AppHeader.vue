@@ -1,37 +1,37 @@
 <template>
   <header
-    class="sticky top-0 flex w-full bg-white border-gray-200 z-999 dark:border-gray-800 dark:bg-gray-900 lg:border-b"
-  >
+    class="sticky top-0 flex w-full bg-white border-gray-200 z-999 dark:border-gray-800 dark:bg-gray-900 lg:border-b">
     <div class="flex flex-col items-center justify-between grow lg:flex-row lg:px-6">
       <div
-        class="flex items-center justify-between w-full gap-2 px-3 py-3 border-b border-gray-200 dark:border-gray-800 sm:gap-4 lg:justify-normal lg:border-b-0 lg:px-0 lg:py-4"
-      >
-        <button
-          @click="handleToggle"
+        class="flex items-center justify-between w-full gap-2 px-3 py-3 border-b border-gray-200 dark:border-gray-800 sm:gap-4 lg:justify-normal lg:border-b-0 lg:px-0 lg:py-4">
+        <button v-if="props.showSidebarToggle" @click="handleToggle"
+          :aria-label="isMobileOpen ? $t('sidebar.close') : $t('sidebar.open')" :aria-expanded="isMobileOpen"
           class="flex items-center justify-center w-10 h-10 text-gray-500 border-gray-200 rounded-lg z-999 dark:border-gray-800 dark:text-gray-400 lg:h-11 lg:w-11 lg:border"
           :class="[
             isMobileOpen
               ? 'lg:bg-transparent dark:lg:bg-transparent bg-gray-100 dark:bg-gray-800'
               : '',
-          ]"
-        >
+          ]">
           <CloseMenuIcon v-if="isMobileOpen" />
           <MenuIcon v-else />
         </button>
-        <HeaderLogo />
-        <button
-          @click="toggleApplicationMenu"
-          class="flex items-center justify-center w-10 h-10 text-gray-700 rounded-lg z-999 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 lg:hidden"
-        >
+        <!-- Spacer when toggle button is hidden to maintain layout -->
+        <div v-else class="w-10 h-10 lg:w-11 lg:h-11"></div>
+        <button @click="toggleApplicationMenu"
+          :aria-label="isApplicationMenuOpen ? $t('header.applicationMenu.close') : $t('header.applicationMenu.open')"
+          :aria-expanded="isApplicationMenuOpen" aria-controls="application-menu"
+          class="flex items-center justify-center w-10 h-10 text-gray-700 rounded-lg z-999 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 lg:hidden">
           <MenuDotsIcon />
         </button>
-        <SearchBar />
+        <HeaderLogo />
+        <button @click="toggleApplicationMenu"
+          class="flex items-center justify-center w-10 h-10 text-gray-700 rounded-lg z-999 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 lg:hidden">
+          <MenuDotsIcon />
+        </button>
       </div>
 
-      <div
-        :class="[isApplicationMenuOpen ? 'flex' : 'hidden']"
-        class="items-center justify-between w-full gap-4 px-5 py-4 shadow-theme-md lg:flex lg:justify-end lg:px-0 lg:shadow-none"
-      >
+      <div :class="[isApplicationMenuOpen ? 'flex' : 'hidden']"
+        class="items-center justify-between w-full gap-4 px-5 py-4 shadow-theme-md lg:flex lg:justify-end lg:px-0 lg:shadow-none">
         <div class="flex items-center gap-2 2xsm:gap-3">
           <ThemeToggler />
           <LanguageSwitcher />
@@ -47,7 +47,6 @@
 import { ref } from 'vue'
 import { useSidebar } from '@/composables/useSidebar'
 import ThemeToggler from '@/components/common/ThemeToggler.vue'
-import SearchBar from '@/components/layout/header/SearchBar.vue'
 import HeaderLogo from '@/components/layout/header/HeaderLogo.vue'
 import NotificationMenu from '@/components/layout/header/NotificationMenu.vue'
 import UserMenu from '@/components/layout/header/UserMenu.vue'
@@ -56,6 +55,14 @@ import LanguageSwitcher from '@/components/layout/header/LanguageSwitcher.vue'
 import CloseMenuIcon from '@/icons/CloseMenuIcon.vue'
 import MenuIcon from '@/icons/MenuIcon.vue'
 import MenuDotsIcon from '@/icons/MenuDotsIcon.vue'
+
+interface Props {
+  showSidebarToggle?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  showSidebarToggle: true
+})
 
 const { toggleSidebar, toggleMobileSidebar, isMobileOpen } = useSidebar()
 

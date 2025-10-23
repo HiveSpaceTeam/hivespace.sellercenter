@@ -12,7 +12,7 @@ type TokenResponse = {
 const tokenEndpoint = new URL('/identity/connect/token', config.api.baseUrl.replace(/\/+$/, '')).toString()
 
 // Helper: perform a refresh_token exchange using the stored refresh token
-export async function refreshTokenIfNeeded(user: AppUser | null): Promise<AppUser | null> {
+export async function refreshToken(user: AppUser | null, forceRefresh = false): Promise<AppUser | null> {
     if (!user) return null
 
     const now = Math.floor(Date.now() / 1000)
@@ -23,8 +23,8 @@ export async function refreshTokenIfNeeded(user: AppUser | null): Promise<AppUse
     const priorExpiresAt = Number(user.expires_at)
     const expiresAt = Number.isFinite(priorExpiresAt) ? priorExpiresAt : NaN
 
-    // If token is valid for at least 60 more seconds, no action
-    if (Number.isFinite(expiresAt) && expiresAt - now > 60) return user
+    // If token is valid for at least 60 more seconds and forceRefresh is false, no action
+    if (!forceRefresh && Number.isFinite(expiresAt) && expiresAt - now > 60) return user
 
     const refreshToken = (user.refresh_token as string) || undefined
     if (!refreshToken) return null
@@ -69,11 +69,25 @@ export async function refreshTokenIfNeeded(user: AppUser | null): Promise<AppUse
             ? Math.floor(Date.now() / 1000) + data.expires_in
             : (Number.isFinite(priorExpiresAt) ? priorExpiresAt : undefined)
 
+        const newIdToken = data.id_token || user.id_token
+        let newProfile = user.profile
+
+        // If we got a new id_token, decode it to get the new profile
+        if (data.id_token) {
+            try {
+                const payload = JSON.parse(atob(data.id_token.split('.')[1]))
+                newProfile = payload
+            } catch (err) {
+                console.error('Failed to decode new id_token', err)
+            }
+        }
+
         const updatedUser: AppUser = {
             ...user,
             access_token: data.access_token || (user as unknown as Record<string, string>)['access_token'],
             refresh_token: data.refresh_token || (user as unknown as Record<string, string>)['refresh_token'],
-            id_token: data.id_token || (user as unknown as Record<string, string>)['id_token'],
+            id_token: newIdToken,
+            profile: newProfile,
             expires_in: newExpiresIn,
             // expires_at may be undefined when there's no authoritative expiry
             expires_at: newExpiresAt as unknown as number | undefined,
@@ -100,4 +114,4 @@ export async function refreshTokenIfNeeded(user: AppUser | null): Promise<AppUse
     }
 }
 
-export default refreshTokenIfNeeded
+export default refreshToken

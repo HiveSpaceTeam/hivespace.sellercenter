@@ -10,7 +10,8 @@
     </div>
 
     <div class="mx-auto w-full max-w-[242px] text-center sm:max-w-[562px]">
-      <img src="/images/logo/logo-light.svg" alt="home" class="w-full h-auto" />
+      <img class="dark:hidden w-full h-auto" src="/images/logo/logo-light.svg" :alt="$t('common.menu')" />
+      <img class="hidden dark:block w-full h-auto" src="/images/logo/logo-dark.svg" :alt="$t('common.menu')" />
       <p class="mt-10 mb-6 text-base text-gray-700 dark:text-gray-400 sm:text-lg"> {{ t('pages.default.welcome') }} </p>
       <Button :disabled="isSigningIn" @click="signIn" variant="primary">
         {{ t('pages.default.signIn') }}

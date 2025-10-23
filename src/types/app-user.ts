@@ -12,22 +12,22 @@ export function toAppUser(user: User | null): AppUser | null {
 
   if (!u.isSystemAdmin) {
     u.isSystemAdmin = () => {
-      const role = u.profile?.role || []
-      return role === 'SystemAdmin'
+      const role = u.profile?.role as string[] || []
+      return role.includes('systemAdmin')
     }
   }
 
   if (!u.isAdmin) {
     u.isAdmin = () => {
-      const role = u.profile?.role || []
-      return role === 'Admin'
+      const role = u.profile?.role as string[] || []
+      return role.includes('admin')
     }
   }
 
   if (!u.isSeller) {
     u.isSeller = () => {
-      const role = u.profile?.role || []
-      return role === 'Seller'
+      const role = u.profile?.role as string[] || []
+      return role.includes('seller')
     }
   }
 
