@@ -1,5 +1,5 @@
 <template>
-    <AdminLayout>
+    <DictionaryLayout>
         <PageBreadcrumb :pageTitle="currentPageTitle" />
         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 pb-24">
             <div class="space-y-6">
@@ -242,14 +242,14 @@
                 {{ $t('common.save') }}
             </Button>
         </div>
-    </AdminLayout>
+    </DictionaryLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router'
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue';
-import AdminLayout from '@/components/layout/AdminLayout.vue';
+import DictionaryLayout from '@/components/layout/DictionaryLayout.vue';
 import DefaultInputs from '@/views/Demo/Forms/DefaultInputs.vue';
 import ComponentCard from '@/components/common/ComponentCard.vue';
 import SelectInput from '@/views/Demo/Forms/SelectInput.vue';

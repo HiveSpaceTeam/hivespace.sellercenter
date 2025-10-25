@@ -1,5 +1,5 @@
 <template>
-  <AdminLayout>
+  <DictionaryLayout>
     <PageBreadcrumb :pageTitle="currentPageTitle" />
     <div class="space-y-5 sm:space-y-6">
       <ComponentCard title="Success Alert">
@@ -67,13 +67,13 @@
         />
       </ComponentCard>
     </div>
-  </AdminLayout>
+  </DictionaryLayout>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
-import AdminLayout from '@/components/layout/AdminLayout.vue'
+import DictionaryLayout from '@/components/layout/DictionaryLayout.vue'
 import ComponentCard from '@/components/common/ComponentCard.vue'
 import Alert from '@/components/common/Alert.vue'
 const currentPageTitle = ref('Alerts')
