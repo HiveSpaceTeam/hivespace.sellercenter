@@ -1,5 +1,5 @@
 <template>
-  <AdminLayout>
+  <DictionaryLayout>
     <PageBreadcrumb :pageTitle="currentPageTitle" />
     <div class="quill-container">
       <div class="quill-content">
@@ -12,14 +12,14 @@
         <div v-html="rawHtml"></div>
       </div>
     </div>
-  </AdminLayout>
+  </DictionaryLayout>
 </template>
 
 <script setup lang="ts">
 import Button from '@/components/common/Button.vue'
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
-import AdminLayout from '@/components/layout/AdminLayout.vue'
+import DictionaryLayout from '@/components/layout/DictionaryLayout.vue'
 import { QuillEditor } from '@vueup/vue-quill'
 import ImageUploader from 'quill-image-uploader'
 

@@ -1,5 +1,5 @@
 <template>
-  <AdminLayout>
+  <DictionaryLayout>
     <div class="space-y-6">
       <!-- Page Header -->
       <div class="bg-white dark:bg-gray-900 rounded-lg shadow-md p-6">
@@ -51,12 +51,12 @@
         Icon name copied to clipboard!
       </div>
     </div>
-  </AdminLayout>
+  </DictionaryLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import AdminLayout from '@/components/layout/AdminLayout.vue'
+import DictionaryLayout from '@/components/layout/DictionaryLayout.vue'
 import * as Icons from '@/icons'
 
 // Remove the default export if it exists and create icons object

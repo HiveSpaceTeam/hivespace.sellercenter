@@ -1,5 +1,5 @@
 <template>
-  <AdminLayout>
+  <DictionaryLayout>
     <PageBreadcrumb :pageTitle="currentPageTitle" />
     <div
       class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
@@ -109,11 +109,11 @@
         </div>
       </Teleport> -->
     </div>
-  </AdminLayout>
+  </DictionaryLayout>
 </template>
 
 <script setup lang="ts">
-import AdminLayout from '@/components/layout/AdminLayout.vue'
+import DictionaryLayout from '@/components/layout/DictionaryLayout.vue'
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
 
 const currentPageTitle = ref('Calendar')

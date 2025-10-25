@@ -1,5 +1,5 @@
 <template>
-  <AdminLayout>
+  <DictionaryLayout>
     <PageBreadcrumb :pageTitle="currentPageTitle" />
     <div class="space-y-5 sm:space-y-6">
       <!-- Basic Toast Examples -->
@@ -359,13 +359,13 @@ appStore.clearAllNotifications()</code></pre>
         </div>
       </ComponentCard>
     </div>
-  </AdminLayout>
+  </DictionaryLayout>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useAppStore } from '@/stores/app'
-import AdminLayout from '@/components/layout/AdminLayout.vue'
+import DictionaryLayout from '@/components/layout/DictionaryLayout.vue'
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
 import ComponentCard from '@/components/common/ComponentCard.vue'
 import Button from '@/components/common/Button.vue'
