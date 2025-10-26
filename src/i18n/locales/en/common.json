@@ -1,6 +1,9 @@
 {
   "menu": "Menu",
   "cancel": "Cancel",
+  "loading": "Loading",
+  "success": "Success",
+  "error": "Error",
   "save": "Save",
   "action": "Action",
   "actions": {
