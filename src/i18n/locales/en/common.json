@@ -1,6 +1,8 @@
 {
   "menu": "Menu",
   "cancel": "Cancel",
+  "save": "Save",
+  "action": "Action",
   "actions": {
     "delete": "Delete",
     "activate": "Activate",
@@ -9,7 +11,7 @@
   },
   "sidebar": {
     "menu": "Menu",
-    "accounts": "Accounts"
+    "products": "Products"
   },
   "profile": {
     "editProfile": "Edit profile",

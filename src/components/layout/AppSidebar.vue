@@ -50,7 +50,7 @@
                   </span>
                   <span v-if="isExpanded || isHovered || isMobileOpen" class="menu-item-text">{{
                     item.name
-                  }}</span>
+                    }}</span>
                   <ChevronDownIcon v-if="isExpanded || isHovered || isMobileOpen" :class="[
                     'ml-auto w-5 h-5 transition-transform duration-200',
                     {
@@ -72,7 +72,7 @@
                   </span>
                   <span v-if="isExpanded || isHovered || isMobileOpen" class="menu-item-text">{{
                     item.name
-                  }}</span>
+                    }}</span>
                 </router-link>
                 <transition @enter="startTransition" @after-enter="endTransition" @before-leave="startTransition"
                   @after-leave="endTransition">
@@ -163,7 +163,7 @@ const menuGroups = computed<MenuGroup[]>(() => [
         title: t('common.sidebar.menu'),
         items: [
           {
-            name: t('common.sidebar.accounts'),
+            name: t('common.sidebar.products'),
             icon: TableIcon,
             subItems: [
               { name: t('pages.productList'), path: "/product/list", pro: false },

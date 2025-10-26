@@ -29,5 +29,25 @@
   "productDeleted": "Đã xóa sản phẩm",
   "productDeletedMessage": "Sản phẩm \"{name}\" đã được xóa thành công.",
   "deleteError": "Xóa thất bại",
-  "deleteErrorMessage": "Không thể xóa sản phẩm. Vui lòng thử lại."
+  "deleteErrorMessage": "Không thể xóa sản phẩm. Vui lòng thử lại.",
+  "selectCategory": "Chọn danh mục",
+  "attributes": "thuộc tính",
+  "noAttributesFound": "Không tìm thấy thuộc tính nào cho danh mục này",
+  "addValue": "Thêm giá trị",
+  "maxValues": "Giá trị tối đa",
+  "mandatory": "Bắt buộc",
+  "salesInfo": "Thông tin bán hàng",
+  "formElements": "Phần tử biểu mẫu",
+  "editProduct": "Chỉnh sửa sản phẩm",
+  "createProduct": "Tạo sản phẩm",
+  "errors": {
+    "failedToLoadCategories": "Không thể tải danh mục",
+    "failedToLoadCategoryAttributes": "Không thể tải thuộc tính danh mục",
+    "failedToLoadProductDetails": "Không thể tải chi tiết sản phẩm",
+    "failedToSaveProduct": "Không thể lưu sản phẩm"
+  },
+  "success": {
+    "productUpdatedSuccessfully": "Cập nhật sản phẩm thành công!",
+    "productSavedSuccessfully": "Lưu sản phẩm thành công!"
+  }
 }

@@ -29,5 +29,25 @@
   "productDeleted": "Product Deleted",
   "productDeletedMessage": "Product \"{name}\" has been successfully deleted.",
   "deleteError": "Delete Failed",
-  "deleteErrorMessage": "Failed to delete the product. Please try again."
+  "deleteErrorMessage": "Failed to delete the product. Please try again.",
+  "selectCategory": "Select Category",
+  "attributes": "attributes",
+  "noAttributesFound": "No attributes found for this category",
+  "addValue": "Add Value",
+  "maxValues": "Max values",
+  "mandatory": "Mandatory",
+  "salesInfo": "Sales Information",
+  "formElements": "Form Elements",
+  "editProduct": "Edit Product",
+  "createProduct": "Create Product",
+  "errors": {
+    "failedToLoadCategories": "Failed to load categories",
+    "failedToLoadCategoryAttributes": "Failed to load category attributes",
+    "failedToLoadProductDetails": "Failed to load product details",
+    "failedToSaveProduct": "Failed to save product"
+  },
+  "success": {
+    "productUpdatedSuccessfully": "Product updated successfully!",
+    "productSavedSuccessfully": "Product saved successfully!"
+  }
 }

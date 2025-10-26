@@ -54,7 +54,7 @@
                 </label>
                 <div class="md:flex-1">
                   <Input v-model="formData.storeName" :placeholder="t('registerSeller.placeholders.storeName')"
-                    :error="formErrors.storeName" required id="storeName" />
+                    :error="formErrors.storeName" id="storeName" />
                 </div>
               </div>
 
@@ -79,7 +79,7 @@
                 </label>
                 <div class="md:flex-1">
                   <Input v-model="formData.address" :placeholder="t('registerSeller.placeholders.storeAddress')"
-                    :error="formErrors.address" required id="storeAddress" />
+                    :error="formErrors.address" id="storeAddress" />
                 </div>
               </div>
 
