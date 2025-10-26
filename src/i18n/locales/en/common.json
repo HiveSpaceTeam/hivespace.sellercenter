@@ -1,6 +1,11 @@
 {
   "menu": "Menu",
   "cancel": "Cancel",
+  "loading": "Loading",
+  "success": "Success",
+  "error": "Error",
+  "save": "Save",
+  "action": "Action",
   "actions": {
     "delete": "Delete",
     "activate": "Activate",
@@ -9,7 +14,7 @@
   },
   "sidebar": {
     "menu": "Menu",
-    "accounts": "Accounts"
+    "products": "Products"
   },
   "profile": {
     "editProfile": "Edit profile",

@@ -3,6 +3,8 @@
   "adminManagement": "Admin Management",
   "listOfUsers": "List of user",
   "listOfAdmins": "List of admin",
+  "productList": "Product List",
+  "addNewProduct": "Add New Product",
   "maintenance": {
     "title": "MAINTENANCE",
     "message": "Our site is currently under maintenance. We will be back shortly. Thank you for your patience."

@@ -20,11 +20,12 @@
                                 {{ $t('product.productCategory') }}
                             </label>
                             <div class="relative z-20 bg-transparent">
-                                <select @change="onChangeCategory" v-model="formData.selectInput" :disabled="isLoadingCategories"
+                                <select @change="onChangeCategory" v-model="formData.selectInput"
+                                    :disabled="isLoadingCategories"
                                     class="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 disabled:opacity-50 disabled:cursor-not-allowed"
                                     :class="{ 'text-gray-800 dark:text-white/90': formData.selectInput }">
                                     <option value="" disabled selected>
-                                       
+
                                     </option>
                                     <option v-for="category in categories" :key="category.id" :value="category.id">
                                         {{ category.name }}
@@ -80,7 +81,7 @@
                             <!-- Textbox -->
                             <template v-if="attribute.inputType === 1">
                                 <!-- Single textbox -->
-                                <div >
+                                <div>
                                     <Input v-model="(attributeValues[attribute.id])"
                                         :placeholder="$t('product.enterValue')" />
                                 </div>
@@ -108,14 +109,14 @@
                                     :placeholder="$t('product.enterValue')" />
                             </template>
 
-                          
+
                         </div>
                     </div>
                 </ComponentCard>
-               
+
             </div>
             <div class="space-y-6">
-                <ComponentCard title="Thông tin bán hàng">
+                <ComponentCard :title="$t('product.salesInfo')">
                     <div class="space-y-6">
                         <div class="product-variants-container space-y-6">
                             <div v-for="(productVariant, variantIndex) in product.variants" :key="variantIndex">
@@ -157,7 +158,7 @@
                                     <thead>
                                         <tr class="border-b border-gray-200 dark:border-gray-700">
                                             <th v-for="(variant, variantIndex) in product.variants"
-                                                class="px-5 py-3 text-left w-1/8 sm:px-6">
+                                                class="px-5 py-3 text-left w-1/8 sm:px-6" :key="variantIndex">
                                                 <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{
                                                     variant.name || $t('product.variantGroup') + ' ' + (variantIndex +
                                                         1)
@@ -180,32 +181,45 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="productSku in product.skus" :key="productSku.id"
-                                            class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-white/[0.05]">
+                                        <template v-for="(group, groupIndex) in groupedSkus" :key="groupIndex">
+                                            <tr v-for="(productSku, skuIndex) in group.skus" :key="productSku.id"
+                                                class="border-b border-gray-200 dark:border-gray-700">
 
-                                            <td v-for="(variant, variantIndex) in product.variants"
-                                                class="px-5 py-4 sm:px-6">
-                                                <div class="text-sm text-gray-900 dark:text-white">{{
-                                                    getVariantValueBySKU(productSku, variant) }}
-                                                </div>
-                                            </td>
+                                                <template v-for="(variant, variantIndex) in product.variants"
+                                                    :key="variantIndex">
+                                                    <!-- First column with rowspan for grouping -->
+                                                    <td v-if="variantIndex === 0 && skuIndex === 0"
+                                                        class="px-5 py-4 sm:px-6 border-l-4 border-l-blue-500 bg-gray-50/30 dark:bg-gray-800/20"
+                                                        :rowspan="group.skus.length">
+                                                        <div
+                                                            class="text-sm font-semibold text-gray-900 dark:text-white">
+                                                            {{ getVariantValueBySKU(productSku, variant) }}
+                                                        </div>
+                                                    </td>
+                                                    <!-- Other columns -->
+                                                    <td v-else-if="variantIndex > 0" class="px-5 py-4 sm:px-6">
+                                                        <div class="text-sm text-gray-900 dark:text-white">
+                                                            {{ getVariantValueBySKU(productSku, variant) }}
+                                                        </div>
+                                                    </td>
+                                                </template>
 
-                                            <td class="px-5 py-4 sm:px-6">
-                                                <input type="text" v-model="productSku.price.amount"
-                                                    class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
-                                            </td>
+                                                <td class="px-5 py-4 sm:px-6">
+                                                    <input type="text" v-model="productSku.price.amount"
+                                                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                                                </td>
 
-                                            <td class="px-5 py-4 sm:px-6">
-                                                <input type="text" v-model="productSku.quantity"
-                                                    class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
-                                            </td>
-                                            <td class="px-5 py-4 sm:px-6">
-                                                <input type="text" v-model="productSku.skuNo"
-                                                    class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
-                                            </td>
+                                                <td class="px-5 py-4 sm:px-6">
+                                                    <input type="text" v-model="productSku.quantity"
+                                                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                                                </td>
+                                                <td class="px-5 py-4 sm:px-6">
+                                                    <input type="text" v-model="productSku.skuNo"
+                                                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                                                </td>
 
-
-                                        </tr>
+                                            </tr>
+                                        </template>
                                     </tbody>
                                 </table>
                             </div>
@@ -230,7 +244,7 @@
                         </div>
                     </div>
                 </ComponentCard>
-          
+
             </div>
         </div>
         <div
@@ -246,45 +260,29 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router'
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue';
 import DictionaryLayout from '@/components/layout/DictionaryLayout.vue';
-import DefaultInputs from '@/views/Demo/Forms/DefaultInputs.vue';
 import ComponentCard from '@/components/common/ComponentCard.vue';
-import SelectInput from '@/views/Demo/Forms/SelectInput.vue';
-import InputState from '@/views/Demo/Forms/InputState.vue';
-import TextArea from '@/views/Demo/Forms/TextArea.vue';
-import InputGroup from '@/views/Demo/Forms/InputGroup.vue';
-import Dropzone from '@/components/common/Dropzone.vue';
-import FileInput from '@/components/common/FileInput.vue';
-import ToggleSwitches from '@/views/Demo/Forms/ToggleSwitches.vue';
-import CheckboxInput from '@/views/Demo/Forms/CheckboxInput.vue';
 import { QuillEditor } from '@vueup/vue-quill'
 import ImageUploader from 'quill-image-uploader';
 import MultipleSelect from '@/components/common/MultipleSelect.vue'
 import Select from '@/components/common/Select.vue'
 import Input from '@/components/common/Input.vue'
-import MailIcon from '@/icons/MailIcon.vue'
 import ChevronDownIcon from '@/icons/ChevronDownIcon.vue'
-import CopyIcon from '@/icons/CopyIcon.vue'
 import Button from '@/components/common/Button.vue';
 import { PlusIcon } from '@/icons';
-import _ from 'lodash';
 import { productService } from '@/services/product.service'
 import { categoryService } from '@/services/category.service'
 import { useAppStore } from '@/stores/app'
 import type { CreateProductRequest, ProductVariant, ProductSku, Category, CategoryAttribute, ProductAttributeSelection, Product } from '@/types'
 
-// Declare modules for missing types
-// @ts-ignore
-declare module 'quill-image-uploader';
-// @ts-ignore
-declare module 'lodash';
-
 const appStore = useAppStore()
+const { t } = useI18n()
 
-const currentPageTitle = ref('Form Elements');
+const currentPageTitle = ref('');
 const route = useRoute()
 const router = useRouter()
 const editingProductId = ref<string | null>(null)
@@ -295,7 +293,10 @@ const product = ref<Product>({
     variants: [],
     skus: [],
 })
-const quillRef = ref<any>(null)
+const quillRef = ref<{
+    setHTML: (html: string) => void;
+    getHTML: () => string;
+} | null>(null)
 
 // Category-related reactive data
 const categories = ref<Category[]>([])
@@ -367,7 +368,7 @@ const updateProductSkus = (productVariant: ProductVariant, option: { optionId: s
 
     if (!isOptionAdded) {
         product.value.skus.forEach(productSku => {
-            let foundOption = productSku.skuVariants.find(x => x.optionId == option.optionId)
+            const foundOption = productSku.skuVariants.find(x => x.optionId == option.optionId)
             if (foundOption) {
                 foundOption.value = option.value;
             }
@@ -379,21 +380,21 @@ const updateProductSkus = (productVariant: ProductVariant, option: { optionId: s
     const variants = product.value.variants || [];
     // Build an array of arrays of options for each variant
     const optionsList = variants.map(v => (v.options || []).filter(o => o.value && o.value.trim() !== '' && (o.optionId == option.optionId || productVariant.id !== v.id)));
-    // If any variant has no options, do nothing
+    // If unknown variant has no options, do nothing
     if (optionsList.some(opts => opts.length === 0)) return;
 
     // Helper: cartesian product
-    function cartesian(arr: any[][]) {
-        return arr.reduce((a, b) => a.flatMap(d => b.map(e => [...d, e])), [[]]);
+    function cartesian<T>(arr: T[][]): T[][] {
+        return arr.reduce((a: T[][], b: T[]) => a.flatMap(d => b.map(e => [...d, e])), [[]] as T[][]);
     }
 
     // Build all possible combinations
     const combinations = cartesian(optionsList);
-    
+
     // Add new SKUs for new combinations
     combinations.forEach(combo => {
         // Build skuVariants for this combo
-        const skuVariants = combo.map((o: any, idx: number) => ({
+        const skuVariants = combo.map((o: { optionId: string; value: string }, idx: number) => ({
             variantId: variants[idx].id,
             value: o.value,
             optionId: o.optionId,
@@ -417,6 +418,41 @@ const getVariantValueBySKU = (productSku: ProductSku, variant: ProductVariant) =
     return matched?.value || '';
 }
 
+// Group SKUs by variant combinations for proper visual grouping
+const groupedSkus = computed(() => {
+    if (!product.value.skus || product.value.skus.length === 0) return [];
+
+    // Group by first variant value to create visual blocks
+    const groups = new Map<string, ProductSku[]>();
+
+    product.value.skus.forEach(sku => {
+        const firstVariantValue = product.value.variants?.[0]
+            ? getVariantValueBySKU(sku, product.value.variants[0])
+            : 'default';
+
+        if (!groups.has(firstVariantValue)) {
+            groups.set(firstVariantValue, []);
+        }
+        groups.get(firstVariantValue)!.push(sku);
+    });
+
+    // Convert to array format and sort
+    return Array.from(groups.entries()).map(([key, skus]) => ({
+        key,
+        skus: skus.sort((a, b) => {
+            // Sort by all variant values in order
+            for (let i = 0; i < product.value.variants.length; i++) {
+                const variantA = getVariantValueBySKU(a, product.value.variants[i]);
+                const variantB = getVariantValueBySKU(b, product.value.variants[i]);
+                if (variantA !== variantB) {
+                    return variantA.localeCompare(variantB);
+                }
+            }
+            return 0;
+        })
+    }));
+})
+
 // Fetch categories from API
 const fetchCategories = async () => {
     try {
@@ -424,9 +460,9 @@ const fetchCategories = async () => {
         categoriesError.value = null
         const fetchedCategories = await categoryService.getCategories()
         categories.value = fetchedCategories
-    } catch (error: any) {
-        categoriesError.value = error?.message || 'Failed to load categories'
-        appStore.notifyError('Error', categoriesError.value || 'Failed to load categories')
+    } catch (error: unknown) {
+        categoriesError.value = (error as Error)?.message || t('product.errors.failedToLoadCategories')
+        appStore.notifyError(t('common.error'), categoriesError.value || t('product.errors.failedToLoadCategories'))
     } finally {
         isLoadingCategories.value = false
     }
@@ -473,9 +509,9 @@ const fetchCategoryAttributes = async (categoryId: string) => {
             else initialValues[attr.id] = ''
         })
         attributeValues.value = initialValues
-    } catch (error: any) {
-        attributesError.value = error?.message || 'Failed to load category attributes'
-        appStore.notifyError('Error', attributesError.value || 'Failed to load category attributes')
+    } catch (error: unknown) {
+        attributesError.value = (error as Error)?.message || t('product.errors.failedToLoadCategoryAttributes')
+        appStore.notifyError(t('common.error'), attributesError.value || t('product.errors.failedToLoadCategoryAttributes'))
     } finally {
         isLoadingAttributes.value = false
     }
@@ -493,11 +529,11 @@ const initFromRoute = async () => {
     if (typeof idParam === 'string' && idParam) {
         editingProductId.value = idParam
         await loadProductDetails(idParam)
-        currentPageTitle.value = 'Edit Product'
+        currentPageTitle.value = t('product.editProduct')
     } else {
         editingProductId.value = null
         resetForm()
-        currentPageTitle.value = 'Create Product'
+        currentPageTitle.value = t('product.createProduct')
     }
 }
 
@@ -507,25 +543,31 @@ watch(() => route.params.id, async () => {
 
 const loadProductDetails = async (id: string) => {
     try {
-        const loaded = await productService.getProductById(id)
+        const loaded = await productService.getProductById(id) as Product & {
+            categories?: Array<{ categoryId: string }>;
+            description?: string;
+            variants?: ProductVariant[];
+            skus?: ProductSku[];
+            attributes?: Array<{ attributeId: string; selectedValueIds?: string[]; freeTextValue?: string | null }>;
+        }
         // Map loaded product into local form model
         product.value.name = loaded.name
         // category id may be located via loaded.categories[0]?.categoryId
         // Using first category as the selected category for now
-        const firstCategoryId = (loaded as any)?.categories?.[0]?.categoryId || ''
+        const firstCategoryId = loaded.categories?.[0]?.categoryId || ''
         formData.value.selectInput = firstCategoryId
         // Description
-        if (quillRef.value?.setHTML && (loaded as any)?.description) {
-            quillRef.value.setHTML((loaded as any).description)
+        if (quillRef.value?.setHTML && loaded.description) {
+            quillRef.value.setHTML(loaded.description)
         }
         // Variants & SKUs (ensure shapes align with local types)
-        product.value.variants = (loaded as any)?.variants || []
-        product.value.skus = (loaded as any)?.skus || []
+        product.value.variants = loaded.variants || []
+        product.value.skus = loaded.skus || []
         // Load attributes data into UI state from product attributes
         if (firstCategoryId) {
             await fetchCategoryAttributes(firstCategoryId)
 
-            const loadedAttributes: Array<{ attributeId: string; selectedValueIds?: string[]; freeTextValue?: string | null }> = (loaded as any)?.attributes || []
+            const loadedAttributes = loaded.attributes || []
 
             // Build attributeValues and attributeMultiValues based on inputType and maxValueCount
             const values: Record<string, string> = { ...attributeValues.value }
@@ -554,8 +596,8 @@ const loadProductDetails = async (id: string) => {
             attributeValues.value = values
             attributeMultiValues.value = multiValues
         }
-    } catch (error: any) {
-        appStore.notifyError('Error', error?.message || 'Failed to load product details')
+    } catch (error: unknown) {
+        appStore.notifyError(t('common.error'), (error as Error)?.message || t('product.errors.failedToLoadProductDetails'))
     }
 }
 
@@ -630,20 +672,20 @@ const onSave = async () => {
         }
         if (editingProductId.value) {
             await productService.updateProduct(editingProductId.value, payload)
-            appStore.notifySuccess('Success', 'Product updated successfully!')
+            appStore.notifySuccess(t('common.success'), t('product.success.productUpdatedSuccessfully'))
             router.push('/product/list')
         } else {
             await productService.createProduct(payload)
-            appStore.notifySuccess('Success', 'Product saved successfully!')
+            appStore.notifySuccess(t('common.success'), t('product.success.productSavedSuccessfully'))
             router.push('/product/list')
         }
         // Optionally, reset form or navigate
-    } catch (error: any) {
-        appStore.notifyError('Error', error?.message || 'Failed to save product')
+    } catch (error: unknown) {
+        appStore.notifyError(t('common.error'), (error as Error)?.message || t('product.errors.failedToSaveProduct'))
     }
 }
 
-const onChangeCategory = ()=>{
+const onChangeCategory = () => {
     if (formData.value.selectInput) {
         fetchCategoryAttributes(formData.value.selectInput)
     } else {

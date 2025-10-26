@@ -3,6 +3,9 @@
   "cancel": "Hủy",
   "save": "Lưu",
   "action": "Hành động",
+  "loading": "Đang tải",
+  "success": "Thành công",
+  "error": "Lỗi",
   "actions": {
     "delete": "Xóa",
     "activate": "Kích hoạt",
@@ -11,7 +14,7 @@
   },
   "sidebar": {
     "menu": "Menu",
-    "accounts": "Tài khoản"
+    "products": "Sản phẩm"
   },
   "profile": {
     "editProfile": "Chỉnh sửa hồ sơ",

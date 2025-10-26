@@ -6,15 +6,16 @@ export interface ProductVariantOption {
 }
 
 export interface ProductVariant {
-  id: string
+  id: string // Using UUID string
   name: string
   options: ProductVariantOption[]
 }
 
 export interface ProductSku {
-  id: string
+  id?: string // Keep for backward compatibility
+  key?: string // New composite key based on variant combinations
   skuVariants: {
-    variantId: string
+    variantId: string // Using UUID string to match ProductVariant.id
     value: string
     optionId: string
   }[]
