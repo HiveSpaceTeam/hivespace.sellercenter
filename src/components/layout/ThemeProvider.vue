@@ -3,42 +3,39 @@
 </template>
 
 <script setup lang="ts">
-import { ref, provide, onMounted, watch, computed } from 'vue'
-
-type Theme = 'light' | 'dark'
+import { provide, computed } from 'vue'
+import { useUserStore } from '@/stores/user'
+import { getCurrentUser } from '@/auth/user-manager'
+import { THEME_TEXT, stringToNumericTheme } from '@/types'
+import { setCookie } from '@/utils/cookie'
+import { applyThemeToDOM } from '@/utils/theme'
+import { themeText } from '@/state/theme.state'
 
 interface ThemeContext {
   isDarkMode: ReturnType<typeof computed<boolean>>
-  toggleTheme: () => void
+  toggleTheme: () => Promise<void>
 }
 
-const theme = ref<Theme>('light')
-const isInitialized = ref(false)
+const userStore = useUserStore()
 
-const isDarkMode = computed(() => theme.value === 'dark')
+const isDarkMode = computed(() => themeText.value === THEME_TEXT.DARK)
 
-const toggleTheme = () => {
-  theme.value = theme.value === 'light' ? 'dark' : 'light'
-}
+const toggleTheme = async () => {
+  const currentTheme = themeText.value
+  const newTheme = currentTheme === THEME_TEXT.LIGHT ? THEME_TEXT.DARK : THEME_TEXT.LIGHT
+  const numericTheme = stringToNumericTheme(newTheme)
 
-onMounted(() => {
-  const savedTheme = localStorage.getItem('theme') as Theme | null
-  const initialTheme = savedTheme || 'light' // Default to light theme
-
-  theme.value = initialTheme
-  isInitialized.value = true
-})
-
-watch([theme, isInitialized], ([newTheme, newIsInitialized]) => {
-  if (newIsInitialized) {
-    localStorage.setItem('theme', newTheme)
-    if (newTheme === 'dark') {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
+  // If authenticated, update through store (which calls API)
+  const user = await getCurrentUser()
+  if (user) {
+    await userStore.updateTheme(numericTheme)
   }
-})
+
+  // Persist locally (cookie) and update app-level ref
+  setCookie('theme', newTheme, 365) // Store for 1 year
+  themeText.value = newTheme
+  applyThemeToDOM(newTheme)
+}
 
 provide('theme', {
   isDarkMode,
@@ -51,7 +48,7 @@ import { inject } from 'vue'
 
 interface ThemeContext {
   isDarkMode: ReturnType<typeof computed<boolean>>
-  toggleTheme: () => void
+  toggleTheme: () => Promise<void>
 }
 
 export function useTheme(): ThemeContext {

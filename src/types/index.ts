@@ -14,6 +14,9 @@ export * from './product.types'
 // Account types
 export * from './account.types'
 
+// User types
+export * from './user-settings.types'
+
 // Store types
 export * from './store.types'
 
