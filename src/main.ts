@@ -34,38 +34,40 @@ const initializeApp = async () => {
     app.use(VueApexCharts)
 
     // Initialize culture and theme before router to ensure i18n and theme are ready
-    const user = await getCurrentUser()
-    if (user) {
-        const userStore = useUserStore()
-        const settings = await userStore.fetchUserSettings()
-
-        const cultureText = numericToStringCulture(settings.culture)
-        i18n.global.locale.value = cultureText
-
-        const themeText = numericToStringTheme(settings.theme)
-        // Initialize app-level theme ref
-        appThemeText.value = themeText
-        // Apply theme to DOM using centralized helper
-        applyThemeToDOM(themeText)
-    } else {
-        // For unauthenticated users, read from cookies or use defaults
-
-        // Initialize culture from cookie
+    const initializeCultureAndThemeFromCookies = () => {
         const cookieCulture = getCookie('culture')
         const cultureText = cookieCulture || CULTURE_TEXT.VIETNAMESE
         const numericCulture = stringToNumericCulture(cultureText)
         const validCultureText = numericToStringCulture(numericCulture)
         i18n.global.locale.value = validCultureText
 
-        // Initialize theme from cookie
         const cookieTheme = getCookie('theme')
         const themeText = cookieTheme || THEME_TEXT.LIGHT
         const numericTheme = stringToNumericTheme(themeText)
         const validThemeText = numericToStringTheme(numericTheme)
 
-        // Initialize app-level theme ref and apply to DOM using centralized helper
         appThemeText.value = validThemeText
         applyThemeToDOM(validThemeText)
+    }
+
+    const user = await getCurrentUser()
+    if (user) {
+        const userStore = useUserStore()
+        try {
+            const settings = await userStore.fetchUserSettings()
+
+            const cultureText = numericToStringCulture(settings.culture)
+            i18n.global.locale.value = cultureText
+
+            const themeText = numericToStringTheme(settings.theme)
+            appThemeText.value = themeText
+            applyThemeToDOM(themeText)
+        } catch (error) {
+            console.error('Failed to fetch user settings; using cookie/default values', error)
+            initializeCultureAndThemeFromCookies()
+        }
+    } else {
+        initializeCultureAndThemeFromCookies()
     }
 
     // Initialize router after i18n is ready

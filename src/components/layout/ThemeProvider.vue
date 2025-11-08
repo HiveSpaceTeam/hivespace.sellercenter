@@ -4,6 +4,7 @@
 
 <script setup lang="ts">
 import { provide, computed } from 'vue'
+import type { ComputedRef } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { getCurrentUser } from '@/auth/user-manager'
 import { THEME_TEXT, stringToNumericTheme } from '@/types'
@@ -12,7 +13,7 @@ import { applyThemeToDOM } from '@/utils/theme'
 import { themeText } from '@/state/theme.state'
 
 interface ThemeContext {
-  isDarkMode: ReturnType<typeof computed<boolean>>
+  isDarkMode: ComputedRef<boolean>
   toggleTheme: () => Promise<void>
 }
 

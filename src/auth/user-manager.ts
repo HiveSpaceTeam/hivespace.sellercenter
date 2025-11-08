@@ -13,7 +13,7 @@ const oidcSettings = {
   scope: config.auth.oidc.scope,
   post_logout_redirect_uri: config.auth.oidc.postLogoutRedirectUri,
   response_mode: config.auth.oidc.responseMode as 'query' | 'fragment' | undefined,
-  userStore: new WebStorageStateStore({ store: window.sessionStorage }),
+  userStore: new WebStorageStateStore({ store: window.localStorage }),
 }
 
 const userManager = new UserManager(oidcSettings)
