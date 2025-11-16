@@ -60,16 +60,27 @@ jobs:
 
       - name: Log Environment Variables
         run: |
-          echo "🔍 Logging Environment Variables and Secrets (masked)"
-          echo "VITE_API_URL: ${{ secrets.VITE_API_URL }}"
-          echo "VITE_APP_CLIENT_ID: ${{ secrets.VITE_APP_CLIENT_ID }}"
-          echo "VITE_AUTH_AUTHORITY_URL: ${{ secrets.VITE_AUTH_AUTHORITY_URL }}"
-          echo "VITE_APP_REDIRECT_URI: ${{ secrets.VITE_APP_REDIRECT_URI }}"
-          echo "VITE_APP_POST_LOGOUT_REDIRECT_URI: ${{ secrets.VITE_APP_POST_LOGOUT_REDIRECT_URI }}"
-          echo "VITE_APP_ENV: ${{ vars.VITE_APP_ENV }}"
-          echo "VITE_APP_SCOPE: ${{ vars.VITE_APP_SCOPE }}"
-          echo "VITE_APP_RESPONSE_TYPE: ${{ vars.VITE_APP_RESPONSE_TYPE }}"
-          echo "VITE_APP_RESPONSE_MODE: ${{ vars.VITE_APP_RESPONSE_MODE }}"
+          echo "🔍 Logging Environment Variables and Secrets"
+          echo "Environment: ${{ needs.determine-environment.outputs.environment }}"
+          echo "VITE_API_URL: ${VITE_API_URL}"
+          echo "VITE_APP_CLIENT_ID: ${VITE_APP_CLIENT_ID}"
+          echo "VITE_AUTH_AUTHORITY_URL: ${VITE_AUTH_AUTHORITY_URL}"
+          echo "VITE_APP_REDIRECT_URI: ${VITE_APP_REDIRECT_URI}"
+          echo "VITE_APP_POST_LOGOUT_REDIRECT_URI: ${VITE_APP_POST_LOGOUT_REDIRECT_URI}"
+          echo "VITE_APP_ENV: ${VITE_APP_ENV}"
+          echo "VITE_APP_SCOPE: ${VITE_APP_SCOPE}"
+          echo "VITE_APP_RESPONSE_TYPE: ${VITE_APP_RESPONSE_TYPE}"
+          echo "VITE_APP_RESPONSE_MODE: ${VITE_APP_RESPONSE_MODE}"
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_APP_CLIENT_ID: ${{ secrets.VITE_APP_CLIENT_ID }}
+          VITE_AUTH_AUTHORITY_URL: ${{ secrets.VITE_AUTH_AUTHORITY_URL }}
+          VITE_APP_REDIRECT_URI: ${{ secrets.VITE_APP_REDIRECT_URI }}
+          VITE_APP_POST_LOGOUT_REDIRECT_URI: ${{ secrets.VITE_APP_POST_LOGOUT_REDIRECT_URI }}
+          VITE_APP_ENV: ${{ vars.VITE_APP_ENV }}
+          VITE_APP_SCOPE: ${{ vars.VITE_APP_SCOPE }}
+          VITE_APP_RESPONSE_TYPE: ${{ vars.VITE_APP_RESPONSE_TYPE }}
+          VITE_APP_RESPONSE_MODE: ${{ vars.VITE_APP_RESPONSE_MODE }}
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
