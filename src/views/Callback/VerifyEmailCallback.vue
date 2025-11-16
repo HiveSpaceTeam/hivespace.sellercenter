@@ -43,7 +43,9 @@
             <!-- Redirect Message with Countdown -->
             <div v-if="returnUrl" class="text-center mb-6">
               <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                {{ t('verifyEmailCallback.success.redirectMessage', { seconds: redirectCountdown }) }}
+                {{
+                  t('verifyEmailCallback.success.redirectMessage', { seconds: redirectCountdown })
+                }}
               </p>
               <Button @click="handleRedirect" variant="primary" class="inline-flex items-center">
                 {{ t('verifyEmailCallback.success.clickToRedirect') }}
@@ -109,8 +111,8 @@ import CheckLargeIcon from '@/icons/CheckLargeIcon.vue'
 import ErrorIcon from '@/icons/ErrorIcon.vue'
 import HomeIcon from '@/icons/HomeIcon.vue'
 import MailIcon from '@/icons/MailIcon.vue'
-import { getCurrentUser } from '@/auth/user-manager';
-import refreshToken from '@/services/refresh.service';
+import { getCurrentUser } from '@/auth/user-manager'
+import refreshToken from '@/services/refresh.service'
 
 const route = useRoute()
 const router = useRouter()
@@ -190,7 +192,7 @@ const handleRedirect = () => {
 
 // Navigate to home
 const goToHome = () => {
-  router.push('/account/user-management')
+  router.push('/products/list')
 }
 
 // Navigate to verify email page
@@ -201,7 +203,7 @@ const goToVerifyEmail = () => {
 // Verify email with token
 const verifyEmailToken = async (token: string) => {
   try {
-    await accountService.confirmEmailVerification(token)
+    await accountService.verifyEmail(token)
 
     // Success
     isSuccess.value = true
@@ -210,7 +212,7 @@ const verifyEmailToken = async (token: string) => {
     // Show success notification
     appStore.notifySuccess(
       t('verifyEmailCallback.success.title'),
-      t('verifyEmailCallback.success.subtitle')
+      t('verifyEmailCallback.success.subtitle'),
     )
 
     const currentUser = await getCurrentUser()
@@ -222,7 +224,6 @@ const verifyEmailToken = async (token: string) => {
     if (returnUrl.value) {
       startRedirectCountdown()
     }
-
   } catch (error) {
     console.error('Email verification failed:', error)
 
@@ -236,14 +237,14 @@ const verifyEmailToken = async (token: string) => {
     // Show error notification with a generic message
     appStore.notifyError(
       t('verifyEmailCallback.error.title'),
-      t('verifyEmailCallback.error.subtitle')
+      t('verifyEmailCallback.error.subtitle'),
     )
   }
 }
 
 // Initialize component
 onMounted(async () => {
-  const user = await getCurrentUser();
+  const user = await getCurrentUser()
   if (user?.profile.email_verified) {
     isLoading.value = false
     isSuccess.value = true

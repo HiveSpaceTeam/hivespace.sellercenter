@@ -26,6 +26,7 @@ export interface AppConfig {
       readonly responseType: string
       readonly responseMode: string
       readonly scope: string
+      readonly authority: string
     }
     readonly callbackUrl: string
   }
@@ -83,9 +84,9 @@ const createConfig = (): AppConfig => {
   // Base API URL with validation
   const apiBaseUrl = validateUrl(
     getEnvVar('VITE_GATEWAY_BASE_URL') ||
-    getEnvVar('VITE_API_BASE_URL') ||
-    getEnvVar('VITE_API_URL') ||
-    'https://localhost:7001/api',
+      getEnvVar('VITE_API_BASE_URL') ||
+      getEnvVar('VITE_API_URL') ||
+      'https://localhost:7001/api',
     'API Base URL',
   )
 
@@ -122,6 +123,12 @@ const createConfig = (): AppConfig => {
         responseMode: getEnvVar('VITE_APP_RESPONSE_MODE', 'query'),
         // Request refresh tokens for the SPA using offline_access
         scope: getEnvVar('VITE_APP_SCOPE', 'openid profile email offline_access'),
+        authority: validateUrl(
+          getEnvVar('VITE_AUTH_AUTHORITY_URL') ||
+            getEnvVar('VITE_IDENTITY_SERVER_URL') ||
+            `${apiBaseUrl}/identity`,
+          'Authority URL',
+        ),
       },
       callbackUrl: validateUrl(
         getEnvVar('VITE_AUTH_CALLBACK_URL', 'http://localhost:5174/auth/callback'),

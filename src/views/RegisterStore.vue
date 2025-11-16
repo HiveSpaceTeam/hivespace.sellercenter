@@ -16,10 +16,10 @@
 
       <div class="mx-auto w-full max-w-[900px] text-center">
         <h1 class="mt-2 mb-2 text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
-          {{ t('registerSeller.title') }}
+          {{ t('registerStore.title') }}
         </h1>
         <p class="mb-10 text-base text-gray-700 dark:text-gray-400 sm:text-lg">
-          {{ t('registerSeller.subtitle') }}
+          {{ t('registerStore.subtitle') }}
         </p>
 
         <form @submit.prevent="handleSubmit" class="text-left space-y-8">
@@ -41,7 +41,7 @@
           <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
             <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
               <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-                {{ t('registerSeller.storeInformation') }}
+                {{ t('registerStore.storeInformation') }}
               </h2>
             </div>
 
@@ -50,10 +50,10 @@
               <div class="flex flex-col md:flex-row md:items-start gap-4">
                 <label
                   class="text-sm font-medium text-gray-700 dark:text-gray-400 required-label md:text-right md:w-1/4 md:mt-3 md:pr-4">
-                  {{ t('registerSeller.fields.storeName') }}
+                  {{ t('registerStore.fields.storeName') }}
                 </label>
                 <div class="md:flex-1">
-                  <Input v-model="formData.storeName" :placeholder="t('registerSeller.placeholders.storeName')"
+                  <Input v-model="formData.storeName" :placeholder="t('registerStore.placeholders.storeName')"
                     :error="formErrors.storeName" id="storeName" />
                 </div>
               </div>
@@ -62,11 +62,11 @@
               <div class="flex flex-col md:flex-row md:items-start gap-4">
                 <label
                   class="text-sm font-medium text-gray-700 dark:text-gray-400 md:text-right md:w-1/4 md:mt-3 md:pr-4">
-                  {{ t('registerSeller.fields.storeDescription') }}
+                  {{ t('registerStore.fields.storeDescription') }}
                 </label>
                 <div class="md:flex-1">
                   <TextArea v-model="formData.description"
-                    :placeholder="t('registerSeller.placeholders.storeDescription')" :error="formErrors.description"
+                    :placeholder="t('registerStore.placeholders.storeDescription')" :error="formErrors.description"
                     :rows="3" id="storeDescription" />
                 </div>
               </div>
@@ -75,10 +75,10 @@
               <div class="flex flex-col md:flex-row md:items-start gap-4">
                 <label
                   class="text-sm font-medium text-gray-700 dark:text-gray-400 required-label md:text-right md:w-1/4 md:mt-3 md:pr-4">
-                  {{ t('registerSeller.fields.storeAddress') }}
+                  {{ t('registerStore.fields.storeAddress') }}
                 </label>
                 <div class="md:flex-1">
-                  <Input v-model="formData.address" :placeholder="t('registerSeller.placeholders.storeAddress')"
+                  <Input v-model="formData.address" :placeholder="t('registerStore.placeholders.storeAddress')"
                     :error="formErrors.address" id="storeAddress" />
                 </div>
               </div>
@@ -87,12 +87,12 @@
               <div class="flex flex-col md:flex-row md:items-start gap-4">
                 <label
                   class="text-sm font-medium text-gray-700 dark:text-gray-400 required-label md:text-right md:w-1/4 md:mt-10 md:pr-4">
-                  {{ t('registerSeller.fields.storeLogo') }}
+                  {{ t('registerStore.fields.storeLogo') }}
                 </label>
                 <div class="md:flex-1">
                   <FileInput v-model="formData.storeLogoFileId" accept="image/*" :max-size="5 * 1024 * 1024"
-                    preview-direction="right" :button-text="t('registerSeller.fileInput.chooseLogo')" preview-size="lg"
-                    preview-shape="square" :help-text="t('registerSeller.fileInput.logoHelpText')"
+                    preview-direction="right" :button-text="t('registerStore.fileInput.chooseLogo')" preview-size="lg"
+                    preview-shape="square" :help-text="t('registerStore.fileInput.logoHelpText')"
                     @change="handleFileChange" @error="handleFileError" :error="formErrors.storeLogoFileId" />
                 </div>
               </div>
@@ -100,7 +100,7 @@
               <!-- Submit Button -->
               <div class="flex justify-center w-full">
                 <Button type="submit" :disabled="isSubmitting" variant="primary" class="h-11 px-6">
-                  {{ t('registerSeller.actions.submit') }}
+                  {{ t('registerStore.actions.submit') }}
                 </Button>
               </div>
             </div>
@@ -142,7 +142,7 @@ const formData = reactive({
   storeName: '',
   description: '',
   storeLogoFileId: null as File | null,
-  address: ''
+  address: '',
 })
 
 // Form error types
@@ -160,7 +160,7 @@ const formErrors = reactive<FormErrors>({
   storeName: '', // Single string for field errors
   description: '',
   storeLogoFileId: '',
-  address: ''
+  address: '',
 })
 
 // Loading states
@@ -195,17 +195,17 @@ const validateForm = (): boolean => {
   let isValid = true
 
   if (!formData.storeName.trim()) {
-    formErrors.storeName = t('registerSeller.errors.storeNameRequired')
+    formErrors.storeName = t('registerStore.errors.storeNameRequired')
     isValid = false
   }
 
   if (!formData.storeLogoFileId) {
-    formErrors.storeLogoFileId = t('registerSeller.errors.storeLogoRequired')
+    formErrors.storeLogoFileId = t('registerStore.errors.storeLogoRequired')
     isValid = false
   }
 
   if (!formData.address.trim()) {
-    formErrors.address = t('registerSeller.errors.storeAddressRequired')
+    formErrors.address = t('registerStore.errors.storeAddressRequired')
     isValid = false
   }
 
@@ -216,8 +216,8 @@ const validateForm = (): boolean => {
 const handleSubmit = async () => {
   if (!validateForm()) {
     appStore.notifyError(
-      t('registerSeller.messages.error'),
-      t('registerSeller.messages.validationFailed')
+      t('registerStore.messages.error'),
+      t('registerStore.messages.validationFailed'),
     )
     return
   }
@@ -232,19 +232,20 @@ const handleSubmit = async () => {
     await storeStore.registerStore({
       storeName: formData.storeName,
       description: formData.description || null,
-      storeLogoFileId: formData.storeLogoFileId instanceof File ? formData.storeLogoFileId.name : '',
-      address: formData.address
+      storeLogoFileId:
+        formData.storeLogoFileId instanceof File ? formData.storeLogoFileId.name : '',
+      address: formData.address,
     })
     // Refresh token after successful registration
     const currentUser = await getCurrentUser()
     await refreshToken(currentUser, true)
     appStore.notifySuccess(
-      t('registerSeller.messages.success'),
-      t('registerSeller.messages.registrationSuccess')
+      t('registerStore.messages.success'),
+      t('registerStore.messages.registrationSuccess'),
     )
 
     // Redirect to account/user-management
-    await router.push('/account/user-management')
+    await router.push('/product/list')
   } catch (error) {
     console.error('Failed to register seller:', error)
 
@@ -257,10 +258,7 @@ const handleSubmit = async () => {
     // If no field errors, show general error notification
     if (!hasFieldErrors) {
       const errorMessage = error instanceof Error ? error.message : t('errors.UNKNOWN_ERROR')
-      appStore.notifyError(
-        t('registerSeller.messages.error'),
-        errorMessage as string
-      )
+      appStore.notifyError(t('registerStore.messages.error'), errorMessage as string)
     }
   } finally {
     isSubmitting.value = false
@@ -274,7 +272,7 @@ onMounted(async () => {
     const currentUser = await getCurrentUser()
     if (currentUser?.isSeller()) {
       // If already a seller, redirect to user management
-      await router.push('/account/user-management')
+      await router.push('/product/list')
       return
     }
   } catch (error) {

@@ -6,7 +6,7 @@ import { CULTURE_TEXT } from '@/types'
 import { config } from '@/config'
 
 const oidcSettings = {
-  authority: config.api.baseUrl + '/identity',
+  authority: config.auth.oidc.authority,
   client_id: config.auth.oidc.clientId,
   redirect_uri: config.auth.oidc.redirectUri,
   response_type: config.auth.oidc.responseType,
@@ -37,7 +37,8 @@ export async function storeUpdatedUser(appUser: AppUser): Promise<void> {
 
     // Access the configured userStore (fall back to a localStorage store)
     // The UserManager exposes its settings via userManager.settings
-    const store = (userManager.settings?.userStore ?? new WebStorageStateStore({ store: window.localStorage })) as WebStorageStateStore
+    const store = (userManager.settings?.userStore ??
+      new WebStorageStateStore({ store: window.localStorage })) as WebStorageStateStore
 
     // WebStorageStateStore expects set(key, value) where it will prefix the key.
     await store.set(storageKeyBase, JSON.stringify(appUser))
@@ -82,12 +83,12 @@ export const login = async (): Promise<void> => {
 
   // Get current locale from i18n
   const i18n = (await import('@/i18n')).default
-  const currentCulture = i18n.global.locale.value as CultureText || CULTURE_TEXT.VIETNAMESE
+  const currentCulture = (i18n.global.locale.value as CultureText) || CULTURE_TEXT.VIETNAMESE
 
   const extraArgs = {
     extraQueryParams: {
-      culture: currentCulture
-    }
+      culture: currentCulture,
+    },
   }
 
   return userManager.signinRedirect(extraArgs)

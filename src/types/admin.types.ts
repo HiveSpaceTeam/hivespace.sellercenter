@@ -1,4 +1,3 @@
-
 import type { Pagination } from '@/types'
 export interface CreateAdminRequest {
   fullName: string

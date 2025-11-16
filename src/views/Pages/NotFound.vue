@@ -1,5 +1,7 @@
 <template>
-  <div class="relative flex flex-col items-center justify-center min-h-screen p-6 overflow-hidden z-1">
+  <div
+    class="relative flex flex-col items-center justify-center min-h-screen p-6 overflow-hidden z-1"
+  >
     <!-- Language Switcher and Theme Toggler - Top Right -->
     <div class="absolute top-4 right-4 z-10 flex items-center gap-3">
       <ThemeToggler />
@@ -7,24 +9,34 @@
     </div>
 
     <div>
-      <div class="absolute right-0 top-0 -z-1 w-full max-w-[250px] xl:max-w-[450px]"><img
-          src="/images/shape/grid-01.svg" alt="grid"></div>
-      <div class="absolute bottom-0 left-0 -z-1 w-full max-w-[250px] rotate-180 xl:max-w-[450px]"><img
-          src="/images/shape/grid-01.svg" alt="grid"></div>
+      <div class="absolute right-0 top-0 -z-1 w-full max-w-[250px] xl:max-w-[450px]">
+        <img src="/images/shape/grid-01.svg" alt="grid" />
+      </div>
+      <div class="absolute bottom-0 left-0 -z-1 w-full max-w-[250px] rotate-180 xl:max-w-[450px]">
+        <img src="/images/shape/grid-01.svg" alt="grid" />
+      </div>
     </div>
     <div class="mx-auto w-full max-w-[242px] text-center sm:max-w-[472px]">
-      <h1 class="mb-8 font-bold text-gray-800 text-title-md dark:text-white/90 xl:text-title-2xl">{{
-        t('pages.notFound.title') }} </h1>
-      <img src="/images/error/404.svg" alt="404" class="dark:hidden">
-      <img src="/images/error/404-dark.svg" alt="404" class="hidden dark:block">
-      <p class="mt-10 mb-6 text-base text-gray-700 dark:text-gray-400 sm:text-lg"> {{ t('pages.notFound.message') }}
+      <h1 class="mb-8 font-bold text-gray-800 text-title-md dark:text-white/90 xl:text-title-2xl">
+        {{ t('pages.notFound.title') }}
+      </h1>
+      <img src="/images/error/404.svg" alt="404" class="dark:hidden" />
+      <img src="/images/error/404-dark.svg" alt="404" class="hidden dark:block" />
+      <p class="mt-10 mb-6 text-base text-gray-700 dark:text-gray-400 sm:text-lg">
+        {{ t('pages.notFound.message') }}
       </p>
-      <a href="/"
-        class="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-5 py-3.5 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
-        {{ t('pages.common.backHome') }} </a>
+      <a
+        href="/"
+        class="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-5 py-3.5 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+      >
+        {{ t('pages.common.backHome') }}
+      </a>
     </div>
-    <p class="absolute text-sm text-center text-gray-500 -translate-x-1/2 bottom-6 left-1/2 dark:text-gray-400"> © 2025
-      - HiveSpace </p>
+    <p
+      class="absolute text-sm text-center text-gray-500 -translate-x-1/2 bottom-6 left-1/2 dark:text-gray-400"
+    >
+      © 2025 - HiveSpace
+    </p>
   </div>
 </template>
 

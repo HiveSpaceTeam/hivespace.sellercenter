@@ -73,9 +73,9 @@
                 <button v-if="!isEmailEditing" type="button" @click="enableEmailEditing"
                   class="inline-flex items-center text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50"
                   :class="[
-                    (isSubmitting || cooldownActive)
+                    isSubmitting || cooldownActive
                       ? 'text-gray-400 dark:text-gray-500'
-                      : 'text-brand-500 hover:text-brand-600 dark:text-brand-400 dark:hover:text-brand-300'
+                      : 'text-brand-500 hover:text-brand-600 dark:text-brand-400 dark:hover:text-brand-300',
                   ]" :disabled="isSubmitting || cooldownActive">
                   <EditIcon class="w-4 h-4 mr-1" />
                   {{ t('verifyEmail.actions.editEmail') }}
@@ -111,8 +111,11 @@
                   {{ t('verifyEmail.actions.resendVerification') }} ({{ cooldownSeconds }}s)
                 </template>
                 <template v-else>
-                  {{ sentBefore ? t('verifyEmail.actions.resendVerification') :
-                    t('verifyEmail.actions.sendVerification') }}
+                  {{
+                    sentBefore
+                      ? t('verifyEmail.actions.resendVerification')
+                      : t('verifyEmail.actions.sendVerification')
+                  }}
                 </template>
               </Button>
 
@@ -123,7 +126,9 @@
 
               <!-- Help text -->
               <div v-else class="text-xs text-gray-500 dark:text-gray-400 space-y-1">
-                <p class="text-center">{{ t('verifyEmail.help.resendInfo', { seconds: COOLDOWN_SECONDS }) }}</p>
+                <p class="text-center">
+                  {{ t('verifyEmail.help.resendInfo', { seconds: COOLDOWN_SECONDS }) }}
+                </p>
               </div>
             </div>
           </form>
@@ -173,7 +178,7 @@ const COOLDOWN_SECONDS = 60
 
 // Form data
 const formData = reactive({
-  email: ''
+  email: '',
 })
 
 // Form error types
@@ -185,7 +190,7 @@ interface FormErrors {
 // Form errors
 const formErrors = reactive<FormErrors>({
   common: [],
-  email: ''
+  email: '',
 })
 
 // State management
@@ -277,7 +282,7 @@ const confirmEmailEdit = () => {
   if (originalEmail.value !== formData.email) {
     appStore.notifySuccess(
       t('verifyEmail.messages.emailUpdated'),
-      t('verifyEmail.messages.emailUpdatedSuccess')
+      t('verifyEmail.messages.emailUpdatedSuccess'),
     )
   }
 }
@@ -294,7 +299,7 @@ const handleSubmit = async () => {
   if (!validateForm()) {
     appStore.notifyError(
       t('verifyEmail.messages.error'),
-      t('verifyEmail.messages.validationFailed')
+      t('verifyEmail.messages.validationFailed'),
     )
     return
   }
@@ -322,7 +327,7 @@ const handleSubmit = async () => {
 
     appStore.notifySuccess(
       t('verifyEmail.messages.success'),
-      t('verifyEmail.messages.verificationSent')
+      t('verifyEmail.messages.verificationSent'),
     )
   } catch (error) {
     console.error('Failed to send verification email:', error)
@@ -336,17 +341,12 @@ const handleSubmit = async () => {
     // If no field errors, show general error notification
     if (!hasFieldErrors) {
       const errorMessage = error instanceof Error ? error.message : t('errors.UNKNOWN_ERROR')
-      appStore.notifyError(
-        t('verifyEmail.messages.error'),
-        errorMessage as string
-      )
+      appStore.notifyError(t('verifyEmail.messages.error'), errorMessage as string)
     }
   } finally {
     isSubmitting.value = false
   }
 }
-
-
 
 // Initialize component
 onMounted(async () => {
@@ -354,7 +354,7 @@ onMounted(async () => {
     // Get current user and check email verification status
     const currentUser = await getCurrentUser()
     if (currentUser) {
-      // If email is already verified, redirect to register seller
+      // If email is already verified, redirect to register store
       if (currentUser.profile?.email_verified) {
         await router.push('/register-seller')
         return
