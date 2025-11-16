@@ -45,22 +45,6 @@ jobs:
       - name: Run Linter
         run: npm run lint
 
-      - name: Check if secrets are loaded
-        run: |
-          if [ -z "${{ secrets.VITE_API_URL }}" ]; then
-            echo "::error::VITE_API_URL secret is NOT set!"
-            exit 1
-          else
-            echo "VITE_API_URL is set (value is masked)."
-          fi
-
-          if [ -z "${{ secrets.VITE_APP_CLIENT_ID }}" ]; then
-            echo "::error::VITE_APP_CLIENT_ID secret is NOT set!"
-            exit 1
-          else
-            echo "VITE_APP_CLIENT_ID is set (value is masked)."
-          fi
-
       - name: Build App
         run: npm run build
         env:
