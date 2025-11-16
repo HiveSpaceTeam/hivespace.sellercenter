@@ -1,5 +1,5 @@
 <template>
-  <DictionaryLayout>
+  <AdminLayout>
     <PageBreadcrumb :pageTitle="currentPageTitle" />
     <div class="quill-container">
       <div class="quill-content">
@@ -12,18 +12,23 @@
         <div v-html="rawHtml"></div>
       </div>
     </div>
-  </DictionaryLayout>
+  </AdminLayout>
 </template>
 
 <script setup lang="ts">
 import Button from '@/components/common/Button.vue'
 import { ref } from 'vue'
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
-import DictionaryLayout from '@/components/layout/DictionaryLayout.vue'
+import AdminLayout from '@/components/layout/AdminLayout.vue'
 import { QuillEditor } from '@vueup/vue-quill'
 import ImageUploader from 'quill-image-uploader'
 
-const quillRef = ref(null)
+type QuillEditorInstance = {
+  setHTML?: (html: string) => void
+  getHTML?: () => string
+}
+
+const quillRef = ref<unknown>(null)
 const rawHtml = ref('')
 const currentPageTitle = ref('Quill')
 
@@ -31,33 +36,30 @@ const modules = ref({
   name: 'imageUploader',
   module: ImageUploader,
   options: {
-    upload: (file) => {
-      return new Promise(() => {
+    upload: (file: File) => {
+      return new Promise((resolve) => {
         const formData = new FormData()
         formData.append('image', file)
 
+        // Example upload flow (uncomment and implement actual upload):
         // axios.post('/upload-image', formData)
-        //   .then(res => {
-        //     console.log(res)
-        //     resolve(res.data.url);
-        //   })
-        //   .catch(err => {
-        //     reject("Upload failed");
-        //     console.error("Error:", err)
-        //   })
+        //   .then(res => resolve(res.data.url))
+        //   .catch(err => reject(new Error('Upload failed')))
+
+        // Temporary: resolve with a placeholder value (empty URL)
+        resolve('')
       })
     },
   },
 })
 
 const onBind = async () => {
-  quillRef?.value?.setHTML(
+  ; (quillRef?.value as QuillEditorInstance)?.setHTML?.(
     '<p>Áo thun DirtyCoins Dico Mate T-Shirt - White</p><p><br></p><p>Model: 1m55 42kg mặc sản phẩm size S</p><p><br></p><p>Chi tiết sản phẩm:</p><p>• Màu: Trắng - Đen - Kem</p><p>• Size: XS - S - M - L - XL</p><p>• Chất liệu: Cotton.</p><p>• Relaxed Fit.</p><p>• Bo cổ 2 chiều.</p><p>• Hình in mặt trước và sau áo áp dụng dụng công nghệ in lụa.</p><p><br></p><p><img src="https://down-vn.img.susercontent.com/file/vn-11134208-7ras8-mdk6gpmpapwx49" height="1167" width="875"></p><p><img src="https://down-vn.img.susercontent.com/file/vn-11134208-7ras8-mdk6gpmpc4hd85" height="1167" width="875"></p><p><img src="https://down-vn.img.susercontent.com/file/vn-11134208-7ras8-mdo2snjimmr0e8" height="1094" width="875"></p><p><img src="https://down-vn.img.susercontent.com/file/vn-11134208-7ras8-mdo2snjio1bgd9" height="1094" width="875"></p><p><img src="https://down-vn.img.susercontent.com/file/vn-11134202-7ras8-m0d2fgqox0q554" height="1326" width="875"></p><p><img src="https://down-vn.img.susercontent.com/file/vn-11134202-7ras8-m0d2fhdpzbhp19" height="1326" width="875"></p>',
   )
 }
 const onClick = async () => {
-  rawHtml.value = quillRef?.value?.getHTML()
-  debugger
+  rawHtml.value = (quillRef?.value as QuillEditorInstance)?.getHTML?.() ?? ''
 }
 </script>
 <style>
