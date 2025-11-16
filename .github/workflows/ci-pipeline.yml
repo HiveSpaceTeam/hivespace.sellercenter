@@ -61,7 +61,6 @@ jobs:
       - name: Log Environment Variables
         run: |
           echo "🔍 Logging Environment Variables and Secrets (masked)"
-          echo "Environment: ${{ needs.determine-environment.outputs.environment }}"
           echo "VITE_API_URL: ${{ secrets.VITE_API_URL }}"
           echo "VITE_APP_CLIENT_ID: ${{ secrets.VITE_APP_CLIENT_ID }}"
           echo "VITE_AUTH_AUTHORITY_URL: ${{ secrets.VITE_AUTH_AUTHORITY_URL }}"
