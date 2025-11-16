@@ -47,15 +47,12 @@ jobs:
       - name: Build App
         run: npm run build
         env:
-          # --- Loaded from GitHub Secrets ---
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
           VITE_APP_CLIENT_ID: ${{ secrets.VITE_APP_CLIENT_ID }}
           VITE_AUTH_AUTHORITY_URL: ${{ secrets.VITE_AUTH_AUTHORITY_URL }}
-
-          # --- Loaded from GitHub Variables ---
+          VITE_APP_REDIRECT_URI: ${{ secrets.VITE_APP_REDIRECT_URI }}
+          VITE_APP_POST_LOGOUT_REDIRECT_URI: ${{ secrets.VITE_APP_POST_LOGOUT_REDIRECT_URI }}
           VITE_APP_ENV: ${{ vars.VITE_APP_ENV }}
-          VITE_APP_REDIRECT_URI: ${{ vars.VITE_APP_REDIRECT_URI }}
-          VITE_APP_POST_LOGOUT_REDIRECT_URI: ${{ vars.VITE_APP_POST_LOGOUT_REDIRECT_URI }}
           VITE_APP_SCOPE: ${{ vars.VITE_APP_SCOPE }}
           VITE_APP_RESPONSE_TYPE: ${{ vars.VITE_APP_RESPONSE_TYPE }}
           VITE_APP_RESPONSE_MODE: ${{ vars.VITE_APP_RESPONSE_MODE }}
