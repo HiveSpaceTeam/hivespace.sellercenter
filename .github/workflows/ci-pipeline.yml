@@ -17,8 +17,35 @@ on:
           - master
 
 jobs:
-  build-app:
+  determine-environment:
     runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.set-env.outputs.environment }}
+      should-deploy: ${{ steps.set-env.outputs.should-deploy }}
+    steps:
+      - name: Determine environment
+        id: set-env
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/master" || "${{ github.event_name }}" == "pull_request" || ("${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.branch }}" == "master") ]]; then
+            echo "environment=dev" >> $GITHUB_OUTPUT
+            if [[ "${{ github.event_name }}" == "push" || ("${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.branch }}" == "master") ]]; then
+              echo "should-deploy=true" >> $GITHUB_OUTPUT
+            else
+              echo "should-deploy=true" >> $GITHUB_OUTPUT
+            fi
+          elif [[ "${{ github.ref }}" == "refs/heads/release" || ("${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.branch }}" == "release") ]]; then
+            echo "environment=production" >> $GITHUB_OUTPUT
+            echo "should-deploy=true" >> $GITHUB_OUTPUT
+          else
+            echo "environment=none" >> $GITHUB_OUTPUT
+            echo "should-deploy=false" >> $GITHUB_OUTPUT
+          fi
+
+  build:
+    runs-on: ubuntu-latest
+    needs: determine-environment
+    if: needs.determine-environment.outputs.environment != 'none'
+    environment: ${{ needs.determine-environment.outputs.environment }}
 
     steps:
       - name: Checkout Code
@@ -60,52 +87,20 @@ jobs:
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: dist-artifact
+          name: dist-artifact-${{ needs.determine-environment.outputs.environment }}
           path: dist
 
-  deploy-dev:
+  deploy:
     runs-on: ubuntu-latest
-    needs: build-app
-    environment: dev
-    # Only deploy on pushes to master
-    # if: |
-    #   (github.event_name == 'push' && github.ref == 'refs/heads/master') ||
-    #   (github.event_name == 'workflow_dispatch' && github.event.inputs.branch == 'master')
+    needs: [determine-environment, build]
+    if: needs.determine-environment.outputs.should-deploy == 'true'
+    environment: ${{ needs.determine-environment.outputs.environment }}
 
     steps:
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
-          name: dist-artifact
-          path: dist
-
-      - name: Deploy to Azure Static Web App
-        uses: Azure/static-web-apps-deploy@v1
-        with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          action: 'upload'
-
-          # This is correct: you are uploading the 'dist' folder
-          app_location: 'dist'
-          api_location: ''
-          output_location: ''
-          skip_app_build: true
-
-  deploy-prod:
-    runs-on: ubuntu-latest
-    needs: build-app
-    environment: production
-    # Only deploy on pushes to release
-    if: |
-      (github.event_name == 'push' && github.ref == 'refs/heads/release') ||
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.branch == 'release')
-
-    steps:
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: dist-artifact
+          name: dist-artifact-${{ needs.determine-environment.outputs.environment }}
           path: dist
 
       - name: Deploy to Azure Static Web App
