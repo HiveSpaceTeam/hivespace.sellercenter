@@ -14,7 +14,6 @@
 </template>
 
 <script setup>
-import DictionaryLayout from '@/components/layout/DictionaryLayout.vue'
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
 import { ref } from 'vue'
 import ProfileCard from './Profiles/ProfileCard.vue'

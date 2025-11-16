@@ -1,4 +1,3 @@
-
 // Product-related types
 export interface ProductVariantOption {
   optionId: string

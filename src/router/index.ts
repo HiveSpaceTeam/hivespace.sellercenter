@@ -88,7 +88,7 @@ const router = createRouter({
     {
       path: '/register-seller',
       name: 'Register Seller',
-      component: () => import('@/views/RegisterSeller.vue'),
+      component: () => import('@/views/RegisterStore.vue'),
       meta: { title: 'Register Seller' },
     },
     {

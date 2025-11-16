@@ -1,13 +1,13 @@
 declare module 'quill-image-uploader' {
-    import type Quill from 'quill'
+  import type Quill from 'quill'
 
-    interface ImageUploaderOptions {
-        upload: (file: File) => Promise<string>
-    }
+  interface ImageUploaderOptions {
+    upload: (file: File) => Promise<string>
+  }
 
-    class ImageUploader {
-        constructor(quill: Quill, options: ImageUploaderOptions)
-    }
+  class ImageUploader {
+    constructor(quill: Quill, options: ImageUploaderOptions)
+  }
 
-    export = ImageUploader
+  export = ImageUploader
 }

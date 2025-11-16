@@ -21,8 +21,6 @@
                   <Select v-model="statusFilter" :options="statusOptions"
                     :buttonClass="'w-full text-left px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white flex justify-between items-center'" />
                 </div>
-
-              
               </div>
 
               <div class="flex items-center justify-end">
@@ -35,7 +33,6 @@
                   </Button>
                 </div>
               </div>
-
             </div>
           </div>
 
@@ -51,16 +48,24 @@
               <thead>
                 <tr class="border-b border-gray-200 dark:border-gray-700">
                   <th class="px-5 py-3 text-left w-1/3 sm:px-6">
-                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('product.productName') }}</p>
+                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                      {{ $t('product.productName') }}
+                    </p>
                   </th>
                   <th class="px-5 py-3 text-left w-1/3 sm:px-6">
-                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('product.price') }}</p>
+                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                      {{ $t('product.price') }}
+                    </p>
                   </th>
                   <th class="px-5 py-3 text-left w-1/3 sm:px-6">
-                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('product.quantity') }}</p>
+                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                      {{ $t('product.quantity') }}
+                    </p>
                   </th>
                   <th class="px-5 py-3 text-left w-1/4 sm:px-6">
-                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $t('common.action') }}</p>
+                    <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                      {{ $t('common.action') }}
+                    </p>
                   </th>
                 </tr>
               </thead>
@@ -68,13 +73,19 @@
                 <tr v-for="product in products" :key="product.id"
                   class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-white/[0.05]">
                   <td class="px-5 py-4 sm:px-6">
-                    <div class="text-sm font-medium text-gray-900 dark:text-white">{{ product.name }}</div>
+                    <div class="text-sm font-medium text-gray-900 dark:text-white">
+                      {{ product.name }}
+                    </div>
                   </td>
                   <td class="px-5 py-4 sm:px-6">
-                    <div class="text-sm text-gray-900 dark:text-white">{{ formatPriceRange(product) }}</div>
+                    <div class="text-sm text-gray-900 dark:text-white">
+                      {{ formatPriceRange(product) }}
+                    </div>
                   </td>
                   <td class="px-5 py-4 sm:px-6">
-                    <div class="text-sm text-gray-900 dark:text-white">{{ totalQuantity(product) }}</div>
+                    <div class="text-sm text-gray-900 dark:text-white">
+                      {{ totalQuantity(product) }}
+                    </div>
                   </td>
                   <td class="px-5 py-4 sm:px-6">
                     <div class="flex items-center gap-2">
@@ -88,25 +99,21 @@
           </div>
         </div>
         <!-- Footer -->
-        <template #footer>
-        </template>
+        <template #footer> </template>
       </ComponentCard>
     </div>
-
   </DictionaryLayout>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted } from "vue";
-import { useI18n } from "vue-i18n";
-import PageBreadcrumb from "@/components/common/PageBreadcrumb.vue";
-import DictionaryLayout from "@/components/layout/DictionaryLayout.vue";
-import ComponentCard from "@/components/common/ComponentCard.vue";
-import Button from "@/components/common/Button.vue";
-import Select from "@/components/common/Select.vue";
-import DropdownMenu from "@/components/common/DropdownMenu.vue";
-import Input from '@/components/common/Input.vue';
-import { useModal } from '@/composables/useModal'
+import { computed, ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
+import DictionaryLayout from '@/components/layout/DictionaryLayout.vue'
+import ComponentCard from '@/components/common/ComponentCard.vue'
+import Button from '@/components/common/Button.vue'
+import Select from '@/components/common/Select.vue'
+import Input from '@/components/common/Input.vue'
 import { useConfirmModal } from '@/composables/useConfirmModal'
 import { productService } from '@/services'
 import { useRouter } from 'vue-router'
@@ -114,53 +121,41 @@ import { useAppStore } from '@/stores/app'
 import type { Product, ProductSearchRequest, PagedResponse } from '@/types'
 
 import { BigPlusIcon, RefreshIcon, EditIcon, TrashRedIcon } from '@/icons'
-import { getCurrentUser } from "@/auth/user-manager";
-import type { AppUser } from "@/types/app-user";
-const { t } = useI18n();
+import { getCurrentUser } from '@/auth/user-manager'
+import type { AppUser } from '@/types/app-user'
+const { t } = useI18n()
 
-const currentPageTitle = computed(() => t('pages.productList'));
+const currentPageTitle = computed(() => t('pages.productList'))
 
 // Options for the filter selects (i18n-backed)
 const statusOptions = computed(() => [
   { value: 'all', label: t('product.productStatus.allStatus') },
   { value: 'active', label: t('product.productStatus.active') },
-  { value: 'inactive', label: t('product.productStatus.inactive') }
-]);
-
+  { value: 'inactive', label: t('product.productStatus.inactive') },
+])
 
 // State management
-const loading = ref(false);
-const searchQuery = ref('');
-const statusFilter = ref('all');
-const lastUpdated = ref('');
+const loading = ref(false)
+const searchQuery = ref('')
+const statusFilter = ref('all')
+const lastUpdated = ref('')
 const products = ref<Product[]>([])
 const pageIndex = ref(1)
 const pageSize = ref(10)
 const totalCount = ref(0)
 
 // Global modal handler
-const { openModal } = useModal()
 const { deleteConfirm } = useConfirmModal()
 const router = useRouter()
 const appStore = useAppStore()
 
-const currentUser = ref<AppUser | null>(null);
-
-
-
-
-const actionText = {
-  delete: t('table.delete'),
-  activate: t('table.activate'),
-  deactivate: t('table.deactivate')
-}
-
+const currentUser = ref<AppUser | null>(null)
 
 // Helpers for product display
 const totalQuantity = (product: Product): number => {
   if (!product?.skus?.length) return 0
   return product.skus.reduce((sum, sku) => {
-    const q = typeof sku.quantity === 'string' ? Number(sku.quantity) : (sku.quantity || 0)
+    const q = typeof sku.quantity === 'string' ? Number(sku.quantity) : sku.quantity || 0
     return sum + (isNaN(q) ? 0 : q)
   }, 0)
 }
@@ -191,19 +186,15 @@ const formatCurrency = (value: number): string => {
   return new Intl.NumberFormat(undefined, { style: 'currency', currency: 'USD' }).format(value)
 }
 
-
-
 const tableHandleSearchInput = (event: Event) => {
   const target = event.target as HTMLInputElement
   handleSearch(target.value)
 }
 
-
-
 const handleSearch = (query: string) => {
-  searchQuery.value = query;
-  console.log('Search query:', query);
-};
+  searchQuery.value = query
+  console.log('Search query:', query)
+}
 
 // Filters are bound via v-model on Select; no manual handlers required here.
 
@@ -220,7 +211,7 @@ const removeProduct = async (product: Product) => {
     // Show confirmation modal
     const confirmed = await deleteConfirm(
       t('product.deleteProduct'),
-      t('product.deleteProductConfirm', { name: product.name })
+      t('product.deleteProductConfirm', { name: product.name }),
     )
 
     if (!confirmed) return
@@ -232,26 +223,22 @@ const removeProduct = async (product: Product) => {
     await productService.deleteProduct(product.id.toString())
 
     // Remove product from local list
-    products.value = products.value.filter(p => p.id !== product.id)
+    products.value = products.value.filter((p) => p.id !== product.id)
     totalCount.value = Math.max(0, totalCount.value - 1)
 
     // Show success notification
     appStore.notifySuccess(
       t('product.productDeleted'),
-      t('product.productDeletedMessage', { name: product.name })
+      t('product.productDeletedMessage', { name: product.name }),
     )
 
     // Update last updated timestamp
     updateLastUpdated()
-
   } catch (error) {
     console.error('Failed to delete product:', error)
-    
+
     // Show error notification
-    appStore.notifyError(
-      t('product.deleteError'),
-      t('product.deleteErrorMessage')
-    )
+    appStore.notifyError(t('product.deleteError'), t('product.deleteErrorMessage'))
   } finally {
     loading.value = false
   }
@@ -267,8 +254,8 @@ const fetchProducts = async () => {
       pageSize: pageSize.value,
     }
     const result: PagedResponse<Product> = await productService.getProducts(params)
-    products.value = (result.items ?? result.data) ?? []
-    totalCount.value = (result.totalCount ?? result.total) ?? 0
+    products.value = result.items ?? result.data ?? []
+    totalCount.value = result.totalCount ?? result.total ?? 0
     updateLastUpdated()
   } catch (err) {
     // Errors are centrally handled in api service; keep console for dev context
@@ -280,13 +267,11 @@ const fetchProducts = async () => {
 
 const refreshTables = async () => {
   await fetchProducts()
-};
+}
 
 const updateLastUpdated = () => {
-  lastUpdated.value = new Date().toLocaleString();
-};
-
-
+  lastUpdated.value = new Date().toLocaleString()
+}
 
 const addNewProduct = () => {
   router.push({ path: '/product/new' })
@@ -294,8 +279,8 @@ const addNewProduct = () => {
 
 // Lifecycle
 onMounted(async () => {
-  currentUser.value = await getCurrentUser();
+  currentUser.value = await getCurrentUser()
   await fetchProducts()
-  console.log('ProductList mounted');
-});
+  console.log('ProductList mounted')
+})
 </script>

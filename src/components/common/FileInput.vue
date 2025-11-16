@@ -2,17 +2,36 @@
   <div v-if="previewDirection === 'top'" class="flex flex-col items-center space-y-4">
     <!-- Image Preview (Top) -->
     <div class="relative">
-      <div :class="[
-        `${previewSizeClasses} ${previewShapeClasses}`,
-        'border-2 border-dashed bg-gray-50 dark:bg-gray-800 flex items-center justify-center overflow-hidden cursor-pointer transition-colors',
-        displayError
-          ? 'border-red-500 dark:border-red-500'
-          : 'border-gray-300 dark:border-gray-600 hover:border-brand-500'
-      ]" @click="triggerFileInput">
+      <div
+        :class="[
+          `${previewSizeClasses} ${previewShapeClasses}`,
+          'border-2 border-dashed bg-gray-50 dark:bg-gray-800 flex items-center justify-center overflow-hidden cursor-pointer transition-colors',
+          displayError
+            ? 'border-red-500 dark:border-red-500'
+            : 'border-gray-300 dark:border-gray-600 hover:border-brand-500',
+        ]"
+        @click="triggerFileInput"
+      >
         <div v-if="!imagePreview" class="text-center">
-          <svg :class="props.previewSize === 'sm' ? 'w-6 h-6' : props.previewSize === 'lg' ? 'w-10 h-10' : 'w-8 h-8'"
-            class="text-gray-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          <svg
+            :class="
+              props.previewSize === 'sm'
+                ? 'w-6 h-6'
+                : props.previewSize === 'lg'
+                  ? 'w-10 h-10'
+                  : 'w-8 h-8'
+            "
+            class="text-gray-400 mb-1"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+            />
           </svg>
           <p class="text-xs text-gray-500 dark:text-gray-400">Add Photo</p>
         </div>
@@ -20,7 +39,12 @@
       </div>
 
       <!-- Remove button when image is selected -->
-      <button v-if="imagePreview" type="button" @click.stop="removeImage" :class="removeButtonClasses">
+      <button
+        v-if="imagePreview"
+        type="button"
+        @click.stop="removeImage"
+        :class="removeButtonClasses"
+      >
         ×
       </button>
     </div>
@@ -31,10 +55,19 @@
         {{ label }}
       </label>
 
-      <input ref="fileInput" type="file" :accept="accept" @change="handleFileChange" class="hidden" />
+      <input
+        ref="fileInput"
+        type="file"
+        :accept="accept"
+        @change="handleFileChange"
+        class="hidden"
+      />
 
-      <button type="button" @click="triggerFileInput"
-        class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors focus:outline-none">
+      <button
+        type="button"
+        @click="triggerFileInput"
+        class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors focus:outline-none"
+      >
         {{ defaultButtonText }}
       </button>
 
@@ -61,33 +94,66 @@
     </label>
 
     <div class="flex items-center space-x-3">
-      <input ref="fileInput" type="file" :accept="accept" @change="handleFileChange" class="hidden" />
+      <input
+        ref="fileInput"
+        type="file"
+        :accept="accept"
+        @change="handleFileChange"
+        class="hidden"
+      />
 
-      <button type="button" @click="triggerFileInput"
-        class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors focus:outline-none">
+      <button
+        type="button"
+        @click="triggerFileInput"
+        class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors focus:outline-none"
+      >
         {{ defaultButtonText }}
       </button>
 
       <!-- Image Preview (Right of button) -->
       <div class="relative">
-        <div :class="[
-          `${previewSizeClasses} ${previewShapeClasses}`,
-          'border-2 border-dashed bg-gray-50 dark:bg-gray-800 flex items-center justify-center overflow-hidden cursor-pointer transition-colors',
-          displayError
-            ? 'border-red-500 dark:border-red-500'
-            : 'border-gray-300 dark:border-gray-600 hover:border-brand-500'
-        ]" @click="triggerFileInput">
+        <div
+          :class="[
+            `${previewSizeClasses} ${previewShapeClasses}`,
+            'border-2 border-dashed bg-gray-50 dark:bg-gray-800 flex items-center justify-center overflow-hidden cursor-pointer transition-colors',
+            displayError
+              ? 'border-red-500 dark:border-red-500'
+              : 'border-gray-300 dark:border-gray-600 hover:border-brand-500',
+          ]"
+          @click="triggerFileInput"
+        >
           <div v-if="!imagePreview" class="text-center">
-            <svg :class="props.previewSize === 'sm' ? 'w-4 h-4' : props.previewSize === 'lg' ? 'w-8 h-8' : 'w-6 h-6'"
-              class="text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            <svg
+              :class="
+                props.previewSize === 'sm'
+                  ? 'w-4 h-4'
+                  : props.previewSize === 'lg'
+                    ? 'w-8 h-8'
+                    : 'w-6 h-6'
+              "
+              class="text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              />
             </svg>
           </div>
           <img v-else :src="imagePreview" :alt="label" :class="previewImageClasses" />
         </div>
 
         <!-- Remove button when image is selected -->
-        <button v-if="imagePreview" type="button" @click.stop="removeImage" :class="removeButtonClasses">
+        <button
+          v-if="imagePreview"
+          type="button"
+          @click.stop="removeImage"
+          :class="removeButtonClasses"
+        >
           ×
         </button>
       </div>
@@ -143,7 +209,7 @@ const props = withDefaults(defineProps<Props>(), {
   buttonText: undefined,
   required: false,
   previewSize: 'md',
-  previewShape: 'circle'
+  previewShape: 'circle',
 })
 
 const defaultButtonText = computed(() => props.buttonText || t('component.fileInput.chooseFile'))
@@ -203,9 +269,14 @@ const previewImageClasses = computed(() => {
 })
 
 const removeButtonClasses = computed(() => {
-  const baseClasses = 'absolute bg-red-500 text-white flex items-center justify-center text-xs hover:bg-red-600 transition-colors'
-  const sizeClasses = props.previewSize === 'sm' ? 'w-4 h-4 -top-1 -right-1' :
-    props.previewSize === 'lg' ? 'w-6 h-6 -top-2 -right-2' : 'w-5 h-5 -top-1 -right-1'
+  const baseClasses =
+    'absolute bg-red-500 text-white flex items-center justify-center text-xs hover:bg-red-600 transition-colors'
+  const sizeClasses =
+    props.previewSize === 'sm'
+      ? 'w-4 h-4 -top-1 -right-1'
+      : props.previewSize === 'lg'
+        ? 'w-6 h-6 -top-2 -right-2'
+        : 'w-5 h-5 -top-1 -right-1'
   return `${baseClasses} ${sizeClasses} rounded-full`
 })
 

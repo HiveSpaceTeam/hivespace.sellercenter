@@ -1,4 +1,11 @@
-import type { CreateProductRequest, CreateProductResponse, Product, ProductSearchRequest, PagedResponse, ProductUpsertRequest } from '@/types'
+import type {
+  CreateProductRequest,
+  CreateProductResponse,
+  Product,
+  ProductSearchRequest,
+  PagedResponse,
+  ProductUpsertRequest,
+} from '@/types'
 import { apiService } from './api'
 import { buildApiUrl } from '@/config'
 

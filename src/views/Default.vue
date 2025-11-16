@@ -1,5 +1,7 @@
 <template>
-  <div class="relative flex flex-col items-center justify-center min-h-screen p-6 overflow-hidden z-1">
+  <div
+    class="relative flex flex-col items-center justify-center min-h-screen p-6 overflow-hidden z-1"
+  >
     <!-- Language Switcher and Theme Toggler - Top Right -->
     <div class="absolute top-4 right-4 z-10 flex items-center gap-3">
       <ThemeToggler />
@@ -18,7 +20,9 @@
     <div class="mx-auto w-full max-w-[242px] text-center sm:max-w-[562px]">
       <img class="dark:hidden w-full h-auto" src="/images/logo/logo-light.svg" alt="home" />
       <img class="hidden dark:block w-full h-auto" src="/images/logo/logo-dark.svg" alt="home" />
-      <p class="mt-10 mb-6 text-base text-gray-700 dark:text-gray-400 sm:text-lg"> {{ t('pages.default.welcome') }} </p>
+      <p class="mt-10 mb-6 text-base text-gray-700 dark:text-gray-400 sm:text-lg">
+        {{ t('pages.default.welcome') }}
+      </p>
       <Button :disabled="isSigningIn" @click="signIn" variant="primary">
         {{ t('pages.default.signIn') }}
       </Button>
@@ -27,8 +31,11 @@
       </Button>
     </div>
 
-    <p class="absolute text-sm text-center text-gray-500 -translate-x-1/2 bottom-6 left-1/2 dark:text-gray-400"> © 2025
-      - HiveSpace </p>
+    <p
+      class="absolute text-sm text-center text-gray-500 -translate-x-1/2 bottom-6 left-1/2 dark:text-gray-400"
+    >
+      © 2025 - HiveSpace
+    </p>
   </div>
 </template>
 

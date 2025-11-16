@@ -4,6 +4,11 @@
  * Request DTO for sending email verification
  */
 export interface SendEmailVerificationRequest {
-    callbackUrl: string
-    returnUrl?: string | null
+  callbackUrl: string
+  returnUrl?: string | null
+}
+
+export interface ConfirmEmailVerificationRequest {
+  token: string,
+  returnUrl?: string | null
 }
