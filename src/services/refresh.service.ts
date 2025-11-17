@@ -10,8 +10,8 @@ type TokenResponse = {
 }
 
 const tokenEndpoint = new URL(
-  '/identity/connect/token',
-  config.api.baseUrl.replace(/\/+$/, ''),
+  '/connect/token',
+  config.auth.oidc.authority.replace(/\/+$/, ''),
 ).toString()
 
 // Helper: perform a refresh_token exchange using the stored refresh token
