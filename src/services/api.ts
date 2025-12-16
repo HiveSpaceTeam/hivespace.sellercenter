@@ -1,6 +1,6 @@
-import { getCurrentUser, login, logout } from '@/auth/user-manager'
+import { useAuth } from '@hivespace/shared'
 import refreshToken from '@/services/refresh.service'
-import type { AppUser } from '@/types/app-user'
+import type { AppUser } from '@hivespace/shared'
 import axios from 'axios'
 import type {
   AxiosInstance,
@@ -63,6 +63,7 @@ const ensureFreshUser = async (user: AppUser | null): Promise<AppUser | null> =>
     // indicates the refresh grant was rejected (invalid_grant). Force logout.
     if (user?.refresh_token) {
       try {
+        const { logout } = useAuth()
         await logout()
       } catch {
         // best-effort
@@ -81,6 +82,7 @@ const ensureFreshUser = async (user: AppUser | null): Promise<AppUser | null> =>
 apiClient.interceptors.request.use(
   async (requestConfig) => {
     try {
+      const { getCurrentUser } = useAuth()
       let currentUser: AppUser | null = await getCurrentUser()
 
       // Ensure we have a fresh user or have logged out on invalid_grant
@@ -89,7 +91,7 @@ apiClient.interceptors.request.use(
       // Add authorization if available (ensure headers object exists)
       requestConfig.headers = requestConfig.headers ?? {}
       if (currentUser?.access_token) {
-        ;(requestConfig.headers as Record<string, string>).Authorization =
+        ; (requestConfig.headers as Record<string, string>).Authorization =
           `Bearer ${currentUser.access_token}`
       }
 
@@ -175,6 +177,7 @@ const shouldRetry = (error: AxiosError): boolean => {
 const handleHttpError = (status: number, appStore: ReturnType<typeof useAppStore>): void => {
   switch (status) {
     case 401:
+      const { login } = useAuth()
       login() // Redirect to login
       break
     case 403:
@@ -257,11 +260,11 @@ class ApiService {
       headers: { 'Content-Type': 'multipart/form-data' },
       onUploadProgress: onUploadProgress
         ? (progressEvent) => {
-            if (progressEvent.total) {
-              const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-              onUploadProgress(progress)
-            }
+          if (progressEvent.total) {
+            const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+            onUploadProgress(progress)
           }
+        }
         : undefined,
     })
   }

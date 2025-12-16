@@ -1,4 +1,4 @@
-import { type GetUserSettingResponse, type SetUserSettingRequest } from '@/types'
+import { type GetUserSettingResponse, type SetUserSettingRequest } from '@hivespace/shared'
 import { apiService } from './api'
 import { buildApiUrl } from '@/config'
 

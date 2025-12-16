@@ -1,7 +1,6 @@
 <template>
   <div
-    class="rounded-2xl border border-gray-200 bg-white px-5 pb-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6"
-  >
+    class="rounded-2xl border border-gray-200 bg-white px-5 pb-5 pt-5 dark:border-gray-800 dark:bg-white/3 sm:px-6 sm:pt-6">
     <div class="flex flex-col gap-5 mb-6 sm:flex-row sm:justify-between">
       <div class="w-full">
         <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Statistics</h3>
@@ -27,7 +26,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import Tabs from '@/components/common/Tabs.vue'
+import { Tabs } from '@hivespace/shared'
 
 const options = [
   { value: 'monthly', label: 'Monthly' },
@@ -37,6 +36,7 @@ const options = [
 
 const selected = ref('monthly')
 import VueApexCharts from 'vue3-apexcharts'
+import type { ApexOptions } from 'apexcharts'
 
 const monthlyData = [
   { name: 'Sales', data: [180, 190, 170, 160, 175, 165, 170, 205, 230, 210, 240, 235] },
@@ -65,7 +65,7 @@ watch(selected, (newValue) => {
   }
 })
 
-const chartOptions = ref({
+const chartOptions = ref<ApexOptions>({
   legend: {
     show: false,
     position: 'top',
@@ -81,7 +81,6 @@ const chartOptions = ref({
   },
   fill: {
     gradient: {
-      enabled: true,
       opacityFrom: 0.55,
       opacityTo: 0,
     },
@@ -93,10 +92,7 @@ const chartOptions = ref({
   markers: {
     size: 0,
   },
-  labels: {
-    show: false,
-    position: 'top',
-  },
+
   grid: {
     xaxis: {
       lines: {

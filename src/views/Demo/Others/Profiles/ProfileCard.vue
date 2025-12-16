@@ -55,13 +55,9 @@
 </template>
 
 <script setup>
-import FacebookIcon from '@/icons/FacebookIcon.vue'
-import XIcon from '@/icons/XIcon.vue'
-import LinkedInIcon from '@/icons/LinkedInIcon.vue'
-import InstagramIcon from '@/icons/InstagramIcon.vue'
-import EditIcon from '@/icons/EditIcon.vue'
+import { FacebookIcon, XIcon, LinkedInIcon, InstagramIcon, EditIcon } from '@/icons'
 import ProfileDetailModal from './Popups/ProfileDetailModal.vue'
-import { useModal } from '@/composables/useModal'
+import { useModal } from '@hivespace/shared'
 const { openModal } = useModal()
 const showProfileDetailModal = () => {
   openModal(ProfileDetailModal, {

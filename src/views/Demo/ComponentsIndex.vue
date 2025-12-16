@@ -375,8 +375,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import DictionaryLayout from '@/components/layout/DictionaryLayout.vue'
-import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
-import ComponentCard from '@/components/common/ComponentCard.vue'
+import { PageBreadcrumb, ComponentCard } from '@hivespace/shared'
 import {
   SuccessIcon,
   WarningIcon,

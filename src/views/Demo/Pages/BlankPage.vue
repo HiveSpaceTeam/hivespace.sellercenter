@@ -21,7 +21,7 @@
 <script setup>
 import { ref } from 'vue'
 import DictionaryLayout from '@/components/layout/DictionaryLayout.vue'
-import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
+import { PageBreadcrumb } from '@hivespace/shared'
 
 const currentPageTitle = ref('Blank Page')
 </script>

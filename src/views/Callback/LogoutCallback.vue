@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import userManager from '@/auth/user-manager'
+import { useAuth } from '@hivespace/shared'
 import type { SignoutResponse } from 'oidc-client-ts'
 
 type SignoutUserState = { redirectTo?: string } | undefined
@@ -14,6 +14,8 @@ const router = useRouter()
 
 onMounted(async () => {
   try {
+    const { userManager } = useAuth()
+    if (!userManager) throw new Error('Auth not initialized')
     // Process the redirect response from the IdP
     const response = (await userManager.signoutRedirectCallback()) as SignoutResponse
     // response.userState may contain the object you passed as `state`

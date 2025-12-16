@@ -34,7 +34,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import CommonGridShape from '@/components/common/CommonGridShape.vue'
+import { CommonGridShape } from '@hivespace/shared'
 
 const currentYear = ref(new Date().getFullYear())
 </script>

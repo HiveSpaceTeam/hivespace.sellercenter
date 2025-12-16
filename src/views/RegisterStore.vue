@@ -121,14 +121,11 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/stores/app'
 import { useStoreStore } from '@/stores'
-import { useFieldValidation } from '@/composables/useFieldValidation'
-import { getCurrentUser } from '@/auth/user-manager'
+import { useFieldValidation } from '@hivespace/shared'
+import { useAuth } from '@hivespace/shared'
 import refreshToken from '@/services/refresh.service'
-import type { ErrorResponse } from '@/types'
-import Button from '@/components/common/Button.vue'
-import Input from '@/components/common/Input.vue'
-import TextArea from '@/components/common/TextArea.vue'
-import FileInput from '@/components/common/FileInput.vue'
+import type { ErrorResponse } from '@hivespace/shared'
+import { Button, Input, TextArea, FileInput } from '@hivespace/shared'
 import AppHeader from '@/components/layout/AppHeader.vue'
 
 const router = useRouter()
@@ -237,6 +234,7 @@ const handleSubmit = async () => {
       address: formData.address,
     })
     // Refresh token after successful registration
+    const { getCurrentUser } = useAuth()
     const currentUser = await getCurrentUser()
     await refreshToken(currentUser, true)
     appStore.notifySuccess(
@@ -269,6 +267,7 @@ const handleSubmit = async () => {
 onMounted(async () => {
   try {
     // Check if user is already a seller
+    const { getCurrentUser } = useAuth()
     const currentUser = await getCurrentUser()
     if (currentUser?.isSeller()) {
       // If already a seller, redirect to user management

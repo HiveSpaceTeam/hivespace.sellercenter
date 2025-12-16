@@ -114,7 +114,7 @@
 
 <script setup lang="ts">
 import DictionaryLayout from '@/components/layout/DictionaryLayout.vue'
-import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
+import { PageBreadcrumb } from '@hivespace/shared'
 
 const currentPageTitle = ref('Calendar')
 import { ref, reactive, onMounted, watch } from 'vue'
@@ -129,7 +129,7 @@ import type {
   EventContentArg,
   EventInput,
 } from '@fullcalendar/core'
-import { useModal } from '@/composables/useModal'
+import { useModal } from '@hivespace/shared'
 import EventDetailModal from '@/views/Demo/Others/Popups/EventDetailModal.vue'
 
 const calendarRef = ref(null)

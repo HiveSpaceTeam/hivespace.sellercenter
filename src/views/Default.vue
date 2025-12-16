@@ -40,13 +40,11 @@
 </template>
 
 <script setup lang="ts">
-import { login, getCurrentUser } from '@/auth/user-manager'
+import { useAuth } from '@hivespace/shared'
 import { useRouter } from 'vue-router'
-import Button from '@/components/common/Button.vue'
-import LanguageSwitcher from '@/components/layout/header/LanguageSwitcher.vue'
-import ThemeToggler from '@/components/common/ThemeToggler.vue'
+import { Button, ThemeToggler } from '@hivespace/shared'
 import { onMounted, ref } from 'vue'
-import type { AppUser } from '@/types/app-user'
+import type { AppUser } from '@hivespace/shared'
 import { useI18n } from 'vue-i18n'
 
 const router = useRouter()
@@ -56,6 +54,7 @@ const { t } = useI18n()
 // Helper: check current local user once and navigate to account if present.
 async function checkUserAndRedirect(): Promise<AppUser | null> {
   try {
+    const { getCurrentUser } = useAuth()
     const user = await getCurrentUser()
     if (user) {
       // If the user already appears signed in locally, go to user management
@@ -80,6 +79,7 @@ const signIn = async () => {
   isSigningIn.value = true
   try {
     // Always start a fresh IdP login flow. Do not reuse any existing local user.
+    const { login } = useAuth()
     await login()
   } catch (err) {
     console.error('Sign-in failed', err)

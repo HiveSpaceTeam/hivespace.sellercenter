@@ -78,10 +78,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import Input from '@/components/common/Input.vue'
-import Select from '@/components/common/Select.vue'
-import MailIcon from '@/icons/MailIcon.vue'
-import CopyIcon from '@/icons/CopyIcon.vue'
+import { Input, Select } from '@hivespace/shared'
+import { MailIcon, CopyIcon } from '@/icons'
 
 const email = ref('')
 const selectedCountry = ref('US')

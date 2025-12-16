@@ -116,12 +116,8 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
-import ChevronDownIcon from '@/icons/ChevronDownIcon.vue'
-import EyeIcon from '@/icons/EyeIcon.vue'
-import EyeOffIcon from '@/icons/EyeOffIcon.vue'
-import PaymentIcon from '@/icons/PaymentIcon.vue'
-import DatePicker from '@/components/common/DatePicker.vue'
-import TimePicker from '@/components/common/TimePicker.vue'
+import { ChevronDownIcon, EyeIcon, EyeOffIcon, PaymentIcon } from '@/icons'
+import { DatePicker, TimePicker } from '@hivespace/shared'
 
 const showPassword = ref(false)
 

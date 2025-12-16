@@ -11,10 +11,8 @@
 
 <script setup>
 import { ref } from 'vue'
-import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
+import { PageBreadcrumb, ComponentCard, ResponsiveImage } from '@hivespace/shared'
 import DictionaryLayout from '@/components/layout/DictionaryLayout.vue'
-import ComponentCard from '@/components/common/ComponentCard.vue'
-import ResponsiveImage from '@/components/common/ResponsiveImage.vue'
 const currentPageTitle = ref('Images')
 </script>
 

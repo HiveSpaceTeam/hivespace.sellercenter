@@ -6,15 +6,15 @@
     <!-- Main Content -->
     <div class="relative flex flex-col items-center justify-center min-h-[calc(100vh-80px)] p-6 overflow-hidden z-1">
       <div>
-        <div class="absolute right-0 top-0 -z-1 w-full max-w-[250px] xl:max-w-[450px]">
+        <div class="absolute right-0 top-0 -z-1 w-full max-w-62.5 xl:max-w-112.5">
           <img src="/images/shape/grid-01.svg" alt="grid" />
         </div>
-        <div class="absolute bottom-0 left-0 -z-1 w-full max-w-[250px] rotate-180 xl:max-w-[450px]">
+        <div class="absolute bottom-0 left-0 -z-1 w-full max-w-62.5 rotate-180 xl:max-w-112.5">
           <img src="/images/shape/grid-01.svg" alt="grid" />
         </div>
       </div>
 
-      <div class="mx-auto w-full max-w-[500px] text-center">
+      <div class="mx-auto w-full max-w-125 text-center">
         <!-- Loading State -->
         <div v-if="isLoading" class="mb-8">
           <LoadingSpinnerIcon class="w-16 h-16 mx-auto mb-4 text-brand-500 animate-spin" />
@@ -104,14 +104,14 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/stores/app'
 import { accountService } from '@/services'
-import Button from '@/components/common/Button.vue'
+import { Button } from '@hivespace/shared'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import LoadingSpinnerIcon from '@/icons/LoadingSpinnerIcon.vue'
 import CheckLargeIcon from '@/icons/CheckLargeIcon.vue'
 import ErrorIcon from '@/icons/ErrorIcon.vue'
 import HomeIcon from '@/icons/HomeIcon.vue'
 import MailIcon from '@/icons/MailIcon.vue'
-import { getCurrentUser } from '@/auth/user-manager'
+import { useAuth } from '@hivespace/shared'
 import refreshToken from '@/services/refresh.service'
 
 const route = useRoute()
@@ -215,6 +215,7 @@ const verifyEmailToken = async (token: string) => {
       t('verifyEmailCallback.success.subtitle'),
     )
 
+    const { getCurrentUser } = useAuth()
     const currentUser = await getCurrentUser()
     if (currentUser) {
       await refreshToken(currentUser, true)
@@ -244,6 +245,7 @@ const verifyEmailToken = async (token: string) => {
 
 // Initialize component
 onMounted(async () => {
+  const { getCurrentUser } = useAuth()
   const user = await getCurrentUser()
   if (user?.profile.email_verified) {
     isLoading.value = false

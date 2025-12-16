@@ -1,5 +1,5 @@
 <template>
-  <admin-layout>
+  <DictionaryLayout>
     <PageBreadcrumb :pageTitle="currentPageTitle" />
 
     <div
@@ -10,11 +10,11 @@
       <personal-info-card />
       <address-card />
     </div>
-  </admin-layout>
+  </DictionaryLayout>
 </template>
 
 <script setup>
-import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
+import DictionaryLayout from '@/components/layout/DictionaryLayout.vue'
 import { ref } from 'vue'
 import ProfileCard from './Profiles/ProfileCard.vue'
 import PersonalInfoCard from './Profiles/PersonalInfoCard.vue'

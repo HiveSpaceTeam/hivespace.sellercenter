@@ -29,10 +29,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import MultipleSelect from '@/components/common/MultipleSelect.vue'
-
-// ...existing code...
-import Select from '@/components/common/Select.vue'
+import { MultipleSelect, Select } from '@hivespace/shared'
 
 const options = [
   { value: 'apple', label: 'Apple' },

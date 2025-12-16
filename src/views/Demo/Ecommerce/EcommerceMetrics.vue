@@ -53,8 +53,5 @@
 </template>
 
 <script setup lang="ts">
-import UserGroupIcon from '@/icons/UserGroupIcon.vue'
-import CheckIcon from '@/icons/CheckIcon.vue'
-import TaskIcon from '@/icons/TaskIcon.vue'
-import ArrowDownRedIcon from '@/icons/ArrowDownRedIcon.vue'
+import { UserGroupIcon, CheckIcon, TaskIcon, ArrowDownRedIcon } from '@/icons'
 </script>

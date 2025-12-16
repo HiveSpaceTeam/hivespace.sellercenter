@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import demoRoutes from './demoRoutes'
-import { getCurrentUser, login, logout } from '@/auth/user-manager'
+import { useAuth } from '@hivespace/shared'
 
 // Single grouped collection for several related routes (callbacks, error pages,
 // maintenance, default and 404). We keep the same order and meta fields so
@@ -113,6 +113,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   // For other routes, enforce presence of a local user; if missing, route to '/'
+  const { getCurrentUser, login, logout } = useAuth()
   const user = await getCurrentUser()
   if (!user) {
     await login()

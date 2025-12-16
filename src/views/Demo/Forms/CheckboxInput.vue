@@ -26,5 +26,5 @@ const checkboxOne = ref(false)
 const checkboxTwo = ref(true)
 const checkboxThree = ref(true)
 
-import Checkbox from '@/components/common/Checkbox.vue'
+import { Checkbox } from '@hivespace/shared'
 </script>

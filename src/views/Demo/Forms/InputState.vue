@@ -53,8 +53,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import InputErrorIcon from '@/icons/InputErrorIcon.vue'
-import InputSuccessIcon from '@/icons/InputSuccessIcon.vue'
+import { InputErrorIcon, InputSuccessIcon } from '@/icons'
 
 const errorEmail = ref('demoemail')
 const successEmail = ref('demoemail@gmail.com')

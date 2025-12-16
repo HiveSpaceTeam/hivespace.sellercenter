@@ -3,10 +3,10 @@
     <PageBreadcrumb :pageTitle="currentPageTitle" />
     <div class="quill-container">
       <div class="quill-content">
-        <div>
+        <div class="mb-2">
           <QuillEditor :style="'height:300px'" ref="quillRef" :modules="modules" toolbar="full" />
         </div>
-        <Button size="sm" @click="onClick" variant="primary"> Submit</Button>
+        <Button size="sm" class="mr-2" @click="onClick" variant="primary"> Submit</Button>
         <Button size="sm" @click="onBind" variant="primary"> Bind</Button>
 
         <div v-html="rawHtml"></div>
@@ -16,11 +16,11 @@
 </template>
 
 <script setup lang="ts">
-import Button from '@/components/common/Button.vue'
+import { Button, PageBreadcrumb } from '@hivespace/shared'
 import { ref } from 'vue'
-import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
-import AdminLayout from '@/components/layout/AdminLayout.vue'
+import AdminLayout from '@/components/layout/DictionaryLayout.vue'
 import { QuillEditor } from '@vueup/vue-quill'
+
 import ImageUploader from 'quill-image-uploader'
 
 type QuillEditorInstance = {
