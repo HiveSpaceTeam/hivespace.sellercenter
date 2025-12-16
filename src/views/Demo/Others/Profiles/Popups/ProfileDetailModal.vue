@@ -70,8 +70,7 @@
 
 <script setup>
 import { reactive, defineProps, defineEmits } from 'vue'
-import Input from '@/components/common/Input.vue'
-import Button from '@/components/common/Button.vue'
+import { Input, Button } from '@hivespace/shared'
 
 defineProps({
   userId: Number,

@@ -47,8 +47,7 @@
 
 <script setup>
 import { reactive } from 'vue'
-import Input from '@/components/common/Input.vue'
-import Button from '@/components/common/Button.vue'
+import { Input, Button } from '@hivespace/shared'
 
 const emit = defineEmits(['close'])
 

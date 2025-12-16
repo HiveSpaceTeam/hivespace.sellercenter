@@ -42,16 +42,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
+import { PageBreadcrumb, ComponentCard, Dropzone, FileInput } from '@hivespace/shared'
 import DictionaryLayout from '@/components/layout/DictionaryLayout.vue'
-import DefaultInputs from '@/views/Demo/Forms/DefaultInputs.vue'
-import ComponentCard from '@/components/common/ComponentCard.vue'
-import SelectInput from '@/views/Demo/Forms/SelectInput.vue'
-import InputState from '@/views/Demo/Forms/InputState.vue'
-import TextAreas from '@/views/Demo/Forms/TextAreas.vue'
-import InputGroup from '@/views/Demo/Forms/InputGroup.vue'
-import Dropzone from '@/components/common/Dropzone.vue'
-import FileInput from '@/components/common/FileInput.vue'
 import ToggleSwitches from '@/views/Demo/Forms/ToggleSwitches.vue'
 import CheckboxInput from './CheckboxInput.vue'
 import RadioGroups from './RadioGroups.vue' // New import

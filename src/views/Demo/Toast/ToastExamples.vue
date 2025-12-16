@@ -142,8 +142,7 @@ apiClient.interceptors.response.use(
 
 <script setup lang="ts">
 import { useAppStore } from '@/stores/app'
-import ComponentCard from '@/components/common/ComponentCard.vue'
-import Button from '@/components/common/Button.vue'
+import { ComponentCard, Button } from '@hivespace/shared'
 
 const appStore = useAppStore()
 

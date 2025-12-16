@@ -155,11 +155,10 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/stores/app'
 import { accountService } from '@/services'
-import { useFieldValidation } from '@/composables/useFieldValidation'
-import { getCurrentUser } from '@/auth/user-manager'
-import type { ErrorResponse } from '@/types'
-import Button from '@/components/common/Button.vue'
-import Input from '@/components/common/Input.vue'
+import { useFieldValidation } from '@hivespace/shared'
+import { useAuth } from '@hivespace/shared'
+import type { ErrorResponse } from '@hivespace/shared'
+import { Button, Input } from '@hivespace/shared'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import MailIcon from '@/icons/MailIcon.vue'
 import CheckLargeIcon from '@/icons/CheckLargeIcon.vue'
@@ -351,7 +350,7 @@ const handleSubmit = async () => {
 // Initialize component
 onMounted(async () => {
   try {
-    // Get current user and check email verification status
+    const { getCurrentUser } = useAuth()
     const currentUser = await getCurrentUser()
     if (currentUser) {
       // If email is already verified, redirect to register store

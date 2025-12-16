@@ -257,11 +257,9 @@ const handleUnsavedChanges = async () => {
 <script setup lang="ts">
 import { computed, reactive } from 'vue'
 import { useAppStore } from '@/stores/app'
-import { useConfirmModal } from '@/composables/useConfirmModal'
+import { useConfirmModal } from '@hivespace/shared'
 import DictionaryLayout from '@/components/layout/DictionaryLayout.vue'
-import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
-import ComponentCard from '@/components/common/ComponentCard.vue'
-import Button from '@/components/common/Button.vue'
+import { PageBreadcrumb, ComponentCard, Button } from '@hivespace/shared'
 import { CheckIcon, InfoIcon, WarningIcon, TrashIcon, EditIcon } from '@/icons'
 
 const appStore = useAppStore()

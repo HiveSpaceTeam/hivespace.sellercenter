@@ -10,10 +10,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
-import DictionaryLayout from '@/components/layout/DictionaryLayout.vue'
-import ComponentCard from '@/components/common/ComponentCard.vue'
-import BasicTableOne from '@/components/tables/basic-tables/BasicTablesOne.vue'
-const currentPageTitle = ref('Basic Tables')
+import { ref } from 'vue';
+import { PageBreadcrumb, ComponentCard, BasicTableOne } from '@hivespace/shared';
+import DictionaryLayout from '@/components/layout/DictionaryLayout.vue';
+const currentPageTitle = ref('Basic Tables');
 </script>

@@ -82,10 +82,8 @@
 
 <script setup>
 import { computed } from 'vue'
-import DropdownMenu from '@/components/common/DropdownMenu.vue'
-import MenuDotsIcon from '@/icons/MenuDotsIcon.vue'
-import ArrowDownRedIcon from '@/icons/ArrowDownRedIcon.vue'
-import ArrowUpGreenIcon from '@/icons/ArrowUpGreenIcon.vue'
+import { DropdownMenu } from '@hivespace/shared'
+import { MenuDotsIcon, ArrowDownRedIcon, ArrowUpGreenIcon } from '@/icons'
 const menuItems = [
   { label: 'View More', onClick: () => console.log('View More clicked') },
   { label: 'Delete', onClick: () => console.log('Delete clicked') },

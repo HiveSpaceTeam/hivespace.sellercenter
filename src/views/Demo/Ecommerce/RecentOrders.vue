@@ -83,8 +83,8 @@
 
 <script setup>
 import { ref } from 'vue'
-import Button from '@/components/common/Button.vue'
-import FilterIcon from '@/icons/FilterIcon.vue'
+import { Button } from '@hivespace/shared'
+import { FilterIcon } from '@/icons'
 
 const products = ref([
   {

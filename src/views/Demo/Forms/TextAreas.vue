@@ -206,7 +206,7 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
-import TextArea from '@/components/common/TextArea.vue'
+import { TextArea } from '@hivespace/shared'
 
 // Basic examples
 const basicDescription = ref('')

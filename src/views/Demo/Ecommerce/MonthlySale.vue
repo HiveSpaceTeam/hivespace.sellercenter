@@ -24,8 +24,8 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import DropdownMenu from '@/components/common/DropdownMenu.vue'
-import MenuDotsIcon from '@/icons/MenuDotsIcon.vue'
+import { DropdownMenu } from '@hivespace/shared'
+import { MenuDotsIcon } from '@/icons'
 const menuItems = [
   { label: 'View More', onClick: () => console.log('View More clicked') },
   { label: 'Delete', onClick: () => console.log('Delete clicked') },

@@ -73,9 +73,7 @@
 
 <script setup>
 import { reactive, computed, defineProps, defineEmits } from 'vue'
-import Input from '@/components/common/Input.vue'
-import Button from '@/components/common/Button.vue'
-import DatePicker from '@/components/common/DatePicker.vue'
+import { Input, Button, DatePicker } from '@hivespace/shared'
 
 const props = defineProps({
   eventId: { type: String, default: '' },

@@ -1,5 +1,6 @@
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import './assets/main.css'
+import '@hivespace/shared/style.css'
 // Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -16,69 +17,60 @@ import router from '@/router'
 import VueApexCharts from 'vue3-apexcharts'
 import { createPinia } from 'pinia'
 import { useUserStore } from '@/stores/user'
-import { getCurrentUser } from '@/auth/user-manager'
 import {
+  useAuth,
   CULTURE_TEXT,
   THEME_TEXT,
   stringToNumericCulture,
   numericToStringCulture,
   stringToNumericTheme,
-  numericToStringTheme,
-} from '@/types'
-import { getCookie } from '@/utils/cookie'
-import { applyThemeToDOM } from '@/utils/theme'
-import { themeText as appThemeText } from '@/state/theme.state'
+  initializeAuth,
+  getCookie,
+} from '@hivespace/shared'
+import config from './config'
 
 const initializeApp = async () => {
   const app = createApp(App)
-  const vfm = createVfm()
   const pinia = createPinia()
+  const vfm = createVfm()
 
-  // Install plugins
+  // 1. Install Core Plugins
   app.use(pinia)
+  app.use(router)
+  // 2. Install UI Plugins
   app.use(vfm)
   app.use(i18n)
   app.use(VueApexCharts)
 
-  // Initialize culture and theme before router to ensure i18n and theme are ready
-  const initializeCultureAndThemeFromCookies = () => {
+  // 3. Initialize Business Logic (Auth)
+  initializeAuth(config.auth.oidc)
+
+  // 4. Use logic that depends on plugins/auth
+  const { isAuthenticated } = useAuth()
+  const userStore = useUserStore()
+
+  if (await isAuthenticated.value) {
+    const settings = await userStore.fetchUserSettings()
+    i18n.global.locale.value = numericToStringCulture(settings.culture)
+  } else {
+    // For unauthenticated users, read from cookies or use defaults
+    // Initialize culture from cookie
     const cookieCulture = getCookie('culture')
     const cultureText = cookieCulture || CULTURE_TEXT.VIETNAMESE
     const numericCulture = stringToNumericCulture(cultureText)
     const validCultureText = numericToStringCulture(numericCulture)
     i18n.global.locale.value = validCultureText
 
+    // Initialize theme from cookie
     const cookieTheme = getCookie('theme')
-    const themeText = cookieTheme || THEME_TEXT.LIGHT
-    const numericTheme = stringToNumericTheme(themeText)
-    const validThemeText = numericToStringTheme(numericTheme)
+    const themeTextCookie = cookieTheme || THEME_TEXT.LIGHT
+    const numericTheme = stringToNumericTheme(themeTextCookie)
 
-    appThemeText.value = validThemeText
-    applyThemeToDOM(validThemeText)
+    userStore.setUserSettings({
+      culture: numericCulture,
+      theme: numericTheme,
+    })
   }
-
-  const user = await getCurrentUser()
-  if (user) {
-    const userStore = useUserStore()
-    try {
-      const settings = await userStore.fetchUserSettings()
-
-      const cultureText = numericToStringCulture(settings.culture)
-      i18n.global.locale.value = cultureText
-
-      const themeText = numericToStringTheme(settings.theme)
-      appThemeText.value = themeText
-      applyThemeToDOM(themeText)
-    } catch (error) {
-      console.error('Failed to fetch user settings; using cookie/default values', error)
-      initializeCultureAndThemeFromCookies()
-    }
-  } else {
-    initializeCultureAndThemeFromCookies()
-  }
-
-  // Initialize router after i18n is ready
-  app.use(router)
 
   return app
 }

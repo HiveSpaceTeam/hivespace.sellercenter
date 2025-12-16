@@ -44,10 +44,8 @@
 
 <script setup>
 import { ref } from 'vue'
-import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
+import { Button, PageBreadcrumb, ComponentCard } from '@hivespace/shared'
 import DictionaryLayout from '@/components/layout/DictionaryLayout.vue'
-import ComponentCard from '@/components/common/ComponentCard.vue'
-import Button from '@/components/common/Button.vue'
 import { BoxIcon } from '@/icons'
 const currentPageTitle = ref('Buttons')
 </script>

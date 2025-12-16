@@ -10,12 +10,8 @@
               <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                 {{ $t('product.productName') }}
               </label>
-              <input
-                type="text"
-                :placeholder="$t('product.productName')"
-                v-model="product.name"
-                class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-              />
+              <input type="text" :placeholder="$t('product.productName')" v-model="product.name"
+                class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
             </div>
 
             <!-- Select Input -->
@@ -24,21 +20,16 @@
                 {{ $t('product.productCategory') }}
               </label>
               <div class="relative z-20 bg-transparent">
-                <select
-                  @change="onChangeCategory"
-                  v-model="formData.selectInput"
-                  :disabled="isLoadingCategories"
+                <select @change="onChangeCategory" v-model="formData.selectInput" :disabled="isLoadingCategories"
                   class="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 disabled:opacity-50 disabled:cursor-not-allowed"
-                  :class="{ 'text-gray-800 dark:text-white/90': formData.selectInput }"
-                >
+                  :class="{ 'text-gray-800 dark:text-white/90': formData.selectInput }">
                   <option value="" disabled selected></option>
                   <option v-for="category in categories" :key="category.id" :value="category.id">
                     {{ category.name }}
                   </option>
                 </select>
                 <span
-                  class="absolute z-30 text-gray-500 -translate-y-1/2 pointer-events-none right-4 top-1/2 dark:text-gray-400"
-                >
+                  class="absolute z-30 text-gray-500 -translate-y-1/2 pointer-events-none right-4 top-1/2 dark:text-gray-400">
                   <ChevronDownIcon class="stroke-current" width="20" height="20" />
                 </span>
               </div>
@@ -52,12 +43,7 @@
               <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                 {{ $t('product.productDescription') }}
               </label>
-              <QuillEditor
-                :style="'height:350px'"
-                ref="quillRef"
-                :modules="modules"
-                toolbar="full"
-              />
+              <QuillEditor :style="'height:350px'" ref="quillRef" :modules="modules" toolbar="full" />
             </div>
           </div>
         </ComponentCard>
@@ -73,17 +59,12 @@
             {{ attributesError }}
           </div>
 
-          <div
-            v-else-if="categoryAttributes.length === 0 && formData.selectInput"
-            class="text-sm text-gray-500 dark:text-gray-400 py-4"
-          >
+          <div v-else-if="categoryAttributes.length === 0 && formData.selectInput"
+            class="text-sm text-gray-500 dark:text-gray-400 py-4">
             {{ $t('product.noAttributesFound') }}
           </div>
 
-          <div
-            v-else-if="!formData.selectInput"
-            class="text-sm text-gray-500 dark:text-gray-400 py-4"
-          >
+          <div v-else-if="!formData.selectInput" class="text-sm text-gray-500 dark:text-gray-400 py-4">
             {{ $t('product.selectCategoryFirst') }}
           </div>
 
@@ -97,10 +78,7 @@
               <template v-if="attribute.inputType === 1">
                 <!-- Single textbox -->
                 <div>
-                  <Input
-                    v-model="attributeValues[attribute.id]"
-                    :placeholder="$t('product.enterValue')"
-                  />
+                  <Input v-model="attributeValues[attribute.id]" :placeholder="$t('product.enterValue')" />
                 </div>
               </template>
 
@@ -108,28 +86,19 @@
               <template v-else-if="attribute.inputType === 2">
                 <!-- Single select -->
                 <div v-if="attribute.maxValueCount === 1">
-                  <Select
-                    v-model="attributeValues[attribute.id]"
-                    :options="attributeOptionsMap[attribute.id] || []"
-                    :placeholder="$t('product.pleaseSelect')"
-                  />
+                  <Select v-model="attributeValues[attribute.id]" :options="attributeOptionsMap[attribute.id] || []"
+                    :placeholder="$t('product.pleaseSelect')" />
                 </div>
                 <!-- Multi select -->
                 <div v-else>
-                  <MultipleSelect
-                    v-model="attributeMultiValues[attribute.id]"
-                    :options="attributeOptionsMap[attribute.id] || []"
-                    :placeholder="$t('product.pleaseSelect')"
-                  />
+                  <MultipleSelect v-model="attributeMultiValues[attribute.id]"
+                    :options="attributeOptionsMap[attribute.id] || []" :placeholder="$t('product.pleaseSelect')" />
                 </div>
               </template>
 
               <!-- Fallback to textbox if unknown inputType -->
               <template v-else>
-                <Input
-                  v-model="attributeValues[attribute.id]"
-                  :placeholder="$t('product.enterValue')"
-                />
+                <Input v-model="attributeValues[attribute.id]" :placeholder="$t('product.enterValue')" />
               </template>
             </div>
           </div>
@@ -142,36 +111,21 @@
               <div v-for="(productVariant, variantIndex) in product.variants" :key="variantIndex">
                 <div class="space-y-3">
                   <div>
-                    <label
-                      class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
-                    >
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                       {{ $t('product.variant') }}
                     </label>
-                    <input
-                      type="text"
-                      :placeholder="$t('product.fill')"
-                      v-model="productVariant.name"
-                      class="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                    />
+                    <input type="text" :placeholder="$t('product.fill')" v-model="productVariant.name"
+                      class="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
                   </div>
                   <div>
-                    <label
-                      class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
-                    >
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                       {{ $t('product.option') }}
                     </label>
                     <div class="space-y-2">
-                      <div
-                        v-for="(option, optionIndex) in productVariant.options"
-                        :key="option.optionId"
-                      >
-                        <input
-                          @input="onChangeVariantOption(variantIndex, optionIndex)"
-                          type="text"
-                          :placeholder="$t('product.fill')"
-                          v-model="option.value"
-                          class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                        />
+                      <div v-for="(option, optionIndex) in productVariant.options" :key="option.optionId">
+                        <input @input="onChangeVariantOption(variantIndex, optionIndex)" type="text"
+                          :placeholder="$t('product.fill')" v-model="option.value"
+                          class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
                       </div>
                     </div>
                   </div>
@@ -182,19 +136,14 @@
             <Button @click="onClickAddNewVariant" size="sm" variant="outline" :startIcon="PlusIcon">
               {{ $t('product.addNewVariant') }}
             </Button>
-            <div
-              v-show="product.variants?.length > 0"
-              class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
-            >
+            <div v-show="product.variants?.length > 0"
+              class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
               <div class="max-w-full overflow-x-auto custom-scrollbar">
                 <table class="min-w-full">
                   <thead>
                     <tr class="border-b border-gray-200 dark:border-gray-700">
-                      <th
-                        v-for="(variant, variantIndex) in product.variants"
-                        class="px-5 py-3 text-left w-1/8 sm:px-6"
-                        :key="variantIndex"
-                      >
+                      <th v-for="(variant, variantIndex) in product.variants" class="px-5 py-3 text-left w-1/8 sm:px-6"
+                        :key="variantIndex">
                         <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
                           {{
                             variant.name || $t('product.variantGroup') + ' ' + (variantIndex + 1)
@@ -220,21 +169,13 @@
                   </thead>
                   <tbody>
                     <template v-for="(group, groupIndex) in groupedSkus" :key="groupIndex">
-                      <tr
-                        v-for="(productSku, skuIndex) in group.skus"
-                        :key="productSku.id"
-                        class="border-b border-gray-200 dark:border-gray-700"
-                      >
-                        <template
-                          v-for="(variant, variantIndex) in product.variants"
-                          :key="variantIndex"
-                        >
+                      <tr v-for="(productSku, skuIndex) in group.skus" :key="productSku.id"
+                        class="border-b border-gray-200 dark:border-gray-700">
+                        <template v-for="(variant, variantIndex) in product.variants" :key="variantIndex">
                           <!-- First column with rowspan for grouping -->
-                          <td
-                            v-if="variantIndex === 0 && skuIndex === 0"
+                          <td v-if="variantIndex === 0 && skuIndex === 0"
                             class="px-5 py-4 sm:px-6 border-l-4 border-l-blue-500 bg-gray-50/30 dark:bg-gray-800/20"
-                            :rowspan="group.skus.length"
-                          >
+                            :rowspan="group.skus.length">
                             <div class="text-sm font-semibold text-gray-900 dark:text-white">
                               {{ getVariantValueBySKU(productSku, variant) }}
                             </div>
@@ -248,26 +189,17 @@
                         </template>
 
                         <td class="px-5 py-4 sm:px-6">
-                          <input
-                            type="text"
-                            v-model="productSku.price.amount"
-                            class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                          />
+                          <input type="text" v-model="productSku.price.amount"
+                            class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
                         </td>
 
                         <td class="px-5 py-4 sm:px-6">
-                          <input
-                            type="text"
-                            v-model="productSku.quantity"
-                            class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                          />
+                          <input type="text" v-model="productSku.quantity"
+                            class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
                         </td>
                         <td class="px-5 py-4 sm:px-6">
-                          <input
-                            type="text"
-                            v-model="productSku.skuNo"
-                            class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                          />
+                          <input type="text" v-model="productSku.skuNo"
+                            class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
                         </td>
                       </tr>
                     </template>
@@ -281,23 +213,15 @@
                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                   {{ $t('product.inventory') }}
                 </label>
-                <input
-                  type="text"
-                  :placeholder="$t('product.typeHere')"
-                  v-model="formData.input"
-                  class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                />
+                <input type="text" :placeholder="$t('product.typeHere')" v-model="formData.input"
+                  class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
               </div>
               <div>
                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                   {{ $t('product.price') }}
                 </label>
-                <input
-                  type="text"
-                  :placeholder="$t('product.typeHere')"
-                  v-model="formData.input"
-                  class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                />
+                <input type="text" :placeholder="$t('product.typeHere')" v-model="formData.input"
+                  class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
               </div>
             </div>
           </div>
@@ -305,8 +229,7 @@
       </div>
     </div>
     <div
-      class="toolbar fixed bottom-0 left-0 w-full flex justify-end gap-3 p-4 bg-white dark:bg-gray-900 shadow-lg z-50"
-    >
+      class="toolbar fixed bottom-0 left-0 w-full flex justify-end gap-3 p-4 bg-white dark:bg-gray-900 shadow-lg z-50">
       <Button variant="outline" size="sm" @click="onCancel" className="min-w-[90px]">
         {{ $t('common.cancel') }}
       </Button>
@@ -321,17 +244,11 @@
 import { ref, onMounted, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
+import { Button, Select, Input, PageBreadcrumb, ComponentCard, MultipleSelect } from '@hivespace/shared'
 import DictionaryLayout from '@/components/layout/DictionaryLayout.vue'
-import ComponentCard from '@/components/common/ComponentCard.vue'
 import { QuillEditor } from '@vueup/vue-quill'
 import ImageUploader from 'quill-image-uploader'
-import MultipleSelect from '@/components/common/MultipleSelect.vue'
-import Select from '@/components/common/Select.vue'
-import Input from '@/components/common/Input.vue'
-import ChevronDownIcon from '@/icons/ChevronDownIcon.vue'
-import Button from '@/components/common/Button.vue'
-import { PlusIcon } from '@/icons'
+import { PlusIcon, ChevronDownIcon } from '@/icons'
 import { productService } from '@/services/product.service'
 import { categoryService } from '@/services/category.service'
 import { useAppStore } from '@/stores/app'
@@ -348,10 +265,13 @@ import type {
 const appStore = useAppStore()
 const { t } = useI18n()
 
-const currentPageTitle = ref('')
 const route = useRoute()
 const router = useRouter()
 const editingProductId = ref<string | null>(null)
+
+const currentPageTitle = computed(() =>
+  editingProductId.value ? t('product.editProduct') : t('product.createProduct'),
+)
 const formData = ref<{ input?: string; selectInput?: string }>({})
 const product = ref<Product>({
   name: '',
@@ -613,11 +533,11 @@ const initFromRoute = async () => {
   if (typeof idParam === 'string' && idParam) {
     editingProductId.value = idParam
     await loadProductDetails(idParam)
-    currentPageTitle.value = t('product.editProduct')
+
   } else {
     editingProductId.value = null
     resetForm()
-    currentPageTitle.value = t('product.createProduct')
+
   }
 }
 
@@ -720,7 +640,7 @@ const resetForm = () => {
   }
 }
 
-const onCancel = () => {}
+const onCancel = () => { }
 const onSave = async () => {
   try {
     // Compose product payload from form

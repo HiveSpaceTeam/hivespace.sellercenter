@@ -1,6 +1,6 @@
 import { config } from '@/config'
-import type { AppUser } from '@/types/app-user'
-import { storeUpdatedUser } from '@/auth/user-manager'
+import type { AppUser } from '@hivespace/shared'
+import { useAuth } from '@hivespace/shared'
 
 type TokenResponse = {
   access_token: string
@@ -110,6 +110,7 @@ export async function refreshToken(
     try {
       // Persist refreshed token info into the user store used by oidc-client-ts so
       // userManager.getUser() returns the rotated tokens for the rest of the app.
+      const { storeUpdatedUser } = useAuth()
       await storeUpdatedUser(updatedUser)
     } catch (err) {
       // If that fails, fall back to an app-local storage key so the API client can still use it.

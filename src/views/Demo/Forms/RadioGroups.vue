@@ -23,8 +23,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import RadioGroup from '@/components/common/RadioGroup.vue'
-import Radio from '@/components/common/Radio.vue' // Added import for Radio
+import { RadioGroup, Radio } from '@hivespace/shared' // Added import for Radio
 
 const selectedRadio1 = ref('default')
 const radioOptions1 = [

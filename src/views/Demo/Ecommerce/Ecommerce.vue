@@ -1,5 +1,5 @@
 <template>
-  <admin-layout>
+  <DictionaryLayout>
     <div class="grid grid-cols-12 gap-4 md:gap-6">
       <div class="col-span-12 space-y-6 xl:col-span-7">
         <ecommerce-metrics />
@@ -21,16 +21,17 @@
         <recent-orders />
       </div>
     </div>
-  </admin-layout>
+  </DictionaryLayout>
 </template>
 
 <script>
-import EcommerceMetrics from '@/views/Demo/Ecommerce/EcommerceMetrics.vue'
-import MonthlyTarget from '@/views/Demo/Ecommerce/MonthlyTarget.vue'
-import MonthlySale from '@/views/Demo/Ecommerce/MonthlySale.vue'
-import CustomerDemographic from '@/views/Demo/Ecommerce/CustomerDemographic.vue'
-import StatisticsChart from '@/views/Demo/Ecommerce/StatisticsChart.vue'
-import RecentOrders from '@/views/Demo/Ecommerce/RecentOrders.vue'
+import EcommerceMetrics from '@/views/Demo/Ecommerce/EcommerceMetrics.vue';
+import MonthlyTarget from '@/views/Demo/Ecommerce/MonthlyTarget.vue';
+import MonthlySale from '@/views/Demo/Ecommerce/MonthlySale.vue';
+import CustomerDemographic from '@/views/Demo/Ecommerce/CustomerDemographic.vue';
+import StatisticsChart from '@/views/Demo/Ecommerce/StatisticsChart.vue';
+import RecentOrders from '@/views/Demo/Ecommerce/RecentOrders.vue';
+import DictionaryLayout from '@/components/layout/DictionaryLayout.vue';
 export default {
   components: {
     EcommerceMetrics,
@@ -39,7 +40,8 @@ export default {
     CustomerDemographic,
     StatisticsChart,
     RecentOrders,
+    DictionaryLayout,
   },
   name: 'Ecommerce',
-}
+};
 </script>

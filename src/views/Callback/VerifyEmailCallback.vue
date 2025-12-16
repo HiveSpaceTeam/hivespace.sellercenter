@@ -100,18 +100,19 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+// @ts-ignore
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/stores/app'
 import { accountService } from '@/services'
-import Button from '@/components/common/Button.vue'
+import { Button } from '@hivespace/shared'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import LoadingSpinnerIcon from '@/icons/LoadingSpinnerIcon.vue'
 import CheckLargeIcon from '@/icons/CheckLargeIcon.vue'
 import ErrorIcon from '@/icons/ErrorIcon.vue'
 import HomeIcon from '@/icons/HomeIcon.vue'
 import MailIcon from '@/icons/MailIcon.vue'
-import { getCurrentUser } from '@/auth/user-manager'
+import { useAuth } from '@hivespace/shared'
 import refreshToken from '@/services/refresh.service'
 
 const route = useRoute()
@@ -215,6 +216,7 @@ const verifyEmailToken = async (token: string) => {
       t('verifyEmailCallback.success.subtitle'),
     )
 
+    const { getCurrentUser } = useAuth()
     const currentUser = await getCurrentUser()
     if (currentUser) {
       await refreshToken(currentUser, true)
@@ -244,6 +246,7 @@ const verifyEmailToken = async (token: string) => {
 
 // Initialize component
 onMounted(async () => {
+  const { getCurrentUser } = useAuth()
   const user = await getCurrentUser()
   if (user?.profile.email_verified) {
     isLoading.value = false

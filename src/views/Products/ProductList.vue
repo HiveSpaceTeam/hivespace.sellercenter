@@ -5,7 +5,7 @@
       <ComponentCard :title="$t('pages.productList')">
         <!-- Table Content -->
         <div
-          class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+          class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
           <!-- Search and Filter Controls -->
           <div class="p-4 border-b border-gray-200 dark:border-gray-700">
             <div class="flex flex-col sm:flex-row gap-4 items-center justify-between">
@@ -71,7 +71,7 @@
               </thead>
               <tbody>
                 <tr v-for="product in products" :key="product.id"
-                  class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-white/[0.05]">
+                  class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-white/5">
                   <td class="px-5 py-4 sm:px-6">
                     <div class="text-sm font-medium text-gray-900 dark:text-white">
                       {{ product.name }}
@@ -108,21 +108,17 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
+import { Button, Select, Input, PageBreadcrumb, ComponentCard } from '@hivespace/shared'
 import DictionaryLayout from '@/components/layout/DictionaryLayout.vue'
-import ComponentCard from '@/components/common/ComponentCard.vue'
-import Button from '@/components/common/Button.vue'
-import Select from '@/components/common/Select.vue'
-import Input from '@/components/common/Input.vue'
-import { useConfirmModal } from '@/composables/useConfirmModal'
+import { useConfirmModal } from '@hivespace/shared'
 import { productService } from '@/services'
 import { useRouter } from 'vue-router'
 import { useAppStore } from '@/stores/app'
 import type { Product, ProductSearchRequest, PagedResponse } from '@/types'
 
 import { BigPlusIcon, RefreshIcon, EditIcon, TrashRedIcon } from '@/icons'
-import { getCurrentUser } from '@/auth/user-manager'
-import type { AppUser } from '@/types/app-user'
+import { useAuth } from '@hivespace/shared'
+import type { AppUser } from '@hivespace/shared'
 const { t } = useI18n()
 
 const currentPageTitle = computed(() => t('pages.productList'))
@@ -277,8 +273,8 @@ const addNewProduct = () => {
   router.push({ path: '/product/new' })
 }
 
-// Lifecycle
 onMounted(async () => {
+  const { getCurrentUser } = useAuth()
   currentUser.value = await getCurrentUser()
   await fetchProducts()
   console.log('ProductList mounted')
