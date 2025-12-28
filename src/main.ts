@@ -36,7 +36,6 @@ const initializeApp = async () => {
 
   // 1. Install Core Plugins
   app.use(pinia)
-  app.use(router)
   // 2. Install UI Plugins
   app.use(vfm)
   app.use(i18n)
@@ -44,6 +43,8 @@ const initializeApp = async () => {
 
   // 3. Initialize Business Logic (Auth)
   initializeAuth(config.auth.oidc)
+
+  app.use(router)
 
   // 4. Use logic that depends on plugins/auth
   const { isAuthenticated } = useAuth()
@@ -55,27 +56,40 @@ const initializeApp = async () => {
   } else {
     // For unauthenticated users, read from cookies or use defaults
     // Initialize culture from cookie
-    const cookieCulture = getCookie('culture')
-    const cultureText = cookieCulture || CULTURE_TEXT.VIETNAMESE
-    const numericCulture = stringToNumericCulture(cultureText)
-    const validCultureText = numericToStringCulture(numericCulture)
-    i18n.global.locale.value = validCultureText
+    // 3. Initialize Business Logic (Auth)
+    initializeAuth(config.auth.oidc)
 
-    // Initialize theme from cookie
-    const cookieTheme = getCookie('theme')
-    const themeTextCookie = cookieTheme || THEME_TEXT.LIGHT
-    const numericTheme = stringToNumericTheme(themeTextCookie)
+    // 4. Use logic that depends on plugins/auth
+    const { isAuthenticated } = useAuth()
+    const userStore = useUserStore()
 
-    userStore.setUserSettings({
-      culture: numericCulture,
-      theme: numericTheme,
-    })
+    if (await isAuthenticated.value) {
+      const settings = await userStore.fetchUserSettings()
+      i18n.global.locale.value = numericToStringCulture(settings.culture)
+    } else {
+      // For unauthenticated users, read from cookies or use defaults
+      // Initialize culture from cookie
+      const cookieCulture = getCookie('culture')
+      const cultureText = cookieCulture || CULTURE_TEXT.VIETNAMESE
+      const numericCulture = stringToNumericCulture(cultureText)
+      const validCultureText = numericToStringCulture(numericCulture)
+      i18n.global.locale.value = validCultureText
+
+      // Initialize theme from cookie
+      const cookieTheme = getCookie('theme')
+      const themeTextCookie = cookieTheme || THEME_TEXT.LIGHT
+      const numericTheme = stringToNumericTheme(themeTextCookie)
+
+      userStore.setUserSettings({
+        culture: numericCulture,
+        theme: numericTheme,
+      })
+    }
+
+    return app
   }
 
-  return app
-}
-
-// Initialize and mount the app
-initializeApp().then((app) => {
-  app.mount('#app')
-})
+  // Initialize and mount the app
+  initializeApp().then((app) => {
+    app.mount('#app')
+  })

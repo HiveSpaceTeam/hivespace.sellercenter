@@ -76,9 +76,9 @@ const createConfig = (): AppConfig => {
   // Base API URL with validation
   const apiBaseUrl = validateUrl(
     getEnvVar('VITE_GATEWAY_BASE_URL') ||
-      getEnvVar('VITE_API_BASE_URL') ||
-      getEnvVar('VITE_API_URL') ||
-      'https://localhost:7001/api',
+    getEnvVar('VITE_API_BASE_URL') ||
+    getEnvVar('VITE_API_URL') ||
+    'https://localhost:7001/api',
     'API Base URL',
   )
 
@@ -120,8 +120,8 @@ const createConfig = (): AppConfig => {
         scope: getEnvVar('VITE_APP_SCOPE', 'openid profile email offline_access'),
         authority: validateUrl(
           getEnvVar('VITE_AUTH_AUTHORITY_URL') ||
-            getEnvVar('VITE_IDENTITY_SERVER_URL') ||
-            `${apiBaseUrl}/identity`,
+          getEnvVar('VITE_IDENTITY_SERVER_URL') ||
+          `${apiBaseUrl}/identity`,
           'Authority URL',
         ),
       },

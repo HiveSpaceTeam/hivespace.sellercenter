@@ -8,15 +8,15 @@
       class="relative flex flex-col items-center justify-center min-h-[calc(100vh-80px)] p-6 overflow-hidden z-1"
     >
       <div>
-        <div class="absolute right-0 top-0 -z-1 w-full max-w-[250px] xl:max-w-[450px]">
+        <div class="absolute right-0 top-0 -z-1 w-full max-w-62.5 xl:max-w-112.5">
           <img src="/images/shape/grid-01.svg" alt="grid" />
         </div>
-        <div class="absolute bottom-0 left-0 -z-1 w-full max-w-[250px] rotate-180 xl:max-w-[450px]">
+        <div class="absolute bottom-0 left-0 -z-1 w-full max-w-62.5 rotate-180 xl:max-w-112.5">
           <img src="/images/shape/grid-01.svg" alt="grid" />
         </div>
       </div>
 
-      <div class="mx-auto w-full max-w-[500px] text-center">
+      <div class="mx-auto w-full max-w-125 text-center">
         <!-- Loading State -->
         <div v-if="isLoading" class="mb-8">
           <LoadingSpinnerIcon class="w-16 h-16 mx-auto mb-4 text-brand-500 animate-spin" />
