@@ -5,21 +5,30 @@
       <ComponentCard :title="$t('pages.productList')">
         <!-- Table Content -->
         <div
-          class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
+          class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3"
+        >
           <!-- Search and Filter Controls -->
           <div class="p-4 border-b border-gray-200 dark:border-gray-700">
             <div class="flex flex-col sm:flex-row gap-4 items-center justify-between">
               <!-- Search Input -->
               <div class="flex items-center justify-end gap-2">
                 <div class="w-full sm:w-64">
-                  <Input type="text" :value="searchQuery" @input="tableHandleSearchInput"
-                    :placeholder="$t('product.searchPlaceholder')" autocomplete="off" />
+                  <Input
+                    type="text"
+                    :value="searchQuery"
+                    @input="tableHandleSearchInput"
+                    :placeholder="$t('product.searchPlaceholder')"
+                    autocomplete="off"
+                  />
                 </div>
 
                 <!-- Status Filter -->
                 <div class="sm:w-48">
-                  <Select v-model="statusFilter" :options="statusOptions"
-                    :buttonClass="'w-full text-left px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white flex justify-between items-center'" />
+                  <Select
+                    v-model="statusFilter"
+                    :options="statusOptions"
+                    :buttonClass="'w-full text-left px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white flex justify-between items-center'"
+                  />
                 </div>
               </div>
 
@@ -38,7 +47,9 @@
 
           <!-- Loading State -->
           <div v-if="loading" class="p-8 text-center">
-            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <div
+              class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"
+            ></div>
             <p class="mt-2 text-gray-600 dark:text-gray-400">{{ $t('table.loading') }}</p>
           </div>
 
@@ -70,8 +81,11 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="product in products" :key="product.id"
-                  class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-white/5">
+                <tr
+                  v-for="product in products"
+                  :key="product.id"
+                  class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-white/5"
+                >
                   <td class="px-5 py-4 sm:px-6">
                     <div class="text-sm font-medium text-gray-900 dark:text-white">
                       {{ product.name }}
@@ -89,8 +103,16 @@
                   </td>
                   <td class="px-5 py-4 sm:px-6">
                     <div class="flex items-center gap-2">
-                      <Button :startIcon="EditIcon" variant="outline" @click="editProduct(product)"></Button>
-                      <Button :startIcon="TrashRedIcon" variant="outline" @click="removeProduct(product)"></Button>
+                      <Button
+                        :startIcon="EditIcon"
+                        variant="outline"
+                        @click="editProduct(product)"
+                      ></Button>
+                      <Button
+                        :startIcon="TrashRedIcon"
+                        variant="outline"
+                        @click="removeProduct(product)"
+                      ></Button>
                     </div>
                   </td>
                 </tr>

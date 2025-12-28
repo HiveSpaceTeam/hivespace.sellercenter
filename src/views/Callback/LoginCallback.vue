@@ -16,15 +16,15 @@ onMounted(async () => {
     const result = await handleLoginCallback()
     let returnToUrl = '/product/list'
     if (result && result.state) {
-        // Checking if result.state is an object and has redirectTo or just a string?
-        // oidc-client-ts user.state is any.
-        // hivespace logic usually puts redirectTo in state.
-        const state = result.state as any
-        if (typeof state === 'string') {
-             returnToUrl = state
-        } else if (state?.redirectTo) {
-             returnToUrl = state.redirectTo
-        }
+      // Checking if result.state is an object and has redirectTo or just a string?
+      // oidc-client-ts user.state is any.
+      // hivespace logic usually puts redirectTo in state.
+      const state = result.state as any
+      if (typeof state === 'string') {
+        returnToUrl = state
+      } else if (state?.redirectTo) {
+        returnToUrl = state.redirectTo
+      }
     }
     router.push({ path: returnToUrl })
   } catch (error) {

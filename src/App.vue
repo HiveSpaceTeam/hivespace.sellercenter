@@ -6,7 +6,6 @@
   <ModalManager />
   <!-- Global toast notifications -->
   <ToastContainer :toasts="appStore.notifications" :onRemoveToast="appStore.removeNotification" />
-
 </template>
 
 <script setup lang="ts">

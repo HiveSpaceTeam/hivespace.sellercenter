@@ -25,13 +25,13 @@
 </template>
 
 <script>
-import EcommerceMetrics from '@/views/Demo/Ecommerce/EcommerceMetrics.vue';
-import MonthlyTarget from '@/views/Demo/Ecommerce/MonthlyTarget.vue';
-import MonthlySale from '@/views/Demo/Ecommerce/MonthlySale.vue';
-import CustomerDemographic from '@/views/Demo/Ecommerce/CustomerDemographic.vue';
-import StatisticsChart from '@/views/Demo/Ecommerce/StatisticsChart.vue';
-import RecentOrders from '@/views/Demo/Ecommerce/RecentOrders.vue';
-import DictionaryLayout from '@/components/layout/DictionaryLayout.vue';
+import EcommerceMetrics from '@/views/Demo/Ecommerce/EcommerceMetrics.vue'
+import MonthlyTarget from '@/views/Demo/Ecommerce/MonthlyTarget.vue'
+import MonthlySale from '@/views/Demo/Ecommerce/MonthlySale.vue'
+import CustomerDemographic from '@/views/Demo/Ecommerce/CustomerDemographic.vue'
+import StatisticsChart from '@/views/Demo/Ecommerce/StatisticsChart.vue'
+import RecentOrders from '@/views/Demo/Ecommerce/RecentOrders.vue'
+import DictionaryLayout from '@/components/layout/DictionaryLayout.vue'
 export default {
   components: {
     EcommerceMetrics,
@@ -43,5 +43,5 @@ export default {
     DictionaryLayout,
   },
   name: 'Ecommerce',
-};
+}
 </script>
