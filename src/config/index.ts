@@ -19,7 +19,7 @@ export interface AppConfig {
     readonly version: string
   }
   readonly auth: {
-    readonly oidc: AuthConfig,
+    readonly oidc: AuthConfig
     readonly callbackUrl: string
   }
   readonly features: {

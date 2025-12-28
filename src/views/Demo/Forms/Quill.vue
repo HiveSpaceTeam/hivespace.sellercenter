@@ -54,7 +54,7 @@ const modules = ref({
 })
 
 const onBind = async () => {
-  ; (quillRef?.value as QuillEditorInstance)?.setHTML?.(
+  ;(quillRef?.value as QuillEditorInstance)?.setHTML?.(
     '<p>Áo thun DirtyCoins Dico Mate T-Shirt - White</p><p><br></p><p>Model: 1m55 42kg mặc sản phẩm size S</p><p><br></p><p>Chi tiết sản phẩm:</p><p>• Màu: Trắng - Đen - Kem</p><p>• Size: XS - S - M - L - XL</p><p>• Chất liệu: Cotton.</p><p>• Relaxed Fit.</p><p>• Bo cổ 2 chiều.</p><p>• Hình in mặt trước và sau áo áp dụng dụng công nghệ in lụa.</p><p><br></p><p><img src="https://down-vn.img.susercontent.com/file/vn-11134208-7ras8-mdk6gpmpapwx49" height="1167" width="875"></p><p><img src="https://down-vn.img.susercontent.com/file/vn-11134208-7ras8-mdk6gpmpc4hd85" height="1167" width="875"></p><p><img src="https://down-vn.img.susercontent.com/file/vn-11134208-7ras8-mdo2snjimmr0e8" height="1094" width="875"></p><p><img src="https://down-vn.img.susercontent.com/file/vn-11134208-7ras8-mdo2snjio1bgd9" height="1094" width="875"></p><p><img src="https://down-vn.img.susercontent.com/file/vn-11134202-7ras8-m0d2fgqox0q554" height="1326" width="875"></p><p><img src="https://down-vn.img.susercontent.com/file/vn-11134202-7ras8-m0d2fhdpzbhp19" height="1326" width="875"></p>',
   )
 }
