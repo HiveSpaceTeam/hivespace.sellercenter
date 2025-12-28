@@ -91,7 +91,7 @@ apiClient.interceptors.request.use(
       // Add authorization if available (ensure headers object exists)
       requestConfig.headers = requestConfig.headers ?? {}
       if (currentUser?.access_token) {
-        ; (requestConfig.headers as Record<string, string>).Authorization =
+        ;(requestConfig.headers as Record<string, string>).Authorization =
           `Bearer ${currentUser.access_token}`
       }
 
@@ -260,11 +260,11 @@ class ApiService {
       headers: { 'Content-Type': 'multipart/form-data' },
       onUploadProgress: onUploadProgress
         ? (progressEvent) => {
-          if (progressEvent.total) {
-            const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-            onUploadProgress(progress)
+            if (progressEvent.total) {
+              const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+              onUploadProgress(progress)
+            }
           }
-        }
         : undefined,
     })
   }

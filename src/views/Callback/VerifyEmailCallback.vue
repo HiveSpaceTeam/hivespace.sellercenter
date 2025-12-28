@@ -4,7 +4,9 @@
     <AppHeader :show-sidebar-toggle="false" />
 
     <!-- Main Content -->
-    <div class="relative flex flex-col items-center justify-center min-h-[calc(100vh-80px)] p-6 overflow-hidden z-1">
+    <div
+      class="relative flex flex-col items-center justify-center min-h-[calc(100vh-80px)] p-6 overflow-hidden z-1"
+    >
       <div>
         <div class="absolute right-0 top-0 -z-1 w-full max-w-[250px] xl:max-w-[450px]">
           <img src="/images/shape/grid-01.svg" alt="grid" />
@@ -28,9 +30,12 @@
 
         <!-- Success State -->
         <div v-else-if="isSuccess" class="mb-8">
-          <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mb-6">
+          <div
+            class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mb-6"
+          >
             <div
-              class="flex items-center justify-center w-16 h-16 mx-auto mb-4 bg-green-100 rounded-full dark:bg-green-900/20">
+              class="flex items-center justify-center w-16 h-16 mx-auto mb-4 bg-green-100 rounded-full dark:bg-green-900/20"
+            >
               <CheckLargeIcon class="w-8 h-8 text-green-600 dark:text-green-400" />
             </div>
             <h1 class="mb-2 text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
@@ -64,9 +69,12 @@
 
         <!-- Error State -->
         <div v-else-if="isError" class="mb-8">
-          <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mb-6">
+          <div
+            class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mb-6"
+          >
             <div
-              class="flex items-center justify-center w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full dark:bg-red-900/20">
+              class="flex items-center justify-center w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full dark:bg-red-900/20"
+            >
               <ErrorIcon class="w-8 h-8 text-red-600 dark:text-red-400" />
             </div>
             <h1 class="mb-2 text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
@@ -91,7 +99,9 @@
         </div>
       </div>
 
-      <p class="absolute text-sm text-center text-gray-500 -translate-x-1/2 bottom-6 left-1/2 dark:text-gray-400">
+      <p
+        class="absolute text-sm text-center text-gray-500 -translate-x-1/2 bottom-6 left-1/2 dark:text-gray-400"
+      >
         © {{ currentYear }} - HiveSpace
       </p>
     </div>

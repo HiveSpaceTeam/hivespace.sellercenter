@@ -15,3 +15,4 @@ export type { AppUser } from '@hivespace/shared' // Keep AppUser export for conv
 export * from './product.types'
 export * from './account.types'
 export * from './store.types'
+export * from './media.types'

@@ -4,7 +4,9 @@
     <AppHeader :show-sidebar-toggle="false" />
 
     <!-- Main Content -->
-    <div class="relative flex flex-col items-center justify-center min-h-[calc(100vh-80px)] p-6 overflow-hidden z-1">
+    <div
+      class="relative flex flex-col items-center justify-center min-h-[calc(100vh-80px)] p-6 overflow-hidden z-1"
+    >
       <div>
         <div class="absolute right-0 top-0 -z-1 w-full max-w-[250px] xl:max-w-[450px]">
           <img src="/images/shape/grid-01.svg" alt="grid" />
@@ -24,8 +26,11 @@
 
         <form @submit.prevent="handleSubmit" class="text-left space-y-8">
           <!-- Common/General Error -->
-          <div v-if="formErrors.common.length > 0"
-            class="p-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert">
+          <div
+            v-if="formErrors.common.length > 0"
+            class="p-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
+            role="alert"
+          >
             <template v-if="formErrors.common.length === 1">
               <div>{{ formErrors.common[0] }}</div>
             </template>
@@ -38,7 +43,9 @@
             </template>
           </div>
           <!-- Store Information Section -->
-          <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+          <div
+            class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700"
+          >
             <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
               <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
                 {{ t('registerStore.storeInformation') }}
@@ -49,51 +56,76 @@
               <!-- Store Name -->
               <div class="flex flex-col md:flex-row md:items-start gap-4">
                 <label
-                  class="text-sm font-medium text-gray-700 dark:text-gray-400 required-label md:text-right md:w-1/4 md:mt-3 md:pr-4">
+                  class="text-sm font-medium text-gray-700 dark:text-gray-400 required-label md:text-right md:w-1/4 md:mt-3 md:pr-4"
+                >
                   {{ t('registerStore.fields.storeName') }}
                 </label>
                 <div class="md:flex-1">
-                  <Input v-model="formData.storeName" :placeholder="t('registerStore.placeholders.storeName')"
-                    :error="formErrors.storeName" id="storeName" />
+                  <Input
+                    v-model="formData.storeName"
+                    :placeholder="t('registerStore.placeholders.storeName')"
+                    :error="formErrors.storeName"
+                    id="storeName"
+                  />
                 </div>
               </div>
 
               <!-- Store Description -->
               <div class="flex flex-col md:flex-row md:items-start gap-4">
                 <label
-                  class="text-sm font-medium text-gray-700 dark:text-gray-400 md:text-right md:w-1/4 md:mt-3 md:pr-4">
+                  class="text-sm font-medium text-gray-700 dark:text-gray-400 md:text-right md:w-1/4 md:mt-3 md:pr-4"
+                >
                   {{ t('registerStore.fields.storeDescription') }}
                 </label>
                 <div class="md:flex-1">
-                  <TextArea v-model="formData.description"
-                    :placeholder="t('registerStore.placeholders.storeDescription')" :error="formErrors.description"
-                    :rows="3" id="storeDescription" />
+                  <TextArea
+                    v-model="formData.description"
+                    :placeholder="t('registerStore.placeholders.storeDescription')"
+                    :error="formErrors.description"
+                    :rows="3"
+                    id="storeDescription"
+                  />
                 </div>
               </div>
 
               <!-- Store Address -->
               <div class="flex flex-col md:flex-row md:items-start gap-4">
                 <label
-                  class="text-sm font-medium text-gray-700 dark:text-gray-400 required-label md:text-right md:w-1/4 md:mt-3 md:pr-4">
+                  class="text-sm font-medium text-gray-700 dark:text-gray-400 required-label md:text-right md:w-1/4 md:mt-3 md:pr-4"
+                >
                   {{ t('registerStore.fields.storeAddress') }}
                 </label>
                 <div class="md:flex-1">
-                  <Input v-model="formData.address" :placeholder="t('registerStore.placeholders.storeAddress')"
-                    :error="formErrors.address" id="storeAddress" />
+                  <Input
+                    v-model="formData.address"
+                    :placeholder="t('registerStore.placeholders.storeAddress')"
+                    :error="formErrors.address"
+                    id="storeAddress"
+                  />
                 </div>
               </div>
 
               <!-- Store Logo -->
               <div class="flex flex-col md:flex-row md:items-start gap-4">
                 <label
-                  class="text-sm font-medium text-gray-700 dark:text-gray-400 required-label md:text-right md:w-1/4 md:mt-10 md:pr-4">
+                  class="text-sm font-medium text-gray-700 dark:text-gray-400 required-label md:text-right md:w-1/4 md:mt-10 md:pr-4"
+                >
                   {{ t('registerStore.fields.storeLogo') }}
                 </label>
                 <div class="md:flex-1">
-                  <FileInput v-model="formData.storeLogoFileId" accept="image/*" :max-size="5 * 1024 * 1024"
-                    preview-direction="right" :button-text="t('registerStore.fileInput.chooseLogo')" preview-size="lg"
-                    preview-shape="square" :help-text="t('registerStore.fileInput.logoHelpText')"
-                    @change="handleFileChange" @error="handleFileError" :error="formErrors.storeLogoFileId" />
+                  <FileInput
+                    v-model="formData.storeLogoFileId"
+                    accept="image/*"
+                    :max-size="5 * 1024 * 1024"
+                    preview-direction="right"
+                    :button-text="t('registerStore.fileInput.chooseLogo')"
+                    preview-size="lg"
+                    preview-shape="square"
+                    :help-text="t('registerStore.fileInput.logoHelpText')"
+                    @change="handleFileChange"
+                    @error="handleFileError"
+                    :error="formErrors.storeLogoFileId"
+                  />
                 </div>
               </div>
 
@@ -108,7 +140,9 @@
         </form>
       </div>
 
-      <p class="absolute text-sm text-center text-gray-500 -translate-x-1/2 bottom-6 left-1/2 dark:text-gray-400">
+      <p
+        class="absolute text-sm text-center text-gray-500 -translate-x-1/2 bottom-6 left-1/2 dark:text-gray-400"
+      >
         © 2025 - HiveSpace
       </p>
     </div>
@@ -120,7 +154,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/stores/app'
-import { useStoreStore } from '@/stores'
+import { useStoreStore, useMediaStore } from '@/stores'
 import { useFieldValidation } from '@hivespace/shared'
 import { useAuth } from '@hivespace/shared'
 import refreshToken from '@/services/refresh.service'
@@ -132,6 +166,7 @@ const router = useRouter()
 const { t } = useI18n()
 const appStore = useAppStore()
 const storeStore = useStoreStore()
+const mediaStore = useMediaStore()
 const { handleFieldValidationErrors, clearFieldErrors } = useFieldValidation()
 
 // Form data
@@ -225,14 +260,25 @@ const handleSubmit = async () => {
     // Clear any previous errors
     clearFieldErrors(formErrors)
 
+    // Upload logo if it's a file
+    let logoFileId = ''
+    if (formData.storeLogoFileId instanceof File) {
+      const uploadResponse = await mediaStore.uploadMedia(formData.storeLogoFileId, 'store-logo')
+      logoFileId = uploadResponse.fileId
+    }
+
     // Submit store registration with just the filename for the logo
-    await storeStore.registerStore({
+    const response = await storeStore.registerStore({
       storeName: formData.storeName,
       description: formData.description || null,
-      storeLogoFileId:
-        formData.storeLogoFileId instanceof File ? formData.storeLogoFileId.name : '',
+      storeLogoFileId: logoFileId,
       address: formData.address,
     })
+
+    // Confirm upload if we have a file and a store ID
+    if (logoFileId && response?.storeId) {
+      await mediaStore.confirmUpload(logoFileId, response.storeId)
+    }
     // Refresh token after successful registration
     const { getCurrentUser } = useAuth()
     const currentUser = await getCurrentUser()

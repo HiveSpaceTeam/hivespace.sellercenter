@@ -4,7 +4,9 @@
     <AppHeader :show-sidebar-toggle="false" />
 
     <!-- Main Content -->
-    <div class="relative flex flex-col items-center justify-center min-h-[calc(100vh-80px)] p-6 overflow-hidden z-1">
+    <div
+      class="relative flex flex-col items-center justify-center min-h-[calc(100vh-80px)] p-6 overflow-hidden z-1"
+    >
       <div>
         <div class="absolute right-0 top-0 -z-1 w-full max-w-[250px] xl:max-w-[450px]">
           <img src="/images/shape/grid-01.svg" alt="grid" />
@@ -27,10 +29,13 @@
         </div>
 
         <!-- Success State -->
-        <div v-if="isSuccess"
-          class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mb-6">
+        <div
+          v-if="isSuccess"
+          class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mb-6"
+        >
           <div
-            class="flex items-center justify-center w-12 h-12 mx-auto mb-4 bg-green-100 rounded-full dark:bg-green-900/20">
+            class="flex items-center justify-center w-12 h-12 mx-auto mb-4 bg-green-100 rounded-full dark:bg-green-900/20"
+          >
             <CheckLargeIcon class="w-6 h-6 text-green-600 dark:text-green-400" />
           </div>
           <h3 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
@@ -46,12 +51,17 @@
         </div>
 
         <!-- Form State -->
-        <div v-if="!isSuccess"
-          class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mb-6">
+        <div
+          v-if="!isSuccess"
+          class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mb-6"
+        >
           <form @submit.prevent="handleSubmit" class="text-left space-y-6">
             <!-- Form Errors -->
-            <div v-if="formErrors.common.length > 0"
-              class="p-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert">
+            <div
+              v-if="formErrors.common.length > 0"
+              class="p-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
+              role="alert"
+            >
               <template v-if="formErrors.common.length === 1">
                 <div>{{ formErrors.common[0] }}</div>
               </template>
@@ -67,33 +77,59 @@
             <!-- Email Input -->
             <div>
               <div class="flex items-center justify-between mb-1.5">
-                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-400 required-label">
+                <label
+                  for="email"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-400 required-label"
+                >
                   {{ t('verifyEmail.fields.emailAddress') }}
                 </label>
-                <button v-if="!isEmailEditing" type="button" @click="enableEmailEditing"
+                <button
+                  v-if="!isEmailEditing"
+                  type="button"
+                  @click="enableEmailEditing"
                   class="inline-flex items-center text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50"
                   :class="[
                     isSubmitting || cooldownActive
                       ? 'text-gray-400 dark:text-gray-500'
                       : 'text-brand-500 hover:text-brand-600 dark:text-brand-400 dark:hover:text-brand-300',
-                  ]" :disabled="isSubmitting || cooldownActive">
+                  ]"
+                  :disabled="isSubmitting || cooldownActive"
+                >
                   <EditIcon class="w-4 h-4 mr-1" />
                   {{ t('verifyEmail.actions.editEmail') }}
                 </button>
               </div>
               <div class="flex items-center space-x-2">
                 <div class="flex-1">
-                  <Input v-model="formData.email" type="email" id="email"
-                    :placeholder="t('verifyEmail.placeholders.emailAddress')" :error="formErrors.email" required
-                    :disabled="!isEmailEditing || isSubmitting || cooldownActive" />
+                  <Input
+                    v-model="formData.email"
+                    type="email"
+                    id="email"
+                    :placeholder="t('verifyEmail.placeholders.emailAddress')"
+                    :error="formErrors.email"
+                    required
+                    :disabled="!isEmailEditing || isSubmitting || cooldownActive"
+                  />
                 </div>
                 <div v-if="isEmailEditing" class="flex items-center space-x-2">
-                  <Button type="button" @click="confirmEmailEdit" variant="primary" size="sm" class="px-3 py-2"
-                    :disabled="isSubmitting || cooldownActive">
+                  <Button
+                    type="button"
+                    @click="confirmEmailEdit"
+                    variant="primary"
+                    size="sm"
+                    class="px-3 py-2"
+                    :disabled="isSubmitting || cooldownActive"
+                  >
                     <CheckIcon class="w-4 h-4" />
                   </Button>
-                  <Button type="button" @click="cancelEmailEdit" variant="outline" size="sm" class="px-3 py-2"
-                    :disabled="isSubmitting || cooldownActive">
+                  <Button
+                    type="button"
+                    @click="cancelEmailEdit"
+                    variant="outline"
+                    size="sm"
+                    class="px-3 py-2"
+                    :disabled="isSubmitting || cooldownActive"
+                  >
                     <CloseIcon class="w-4 h-4" />
                   </Button>
                 </div>
@@ -102,7 +138,12 @@
 
             <!-- Submit Button -->
             <div class="flex flex-col space-y-3">
-              <Button type="submit" :disabled="isSubmitting || cooldownActive" variant="primary" class="w-full h-11">
+              <Button
+                type="submit"
+                :disabled="isSubmitting || cooldownActive"
+                variant="primary"
+                class="w-full h-11"
+              >
                 <template v-if="isSubmitting">
                   <LoadingSpinnerIcon class="w-4 h-4 mr-2" />
                   {{ t('verifyEmail.actions.sendVerification') }}
@@ -142,7 +183,9 @@
         </div>
       </div>
 
-      <p class="absolute text-sm text-center text-gray-500 -translate-x-1/2 bottom-6 left-1/2 dark:text-gray-400">
+      <p
+        class="absolute text-sm text-center text-gray-500 -translate-x-1/2 bottom-6 left-1/2 dark:text-gray-400"
+      >
         © {{ currentYear }} - HiveSpace
       </p>
     </div>
