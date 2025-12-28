@@ -120,7 +120,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/stores/app'
-import { useStoreStore } from '@/stores'
+import { useStoreStore, useMediaStore } from '@/stores'
 import { useFieldValidation } from '@hivespace/shared'
 import { useAuth } from '@hivespace/shared'
 import refreshToken from '@/services/refresh.service'
@@ -132,6 +132,7 @@ const router = useRouter()
 const { t } = useI18n()
 const appStore = useAppStore()
 const storeStore = useStoreStore()
+const mediaStore = useMediaStore()
 const { handleFieldValidationErrors, clearFieldErrors } = useFieldValidation()
 
 // Form data
@@ -225,14 +226,25 @@ const handleSubmit = async () => {
     // Clear any previous errors
     clearFieldErrors(formErrors)
 
+    // Upload logo if it's a file
+    let logoFileId = ''
+    if (formData.storeLogoFileId instanceof File) {
+      const uploadResponse = await mediaStore.uploadMedia(formData.storeLogoFileId, 'store-logo')
+      logoFileId = uploadResponse.fileId
+    }
+
     // Submit store registration with just the filename for the logo
-    await storeStore.registerStore({
+    const response = await storeStore.registerStore({
       storeName: formData.storeName,
       description: formData.description || null,
-      storeLogoFileId:
-        formData.storeLogoFileId instanceof File ? formData.storeLogoFileId.name : '',
+      storeLogoFileId: logoFileId,
       address: formData.address,
     })
+
+    // Confirm upload if we have a file and a store ID
+    if (logoFileId && response?.storeId) {
+      await mediaStore.confirmUpload(logoFileId, response.storeId)
+    }
     // Refresh token after successful registration
     const { getCurrentUser } = useAuth()
     const currentUser = await getCurrentUser()
