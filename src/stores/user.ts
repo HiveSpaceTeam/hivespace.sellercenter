@@ -9,7 +9,7 @@ import {
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { userService } from '@/services/user.service'
-import { useAppStore } from './app'
+import { useAppStore } from '@hivespace/shared'
 
 export const useUserStore = defineStore('user', () => {
   // User settings state

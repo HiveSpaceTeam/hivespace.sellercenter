@@ -103,7 +103,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useAppStore } from '@/stores/app'
+import { useAppStore } from '@hivespace/shared'
 import { accountService } from '@/services'
 import { Button } from '@hivespace/shared'
 import AppHeader from '@/components/layout/AppHeader.vue'
