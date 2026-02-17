@@ -88,26 +88,6 @@
                           },
                         ]">
                           {{ subItem.name }}
-                          <span class="flex items-center gap-1 ml-auto">
-                            <span v-if="subItem.new" :class="[
-                              'menu-dropdown-badge',
-                              {
-                                'menu-dropdown-badge-active': isActive(subItem.path),
-                                'menu-dropdown-badge-inactive': !isActive(subItem.path),
-                              },
-                            ]">
-                              new
-                            </span>
-                            <span v-if="subItem.pro" :class="[
-                              'menu-dropdown-badge',
-                              {
-                                'menu-dropdown-badge-active': isActive(subItem.path),
-                                'menu-dropdown-badge-inactive': !isActive(subItem.path),
-                              },
-                            ]">
-                              pro
-                            </span>
-                          </span>
                         </router-link>
                       </li>
                     </ul>
@@ -172,7 +152,7 @@ const menuGroups = computed<MenuGroup[]>(() => {
       icon: GridIcon,
       name: 'Demo',
       subItems: [
-        { name: 'Component', path: '/demo/components', new: true },
+        { name: 'Component', path: '/demo/components' },
         { name: 'Ecommerce', path: '/demo' },
         { name: 'Calendar', path: '/demo/calendar' },
         { name: 'User Profile', path: '/demo/profile' },
@@ -184,15 +164,13 @@ const menuGroups = computed<MenuGroup[]>(() => {
         { name: 'Line Chart', path: '/demo/line-chart' },
         { name: 'Bar Chart', path: '/demo/bar-chart' },
         { name: 'Alerts', path: '/demo/alerts' },
-        { name: 'Toast Notifications', path: '/demo/toast', new: true },
-        { name: 'Modal Popups', path: '/demo/modal', new: true },
+        { name: 'Toast Notifications', path: '/demo/toast' },
+        { name: 'Modal Popups', path: '/demo/modal' },
         { name: 'Avatars', path: '/demo/avatars' },
         { name: 'Badge', path: '/demo/badge' },
         { name: 'Buttons', path: '/demo/buttons' },
         { name: 'Images', path: '/demo/images' },
         { name: 'Videos', path: '/demo/videos' },
-        { name: 'Signin', path: '/demo/signin' },
-        { name: 'Signup', path: '/demo/signup' },
         { name: 'Icons', path: '/demo/icons' },
       ] as SubMenuItem[],
     })

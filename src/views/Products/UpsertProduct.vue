@@ -251,7 +251,7 @@ import ImageUploader from 'quill-image-uploader'
 import { PlusIcon, ChevronDownIcon } from '@/icons'
 import { productService } from '@/services/product.service'
 import { categoryService } from '@/services/category.service'
-import { useAppStore } from '@/stores/app'
+import { useAppStore } from '@hivespace/shared'
 import type {
   CreateProductRequest,
   ProductVariant,

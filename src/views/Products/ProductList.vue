@@ -4,8 +4,7 @@
     <div class="space-y-5 sm:space-y-6">
       <ComponentCard :title="$t('pages.productList')">
         <!-- Table Content -->
-        <div
-          class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
+        <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
           <!-- Search and Filter Controls -->
           <div class="p-4 border-b border-gray-200 dark:border-gray-700">
             <div class="flex flex-col sm:flex-row gap-4 items-center justify-between">
@@ -113,7 +112,7 @@ import DictionaryLayout from '@/components/layout/DictionaryLayout.vue'
 import { useConfirmModal } from '@hivespace/shared'
 import { productService } from '@/services'
 import { useRouter } from 'vue-router'
-import { useAppStore } from '@/stores/app'
+import { useAppStore } from '@hivespace/shared'
 import type { Product, ProductSearchRequest, PagedResponse } from '@/types'
 
 import { BigPlusIcon, RefreshIcon, EditIcon, TrashRedIcon } from '@/icons'

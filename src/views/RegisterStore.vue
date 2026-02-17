@@ -90,7 +90,7 @@
                   {{ t('registerStore.fields.storeLogo') }}
                 </label>
                 <div class="md:flex-1">
-                  <FileInput v-model="formData.storeLogoFileId" accept="image/*" :max-size="5 * 1024 * 1024"
+                  <FileInput v-model="formData.storeLogoFile" accept="image/*" :max-size="5 * 1024 * 1024"
                     preview-direction="right" :button-text="t('registerStore.fileInput.chooseLogo')" preview-size="lg"
                     preview-shape="square" :help-text="t('registerStore.fileInput.logoHelpText')"
                     @change="handleFileChange" @error="handleFileError" :error="formErrors.storeLogoFileId" />
@@ -119,7 +119,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useAppStore } from '@/stores/app'
+import { useAppStore } from '@hivespace/shared'
 import { useStoreStore, useMediaStore } from '@/stores'
 import { useFieldValidation } from '@hivespace/shared'
 import { useAuth } from '@hivespace/shared'
@@ -139,7 +139,7 @@ const { handleFieldValidationErrors, clearFieldErrors } = useFieldValidation()
 const formData = reactive({
   storeName: '',
   description: '',
-  storeLogoFileId: null as File | null,
+  storeLogoFile: null as File | null,
   address: '',
 })
 
@@ -175,7 +175,7 @@ const clearErrors = () => {
 
 // Handle file change from FileInput component
 const handleFileChange = (file: File | null) => {
-  formData.storeLogoFileId = file
+  formData.storeLogoFile = file
   // Clear any previous errors when a valid file is selected
   if (file) {
     formErrors.storeLogoFileId = ''
@@ -197,7 +197,7 @@ const validateForm = (): boolean => {
     isValid = false
   }
 
-  if (!formData.storeLogoFileId) {
+  if (!formData.storeLogoFile) {
     formErrors.storeLogoFileId = t('registerStore.errors.storeLogoRequired')
     isValid = false
   }
@@ -228,11 +228,10 @@ const handleSubmit = async () => {
 
     // Upload logo if it's a file
     let logoFileId = ''
-    if (formData.storeLogoFileId instanceof File) {
-      const uploadResponse = await mediaStore.uploadMedia(formData.storeLogoFileId, 'store-logo')
+    if (formData.storeLogoFile instanceof File) {
+      const uploadResponse = await mediaStore.uploadMedia(formData.storeLogoFile, 'store-logo')
       logoFileId = uploadResponse.fileId
     }
-
     // Submit store registration with just the filename for the logo
     const response = await storeStore.registerStore({
       storeName: formData.storeName,
