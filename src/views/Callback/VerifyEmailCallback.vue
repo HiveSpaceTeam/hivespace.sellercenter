@@ -135,13 +135,14 @@ let redirectTimer: number | null = null
 // Extract parameters from URL
 const extractUrlParams = () => {
   const token = route.query.token as string
+  const userId = route.query.userId as string
   const urlReturnUrl = route.query.returnUrl as string
 
   if (urlReturnUrl) {
     returnUrl.value = urlReturnUrl
   }
 
-  return { token }
+  return { token, userId }
 }
 
 // Start redirect countdown
@@ -202,9 +203,10 @@ const goToVerifyEmail = () => {
 }
 
 // Verify email with token
-const verifyEmailToken = async (token: string) => {
+const verifyEmailToken = async (userId: string, token: string) => {
   try {
-    await accountService.verifyEmail(token)
+    debugger
+    await accountService.verifyEmail(userId, token)
 
     // Success
     isSuccess.value = true
@@ -246,6 +248,9 @@ const verifyEmailToken = async (token: string) => {
 
 // Initialize component
 onMounted(async () => {
+  // Extract URL params first so returnUrl is available for any redirect (including already-verified)
+  const { token, userId } = extractUrlParams()
+
   const { getCurrentUser } = useAuth()
   const user = await getCurrentUser()
   if (user?.profile.email_verified) {
@@ -255,10 +260,8 @@ onMounted(async () => {
     return
   }
 
-  const { token } = extractUrlParams()
-
-  if (!token) {
-    // No token provided
+  if (!token || !userId) {
+    // Missing token or userId in the link
     isError.value = true
     isLoading.value = false
     errorMessage.value = t('verifyEmailCallback.error.noToken')
@@ -266,7 +269,7 @@ onMounted(async () => {
   }
 
   // Verify the token
-  await verifyEmailToken(token)
+  await verifyEmailToken(userId, token)
 })
 
 // Cleanup on unmount

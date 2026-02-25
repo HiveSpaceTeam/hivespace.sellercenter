@@ -9,6 +9,7 @@ export interface SendEmailVerificationRequest {
 }
 
 export interface ConfirmEmailVerificationRequest {
+  userId: string
   token: string
   returnUrl?: string | null
 }
