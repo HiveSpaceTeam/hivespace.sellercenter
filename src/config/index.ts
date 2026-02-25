@@ -98,6 +98,9 @@ const createConfig = (): AppConfig => {
           `${apiBaseUrl}/identity`,
           'Authority URL',
         ),
+        // Use localStorage so the session persists across tabs (e.g. email verification links
+        // opened in a new tab can still reach the user session via getCurrentUser())
+        storageType: 'local' as const,
       },
       callbackUrl: validateUrl(
         getEnvVar('VITE_AUTH_CALLBACK_URL', 'http://localhost:5174/auth/callback'),

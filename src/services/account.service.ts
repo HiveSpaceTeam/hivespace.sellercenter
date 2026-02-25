@@ -25,12 +25,13 @@ class AccountService {
   }
 
   /**
-   * Confirm email verification with token - returns success if valid
+   * Confirm email verification with token - endpoint is unauthenticated (userId + token prove identity)
    */
-  async verifyEmail(token: string): Promise<void> {
+  async verifyEmail(userId: string, token: string): Promise<void> {
     const url = buildApiUrl(ACCOUNT_ENDPOINTS.VERIFY_EMAIL)
 
     const requestData: ConfirmEmailVerificationRequest = {
+      userId,
       token,
     }
 
