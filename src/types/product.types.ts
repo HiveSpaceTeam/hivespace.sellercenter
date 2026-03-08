@@ -10,6 +10,11 @@ export interface ProductVariant {
   options: ProductVariantOption[]
 }
 
+export interface ProductSkuImage {
+  skuId: string
+  fileId: string
+}
+
 export interface ProductSku {
   id?: string // Keep for backward compatibility
   key?: string // New composite key based on variant combinations
@@ -21,6 +26,8 @@ export interface ProductSku {
   price: { amount: number; currency: number }
   quantity?: number | string
   skuNo?: string
+  imageFileName?: string
+  images?: ProductSkuImage[]
 }
 
 export interface Product {

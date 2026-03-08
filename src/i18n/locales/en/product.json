@@ -49,5 +49,15 @@
   "success": {
     "productUpdatedSuccessfully": "Product updated successfully!",
     "productSavedSuccessfully": "Product saved successfully!"
-  }
+  },
+  "imagesBySku": "Images by Variant",
+  "noSkusForImages": "Please add variant SKUs before uploading images.",
+  "variantCombination": "Variant combination",
+  "image": "Image",
+  "imageRequirements": "Minimum size: {size} | {formats} | Max {maxSize}",
+  "defaultSku": "Default SKU",
+  "uploadSkuImage": "Upload image",
+  "uploadSkuImageHelp": "Minimum 500x500px, JPG or PNG, up to 10MB.",
+  "previewImage": "Preview image",
+  "closeImage": "Close image"
 }

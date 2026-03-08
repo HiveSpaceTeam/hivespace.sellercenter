@@ -302,10 +302,145 @@
             </div>
           </div>
         </ComponentCard>
+        <ComponentCard :title="$t('product.imagesBySku')">
+          <div v-if="!product.skus || product.skus.length === 0" class="py-4 text-sm text-gray-500 dark:text-gray-400">
+            {{ $t('product.noSkusForImages') }}
+          </div>
+          <div
+            v-else
+            class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
+          >
+            <div class="max-w-full overflow-x-auto custom-scrollbar">
+              <table class="min-w-full">
+                <thead>
+                  <tr class="border-b border-gray-200 dark:border-gray-700">
+                    <th class="px-5 py-3 text-left w-1/3 sm:px-6">
+                      <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                        {{ $t('product.variantCombination') }}
+                      </p>
+                    </th>
+                    <th class="px-5 py-3 text-left w-1/3 sm:px-6">
+                      <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                        {{ $t('product.image') }}
+                      </p>
+                      <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">
+                        {{
+                          $t('product.imageRequirements', {
+                            size: '500px x 500px',
+                            formats: '.jpg, .png',
+                            maxSize: '10 MB',
+                          })
+                        }}
+                      </p>
+                    </th>
+                    <th class="px-5 py-3 text-right w-1/3 sm:px-6">
+                      <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                        {{ $t('common.actions') }}
+                      </p>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="productSku in product.skus"
+                    :key="getSkuKey(productSku)"
+                    class="border-b border-gray-200 dark:border-gray-700"
+                  >
+                    <td class="px-5 py-4 sm:px-6 align-top">
+                      <div class="text-sm font-medium text-gray-900 dark:text-white">
+                        {{ getSkuDisplayName(productSku) || $t('product.defaultSku') }}
+                      </div>
+                    </td>
+                    <td class="px-5 py-4 sm:px-6">
+                      <div class="space-y-3">
+                        <div
+                          v-if="productSku.images && productSku.images.length"
+                          class="flex flex-wrap gap-2"
+                        >
+                          <div
+                            v-for="image in productSku.images"
+                            :key="image.fileId"
+                            class="group relative w-16 h-16 rounded-md overflow-hidden border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800"
+                          >
+                            <img
+                              :src="image.fileId"
+                              :alt="getSkuDisplayName(productSku) || $t('product.defaultSku')"
+                              class="w-full h-full object-cover"
+                            />
+                            <button
+                              type="button"
+                              class="absolute inset-0 flex items-center justify-center bg-black/40 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                              :aria-label="t('product.previewImage')"
+                              @click.stop="
+                                onPreviewSkuImage(
+                                  image.fileId,
+                                  getSkuDisplayName(productSku) || $t('product.defaultSku'),
+                                )
+                              "
+                            >
+                              <EyeIcon class="w-5 h-5" />
+                            </button>
+                          </div>
+                        </div>
+
+                        <FileInput
+                          :model-value="getSkuImageFile(productSku)"
+                          @update:modelValue="(file) => onSkuImageChange(productSku, file)"
+                          accept="image/jpeg,image/png"
+                          :max-size="10 * 1024 * 1024"
+                          preview-direction="right"
+                          preview-size="md"
+                          preview-shape="square"
+                          :button-text="$t('product.uploadSkuImage')"
+                          :help-text="$t('product.uploadSkuImageHelp')"
+                          :error="skuImageErrors[getSkuKey(productSku)]"
+                        />
+                      </div>
+                    </td>
+                    <td class="px-5 py-4 sm:px-6">
+                      <div class="flex justify-end">
+                        <button
+                          type="button"
+                          class="inline-flex items-center gap-1 rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-100 focus:outline-hidden focus:ring-2 focus:ring-red-500/20 dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-300 dark:hover:bg-red-900/40"
+                          @click="clearSkuImage(productSku)"
+                        >
+                          <TrashIcon class="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </ComponentCard>
       </div>
     </div>
+
     <div
-      class="toolbar fixed bottom-0 left-0 w-full flex justify-end gap-3 p-4 bg-white dark:bg-gray-900 shadow-lg z-50"
+      v-if="isImagePreviewOpen && previewImageUrl"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+      @click.self="closeImagePreview"
+    >
+      <div class="relative w-full max-w-3xl mx-4">
+        <button
+          type="button"
+          class="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-black/70 text-sm font-medium text-white hover:bg-black focus:outline-hidden focus:ring-2 focus:ring-white/60"
+          :aria-label="t('product.closeImage')"
+          @click.stop="closeImagePreview"
+        >
+          ×
+        </button>
+        <img
+          :src="previewImageUrl"
+          :alt="previewImageAlt || t('product.previewImage')"
+          class="w-full max-h-[80vh] rounded-lg bg-white object-contain"
+        />
+      </div>
+    </div>
+
+    <div
+      class="toolbar fixed bottom-0 left-0 w-full flex justify-end gap-3 p-4 bg-white dark:bg-gray-900 shadow-lg z-40"
     >
       <Button variant="outline" size="sm" @click="onCancel" className="min-w-[90px]">
         {{ $t('common.cancel') }}
@@ -329,9 +464,10 @@ import ImageUploader from 'quill-image-uploader'
 import MultipleSelect from '@/components/common/MultipleSelect.vue'
 import Select from '@/components/common/Select.vue'
 import Input from '@/components/common/Input.vue'
+import FileInput from '@/components/common/FileInput.vue'
 import ChevronDownIcon from '@/icons/ChevronDownIcon.vue'
 import Button from '@/components/common/Button.vue'
-import { PlusIcon } from '@/icons'
+import { PlusIcon, TrashIcon, EyeIcon } from '@/icons'
 import { productService } from '@/services/product.service'
 import { categoryService } from '@/services/category.service'
 import { useAppStore } from '@/stores/app'
@@ -379,6 +515,13 @@ const attributeValues = ref<Record<string, string>>({})
 const attributeMultiValues = ref<Record<string, { value: string | number; label: string }[]>>({})
 // Options per attribute (for dropdowns). Shape: { [attributeId]: { value, label }[] }
 const attributeOptionsMap = ref<Record<string, { value: string | number; label: string }[]>>({})
+
+// SKU image upload & preview state
+const skuImages = ref<Record<string, File | null>>({})
+const skuImageErrors = ref<Record<string, string>>({})
+const isImagePreviewOpen = ref(false)
+const previewImageUrl = ref<string | null>(null)
+const previewImageAlt = ref<string>('')
 
 const modules = ref({
   name: 'imageUploader',
@@ -490,6 +633,27 @@ const updateProductSkus = (
   )
 }
 
+const getSkuKey = (productSku: ProductSku): string => {
+  if (productSku.id) return productSku.id
+  if (productSku.key) return productSku.key
+  if (productSku.skuNo) return String(productSku.skuNo)
+  return productSku.skuVariants
+    .map((variant) => `${variant.variantId}:${variant.optionId}:${variant.value}`)
+    .join('|')
+}
+
+const getSkuDisplayName = (productSku: ProductSku) => {
+  if (!product.value.variants || product.value.variants.length === 0) {
+    return productSku.skuNo || ''
+  }
+
+  const parts = product.value.variants
+    .map((variant) => getVariantValueBySKU(productSku, variant))
+    .filter((val) => val && val.trim() !== '')
+
+  return parts.join(' - ')
+}
+
 const getVariantValueBySKU = (productSku: ProductSku, variant: ProductVariant) => {
   if (!productSku || !Array.isArray(productSku.skuVariants) || !variant) return ''
   const variantId = variant.id
@@ -531,6 +695,47 @@ const groupedSkus = computed(() => {
     }),
   }))
 })
+
+const getSkuImageFile = (productSku: ProductSku): File | null => {
+  const key = getSkuKey(productSku)
+  return skuImages.value[key] || null
+}
+
+const onSkuImageChange = (productSku: ProductSku, file: File | null) => {
+  const key = getSkuKey(productSku)
+  skuImages.value[key] = file
+  skuImageErrors.value[key] = ''
+
+  if (file) {
+    productSku.imageFileName = file.name
+  } else {
+    delete productSku.imageFileName
+  }
+}
+
+const onSkuImageError = (productSku: ProductSku, message: string) => {
+  const key = getSkuKey(productSku)
+  skuImageErrors.value[key] = message
+}
+
+const clearSkuImage = (productSku: ProductSku) => {
+  const key = getSkuKey(productSku)
+  skuImages.value[key] = null
+  delete skuImageErrors.value[key]
+  delete productSku.imageFileName
+}
+
+const onPreviewSkuImage = (imageUrl: string, altText: string) => {
+  previewImageUrl.value = imageUrl
+  previewImageAlt.value = altText
+  isImagePreviewOpen.value = true
+}
+
+const closeImagePreview = () => {
+  isImagePreviewOpen.value = false
+  previewImageUrl.value = null
+  previewImageAlt.value = ''
+}
 
 // Fetch categories from API
 const fetchCategories = async () => {
