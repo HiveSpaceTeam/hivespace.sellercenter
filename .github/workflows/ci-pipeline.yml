@@ -19,7 +19,7 @@ on:
 jobs:
   build-app:
     runs-on: ubuntu-latest
-    environment: dev
+    environment: ${{ (github.ref == 'refs/heads/release' || (github.event_name == 'workflow_dispatch' && github.event.inputs.branch == 'release')) && 'production' || 'dev' }}
 
     steps:
       - name: Checkout Code

@@ -6,9 +6,9 @@ export interface RegisterStoreRequest {
 }
 
 export interface RegisterStoreResponse {
-  StoreId: string
-  StoreName: string
-  StoreDescription: string | null
-  StoreLogo: string
-  StoreAddress: string
+  storeId: string
+  storeName: string
+  storeDescription: string | null
+  storeLogo: string
+  storeAddress: string
 }

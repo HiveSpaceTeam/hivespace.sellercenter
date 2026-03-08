@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import demoRoutes from './demoRoutes'
-import { getCurrentUser, login, logout } from '@/auth/user-manager'
+import { useAuth, Maintenance, NotFound, ServerError, Default, demoRoutes } from '@hivespace/shared'
 
 // Single grouped collection for several related routes (callbacks, error pages,
 // maintenance, default and 404). We keep the same order and meta fields so
@@ -28,26 +27,57 @@ const mainRoutes = [
   {
     path: '/server-error',
     name: 'ServerError',
-    component: () => import('@/views/Pages/ServerError.vue'),
+    component: ServerError,
     meta: { title: 'Server Error', allowAnonymous: true },
   },
   {
     path: '/maintenance',
     name: 'Maintenance',
-    component: () => import('@/views/Pages/Maintenance.vue'),
+    component: Maintenance,
     meta: { title: 'Maintenance', allowAnonymous: true },
   },
   {
     path: '/',
     name: 'Default',
-    component: () => import('@/views/Default.vue'),
+    component: Default,
+    props: { redirectPath: '/product/list', showSignUp: true },
     meta: { title: 'HiveSpace - Seller Center', allowAnonymous: true },
   },
-  ...demoRoutes,
+  ...demoRoutes.map((route) => {
+    // Override the icons route to use local component
+    if (route.path === '/demo' && route.children) {
+      const children = route.children.map((child) => {
+        if (child.path === 'icons') {
+          return {
+            ...child,
+            component: () => import('@/views/Icons.vue'),
+          }
+        }
+        return child
+      })
+
+      // If icons route is missing, explicit add it
+      if (!children.some((c) => c.path === 'icons')) {
+        children.push({
+          path: 'icons',
+          name: 'Icons',
+          component: () => import('@/views/Icons.vue'),
+          meta: { title: 'Icons' },
+        })
+      }
+
+      return {
+        ...route,
+        component: () => import('@/views/DemoWrapper.vue'),
+        children,
+      }
+    }
+    return { ...route, component: () => import('@/views/DemoWrapper.vue') }
+  }),
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
-    component: () => import('@/views/Pages/NotFound.vue'),
+    component: NotFound,
     meta: { title: 'Not Found', allowAnonymous: true },
   },
 ]
@@ -113,6 +143,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   // For other routes, enforce presence of a local user; if missing, route to '/'
+  const { getCurrentUser, login, logout } = useAuth()
   const user = await getCurrentUser()
   if (!user) {
     await login()

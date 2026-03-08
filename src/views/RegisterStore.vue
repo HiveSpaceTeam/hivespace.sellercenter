@@ -90,7 +90,7 @@
                   {{ t('registerStore.fields.storeLogo') }}
                 </label>
                 <div class="md:flex-1">
-                  <FileInput v-model="formData.storeLogoFileId" accept="image/*" :max-size="5 * 1024 * 1024"
+                  <FileInput v-model="formData.storeLogoFile" accept="image/*" :max-size="5 * 1024 * 1024"
                     preview-direction="right" :button-text="t('registerStore.fileInput.chooseLogo')" preview-size="lg"
                     preview-shape="square" :help-text="t('registerStore.fileInput.logoHelpText')"
                     @change="handleFileChange" @error="handleFileError" :error="formErrors.storeLogoFileId" />
@@ -119,29 +119,27 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useAppStore } from '@/stores/app'
-import { useStoreStore } from '@/stores'
-import { useFieldValidation } from '@/composables/useFieldValidation'
-import { getCurrentUser } from '@/auth/user-manager'
+import { useAppStore } from '@hivespace/shared'
+import { useStoreStore, useMediaStore } from '@/stores'
+import { useFieldValidation } from '@hivespace/shared'
+import { useAuth } from '@hivespace/shared'
 import refreshToken from '@/services/refresh.service'
-import type { ErrorResponse } from '@/types'
-import Button from '@/components/common/Button.vue'
-import Input from '@/components/common/Input.vue'
-import TextArea from '@/components/common/TextArea.vue'
-import FileInput from '@/components/common/FileInput.vue'
+import type { ErrorResponse } from '@hivespace/shared'
+import { Button, Input, TextArea, FileInput } from '@hivespace/shared'
 import AppHeader from '@/components/layout/AppHeader.vue'
 
 const router = useRouter()
 const { t } = useI18n()
 const appStore = useAppStore()
 const storeStore = useStoreStore()
+const mediaStore = useMediaStore()
 const { handleFieldValidationErrors, clearFieldErrors } = useFieldValidation()
 
 // Form data
 const formData = reactive({
   storeName: '',
   description: '',
-  storeLogoFileId: null as File | null,
+  storeLogoFile: null as File | null,
   address: '',
 })
 
@@ -177,7 +175,7 @@ const clearErrors = () => {
 
 // Handle file change from FileInput component
 const handleFileChange = (file: File | null) => {
-  formData.storeLogoFileId = file
+  formData.storeLogoFile = file
   // Clear any previous errors when a valid file is selected
   if (file) {
     formErrors.storeLogoFileId = ''
@@ -199,7 +197,7 @@ const validateForm = (): boolean => {
     isValid = false
   }
 
-  if (!formData.storeLogoFileId) {
+  if (!formData.storeLogoFile) {
     formErrors.storeLogoFileId = t('registerStore.errors.storeLogoRequired')
     isValid = false
   }
@@ -228,15 +226,26 @@ const handleSubmit = async () => {
     // Clear any previous errors
     clearFieldErrors(formErrors)
 
+    // Upload logo if it's a file
+    let logoFileId = ''
+    if (formData.storeLogoFile instanceof File) {
+      const uploadResponse = await mediaStore.uploadMedia(formData.storeLogoFile, 'store-logo')
+      logoFileId = uploadResponse.fileId
+    }
     // Submit store registration with just the filename for the logo
-    await storeStore.registerStore({
+    const response = await storeStore.registerStore({
       storeName: formData.storeName,
       description: formData.description || null,
-      storeLogoFileId:
-        formData.storeLogoFileId instanceof File ? formData.storeLogoFileId.name : '',
+      storeLogoFileId: logoFileId,
       address: formData.address,
     })
+
+    // Confirm upload if we have a file and a store ID
+    if (logoFileId && response?.storeId) {
+      await mediaStore.confirmUpload(logoFileId, response.storeId)
+    }
     // Refresh token after successful registration
+    const { getCurrentUser } = useAuth()
     const currentUser = await getCurrentUser()
     await refreshToken(currentUser, true)
     appStore.notifySuccess(
@@ -269,6 +278,7 @@ const handleSubmit = async () => {
 onMounted(async () => {
   try {
     // Check if user is already a seller
+    const { getCurrentUser } = useAuth()
     const currentUser = await getCurrentUser()
     if (currentUser?.isSeller()) {
       // If already a seller, redirect to user management

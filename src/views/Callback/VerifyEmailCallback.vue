@@ -6,15 +6,15 @@
     <!-- Main Content -->
     <div class="relative flex flex-col items-center justify-center min-h-[calc(100vh-80px)] p-6 overflow-hidden z-1">
       <div>
-        <div class="absolute right-0 top-0 -z-1 w-full max-w-[250px] xl:max-w-[450px]">
+        <div class="absolute right-0 top-0 -z-1 w-full max-w-62.5 xl:max-w-112.5">
           <img src="/images/shape/grid-01.svg" alt="grid" />
         </div>
-        <div class="absolute bottom-0 left-0 -z-1 w-full max-w-[250px] rotate-180 xl:max-w-[450px]">
+        <div class="absolute bottom-0 left-0 -z-1 w-full max-w-62.5 rotate-180 xl:max-w-112.5">
           <img src="/images/shape/grid-01.svg" alt="grid" />
         </div>
       </div>
 
-      <div class="mx-auto w-full max-w-[500px] text-center">
+      <div class="mx-auto w-full max-w-125 text-center">
         <!-- Loading State -->
         <div v-if="isLoading" class="mb-8">
           <LoadingSpinnerIcon class="w-16 h-16 mx-auto mb-4 text-brand-500 animate-spin" />
@@ -100,18 +100,19 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useAppStore } from '@/stores/app'
+import { useAppStore } from '@hivespace/shared'
 import { accountService } from '@/services'
-import Button from '@/components/common/Button.vue'
+import { Button } from '@hivespace/shared'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import LoadingSpinnerIcon from '@/icons/LoadingSpinnerIcon.vue'
 import CheckLargeIcon from '@/icons/CheckLargeIcon.vue'
 import ErrorIcon from '@/icons/ErrorIcon.vue'
 import HomeIcon from '@/icons/HomeIcon.vue'
 import MailIcon from '@/icons/MailIcon.vue'
-import { getCurrentUser } from '@/auth/user-manager'
+import { useAuth } from '@hivespace/shared'
 import refreshToken from '@/services/refresh.service'
 
 const route = useRoute()
@@ -134,13 +135,14 @@ let redirectTimer: number | null = null
 // Extract parameters from URL
 const extractUrlParams = () => {
   const token = route.query.token as string
+  const userId = route.query.userId as string
   const urlReturnUrl = route.query.returnUrl as string
 
   if (urlReturnUrl) {
     returnUrl.value = urlReturnUrl
   }
 
-  return { token }
+  return { token, userId }
 }
 
 // Start redirect countdown
@@ -201,9 +203,10 @@ const goToVerifyEmail = () => {
 }
 
 // Verify email with token
-const verifyEmailToken = async (token: string) => {
+const verifyEmailToken = async (userId: string, token: string) => {
   try {
-    await accountService.verifyEmail(token)
+    debugger
+    await accountService.verifyEmail(userId, token)
 
     // Success
     isSuccess.value = true
@@ -215,6 +218,7 @@ const verifyEmailToken = async (token: string) => {
       t('verifyEmailCallback.success.subtitle'),
     )
 
+    const { getCurrentUser } = useAuth()
     const currentUser = await getCurrentUser()
     if (currentUser) {
       await refreshToken(currentUser, true)
@@ -244,6 +248,10 @@ const verifyEmailToken = async (token: string) => {
 
 // Initialize component
 onMounted(async () => {
+  // Extract URL params first so returnUrl is available for any redirect (including already-verified)
+  const { token, userId } = extractUrlParams()
+
+  const { getCurrentUser } = useAuth()
   const user = await getCurrentUser()
   if (user?.profile.email_verified) {
     isLoading.value = false
@@ -252,10 +260,8 @@ onMounted(async () => {
     return
   }
 
-  const { token } = extractUrlParams()
-
-  if (!token) {
-    // No token provided
+  if (!token || !userId) {
+    // Missing token or userId in the link
     isError.value = true
     isLoading.value = false
     errorMessage.value = t('verifyEmailCallback.error.noToken')
@@ -263,7 +269,7 @@ onMounted(async () => {
   }
 
   // Verify the token
-  await verifyEmailToken(token)
+  await verifyEmailToken(userId, token)
 })
 
 // Cleanup on unmount
