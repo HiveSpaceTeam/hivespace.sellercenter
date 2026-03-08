@@ -141,7 +141,7 @@ const statusFilter = ref('all')
 const lastUpdated = ref('')
 const products = ref<Product[]>([])
 const pageIndex = ref(1)
-const pageSize = ref(10)
+const pageSize = ref(100)
 const totalCount = ref(0)
 
 // Global modal handler

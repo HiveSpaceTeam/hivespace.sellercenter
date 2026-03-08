@@ -132,7 +132,8 @@ onBeforeUnmount(() => {
 const options = computed(() => props.options ?? [])
 
 const selectedLabel = computed(() => {
-  const found = options.value.find((o) => o.value === props.modelValue)
+  debugger
+  const found = options.value.find((o) => o.value == props.modelValue)
   return found ? found.label : ''
 })
 
