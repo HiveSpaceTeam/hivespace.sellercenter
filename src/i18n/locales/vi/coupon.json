@@ -40,7 +40,13 @@
       "duration": "Thời gian lưu",
       "actions": "Thao tác",
       "emptyText": "Không có Mã giảm giá nào"
-    }
+    },
+    "codePrefix": "Mã: ",
+    "productCount": "{count} sản phẩm",
+    "allProducts": "Tất cả sản phẩm",
+    "minSpend": "Đơn tối thiểu:",
+    "discountOff": "% GIẢM",
+    "discountMax": "Tối đa"
   },
   "detail": {
     "titleCreate": "Tạo Coupon mới",
@@ -60,7 +66,10 @@
       "allowEarlySave": "Cho phép lưu mã trước Thời gian sử dụng",
       "displayEarlyTime": "Thời gian hiển thị mã sớm",
       "earlySaveHint": "Khi voucher có hiệu lực sử dụng, mục này sẽ không được chỉnh sửa",
-      "smartCoupon": "Mã giảm giá thông minh"
+      "smartCoupon": "Mã giảm giá thông minh",
+      "startDatePlaceholder": "Ngày bắt đầu",
+      "endDatePlaceholder": "Ngày kết thúc",
+      "earlySaveDatePlaceholder": "Ngày hiển thị sớm"
     },
     "discountSettings": {
       "title": "Thiết lập mã giảm giá",
@@ -77,7 +86,8 @@
       "minOrderValue": "Giá trị đơn hàng tối thiểu",
       "totalMaxUsages": "Tổng lượt sử dụng tối đa",
       "totalMaxUsagesHint": "Tổng số Mã giảm giá có thể sử dụng",
-      "maxUsagesPerBuyer": "Lượt sử dụng tối đa/Người mua"
+      "maxUsagesPerBuyer": "Lượt sử dụng tối đa/Người mua",
+      "currency": "Đơn vị tiền tệ"
     },
     "displayAndProducts": {
       "title": "Hiển thị mã giảm giá và các sản phẩm áp dụng",
@@ -89,7 +99,14 @@
       "allProducts": "Tất cả sản phẩm",
       "allProductsDescription": "Bao gồm tất cả sản phẩm hiện có, ngoại trừ các sản phẩm bị hạn chế khuyến mãi theo quy định của pháp luật hiện hành và các sản phẩm độc quyền cho thành viên. Tìm hiểu thêm",
       "specificProducts": "Một (số) sản phẩm",
-      "addProducts": "Thêm sản phẩm"
+      "addProducts": "Thêm sản phẩm",
+      "productsSelected": "{count} sản phẩm đã chọn",
+      "table": {
+        "products": "Sản phẩm",
+        "originalPrice": "Giá gốc",
+        "stock": "Kho hàng",
+        "action": "Thao tác"
+      }
     },
     "actions": {
       "cancel": "Hủy",

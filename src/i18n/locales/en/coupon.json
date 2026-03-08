@@ -40,7 +40,13 @@
       "duration": "Duration",
       "actions": "Actions",
       "emptyText": "No Coupons found"
-    }
+    },
+    "codePrefix": "Code: ",
+    "productCount": "{count} Products",
+    "allProducts": "All Products",
+    "minSpend": "Min spend:",
+    "discountOff": "% OFF",
+    "discountMax": "Max"
   },
   "detail": {
     "titleCreate": "Create new Coupon",
@@ -60,7 +66,10 @@
       "allowEarlySave": "Allow code saving before Usage Time",
       "displayEarlyTime": "Display voucher early time",
       "earlySaveHint": "Once voucher starts displaying, this section can no longer be edited",
-      "smartCoupon": "Smart Coupon"
+      "smartCoupon": "Smart Coupon",
+      "startDatePlaceholder": "Start Date",
+      "endDatePlaceholder": "End Date",
+      "earlySaveDatePlaceholder": "Early Save Date"
     },
     "discountSettings": {
       "title": "Discount Settings",
@@ -77,7 +86,8 @@
       "minOrderValue": "Minimum Order Value",
       "totalMaxUsages": "Total Maximum Usages",
       "totalMaxUsagesHint": "Total number of discount codes that can be used",
-      "maxUsagesPerBuyer": "Maximum usages / Buyer"
+      "maxUsagesPerBuyer": "Maximum usages / Buyer",
+      "currency": "Currency"
     },
     "displayAndProducts": {
       "title": "Discount Code Display and Application",
@@ -89,7 +99,14 @@
       "allProducts": "All products",
       "allProductsDescription": "For selected products only, some products are prohibited from promotions due to regulations in your country or because they are member-exclusive. Learn More",
       "specificProducts": "Specific product(s)",
-      "addProducts": "Add Products"
+      "addProducts": "Add Products",
+      "productsSelected": "{count} product(s) selected",
+      "table": {
+        "products": "Products",
+        "originalPrice": "Original Price",
+        "stock": "Stock",
+        "action": "Action"
+      }
     },
     "actions": {
       "cancel": "Cancel",

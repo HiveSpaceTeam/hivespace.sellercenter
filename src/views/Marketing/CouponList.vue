@@ -153,7 +153,7 @@
                         </Badge>
                         <span class="text-sm font-medium text-gray-900 dark:text-white leading-tight mt-0.5">{{
                           coupon.name }}</span>
-                        <span class="text-xs text-gray-500 leading-tight">Code:{{ coupon.code }}</span>
+                        <span class="text-xs text-gray-500 leading-tight">{{ $t('coupon.list.codePrefix') }}{{ coupon.code }}</span>
                       </div>
                     </div>
                   </td>
@@ -164,15 +164,16 @@
                   </td>
                   <td class="px-5 py-4 sm:px-6">
                     <span class="text-sm text-gray-700 dark:text-gray-300">
-                      {{ coupon.applicableProductIds.length > 0 ? `${coupon.applicableProductIds.length} Products` :
-                        'All Products' }}
+                      {{ coupon.applicableProductIds.length > 0
+                        ? $t('coupon.list.productCount', { count: coupon.applicableProductIds.length })
+                        : $t('coupon.list.allProducts') }}
                     </span>
                   </td>
                   <td class="px-5 py-4 sm:px-6">
                     <div class="flex flex-col">
                       <span class="text-sm font-medium text-gray-900 dark:text-white">{{ formatDiscount(coupon)
                         }}</span>
-                      <span v-if="coupon.minOrderAmount > 0" class="text-xs text-gray-500">Min spend: {{
+                      <span v-if="coupon.minOrderAmount > 0" class="text-xs text-gray-500">{{ $t('coupon.list.minSpend') }} {{
                         formatMoney(coupon.minOrderAmount, coupon.discountCurrency) }}</span>
                     </div>
                   </td>
@@ -284,9 +285,9 @@ const formatDiscount = (coupon: CouponSummaryDto) => {
   if (coupon.discountType === DiscountType.FixedAmount) {
     return formatMoney(coupon.discountAmount || 0, coupon.discountCurrency);
   } else {
-    let result = `${coupon.discountPercentage}% OFF`;
+    let result = `${coupon.discountPercentage}${t('coupon.list.discountOff')}`;
     if (coupon.maxDiscountAmount) {
-      result += ` (Max ${formatMoney(coupon.maxDiscountAmount, coupon.discountCurrency)})`;
+      result += ` (${t('coupon.list.discountMax')} ${formatMoney(coupon.maxDiscountAmount, coupon.discountCurrency)})`;
     }
     return result;
   }

@@ -74,14 +74,14 @@
               <div class="flex items-center gap-2">
                 <!-- Start date: always locked when editing (ongoing or expired) -->
                 <div class="flex-1">
-                  <DateTimePicker v-model="form.startDate" placeholder="Start Date" format="iso"
+                  <DateTimePicker v-model="form.startDate" :placeholder="$t('coupon.detail.basicInfo.startDatePlaceholder')" format="iso"
                     :disabled="isViewOnly || isOngoing" @update:modelValue="validateStartDateTime" />
                   <p v-if="errors.startDateTime" class="text-xs text-red-600 mt-1">{{ errors.startDateTime }}</p>
                 </div>
                 <span class="text-gray-400">—</span>
                 <!-- End date: editable in Ongoing and Upcoming; locked in Expired -->
                 <div class="flex-1">
-                  <DateTimePicker v-model="form.endDate" placeholder="End Date" format="iso" :disabled="isViewOnly"
+                  <DateTimePicker v-model="form.endDate" :placeholder="$t('coupon.detail.basicInfo.endDatePlaceholder')" format="iso" :disabled="isViewOnly"
                     @update:modelValue="validateEndDateTime" />
                   <p v-if="errors.endDateTime" class="text-xs text-red-600 mt-1">{{ errors.endDateTime }}</p>
                 </div>
@@ -91,7 +91,7 @@
                 <Checkbox v-model="form.allowEarlySave" :disabled="isViewOnly || !canEditEarlySave"
                   :label="form.allowEarlySave ? $t('coupon.detail.basicInfo.displayEarlyTime') : $t('coupon.detail.basicInfo.allowEarlySave')" />
                 <div v-if="form.allowEarlySave" class="mt-2 pl-7 max-w-sm">
-                  <DateTimePicker v-model="form.earlySaveDate" placeholder="Early Save Date" format="iso"
+                  <DateTimePicker v-model="form.earlySaveDate" :placeholder="$t('coupon.detail.basicInfo.earlySaveDatePlaceholder')" format="iso"
                     :disabled="isViewOnly || !canEditEarlySave" :error="errors.earlySaveDateTime"
                     @update:modelValue="validateEarlySaveDateTime" />
                   <p v-if="!errors.earlySaveDateTime" class="text-xs text-gray-500 mt-2">{{
@@ -118,7 +118,7 @@
 
           <div class="flex items-start">
             <label class="w-1/4 text-sm font-medium text-gray-700 dark:text-gray-300 mt-2">
-              Currency
+              {{ $t('coupon.detail.discountSettings.currency') }}
               <span class="text-red-500 ml-0.5">*</span>
             </label>
             <div class="w-3/16">
@@ -267,7 +267,7 @@
                 <!-- Header part: count and add button -->
                 <div class="flex items-center justify-between">
                   <span class="text-sm text-gray-500 dark:text-gray-400" v-if="selectedProductIds.length > 0">
-                    {{ selectedProductIds.length }} product(s) selected
+                    {{ $t('coupon.detail.displayAndProducts.productsSelected', { count: selectedProductIds.length }) }}
                   </span>
                   <Button variant="primary-outline" :start-icon="BigPlusIcon" size="md"
                     :disabled="isViewOnly || isOngoing" @click="handleAddProducts">
@@ -283,17 +283,17 @@
                       <tr>
                         <th
                           class="px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap w-1/2">
-                          Products
+                          {{ $t('coupon.detail.displayAndProducts.table.products') }}
                         </th>
                         <th class="px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap">
-                          Original Price
+                          {{ $t('coupon.detail.displayAndProducts.table.originalPrice') }}
                         </th>
                         <th class="px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap">
-                          Stock
+                          {{ $t('coupon.detail.displayAndProducts.table.stock') }}
                         </th>
                         <th
                           class="px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap w-20 text-center">
-                          Action
+                          {{ $t('coupon.detail.displayAndProducts.table.action') }}
                         </th>
                       </tr>
                     </thead>
