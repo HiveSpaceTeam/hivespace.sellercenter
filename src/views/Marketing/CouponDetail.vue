@@ -387,7 +387,7 @@ import { CouponType, DiscountType, CouponScope, RewardType, CouponStatus } from 
 import type { CreateCouponRequest, UpdateCouponRequest, CouponDto } from '@/types'
 import { useCouponStore } from '@/stores/coupon'
 import SelectProductsModal from '@/views/Marketing/Popups/SelectProductsModal.vue'
-import { useCouponValidation, type CouponFormErrors } from './useCouponValidation'
+import { useCouponValidation, type CouponFormErrors, type CouponFormData } from './useCouponValidation'
 
 const { t, locale } = useI18n()
 const route = useRoute()
@@ -461,7 +461,7 @@ let initialType = CouponType.ENTIRE_SHOP
 if (formTypeParam === CouponType.SPECIFIC_PRODUCTS) initialType = CouponType.SPECIFIC_PRODUCTS
 if (formTypeParam === CouponType.PRIVATE) initialType = CouponType.PRIVATE
 
-const form = ref({
+const form = ref<CouponFormData>({
   type: initialType,
   name: '',
   prefix: 'SHOP',
@@ -485,6 +485,10 @@ const form = ref({
   applicableProductsType: CouponType.ENTIRE_SHOP,
   initialEarlySavePassed: false,
 })
+
+/** Captures the startDate value as loaded from the server so validation can
+ * distinguish between "user changed the date" and "date is unchanged from saved state". */
+const initialStartDate = ref<string>('')
 
 const isSpecificProducts = computed(() => {
   return form.value.type === CouponType.SPECIFIC_PRODUCTS || (form.value.type === CouponType.PRIVATE && form.value.applicableProductsType === CouponType.SPECIFIC_PRODUCTS)
@@ -668,7 +672,7 @@ const {
   validateMaxUsageCount,
   validateMaxUsagePerUser,
   validateAllFields,
-} = useCouponValidation(form, errors, t, isEditMode)
+} = useCouponValidation(form, errors, t, isEditMode, initialStartDate)
 
 // Watchers for numeric fields to clear validation errors dynamically when corrected
 watch(() => form.value.discountAmount, () => {
@@ -719,6 +723,8 @@ const populateFormFromDto = (dto: CouponDto) => {
   // Duplicate/Create: clear it so user must pick a new one.
   form.value.code = isEditMode.value ? dto.code.substring(4) : ''
   form.value.startDate = isDuplicate.value ? defaultStartTime.toISOString() : dto.startDateTime.toString()
+  // Record the loaded start date so validators can detect user-driven changes
+  initialStartDate.value = form.value.startDate
   form.value.endDate = isDuplicate.value ? defaultEndTime.toISOString() : dto.endDateTime.toString()
   form.value.allowEarlySave = !!dto.earlySaveDateTime
   if (dto.earlySaveDateTime) {

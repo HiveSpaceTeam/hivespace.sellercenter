@@ -115,6 +115,11 @@ export const useCouponStore = defineStore('coupon', () => {
         }
     }
 
+    /** Reset the coupons list to an empty array (e.g. on tab change before re-fetching). */
+    const clearCoupons = () => {
+        coupons.value = []
+    }
+
     /**
      * Delete a coupon by ID and show a success notification.
      */
@@ -163,6 +168,7 @@ export const useCouponStore = defineStore('coupon', () => {
         fetchCouponById,
         deleteCoupon,
         endCoupon,
+        clearCoupons,
         reset,
         activeTab,
     }

@@ -37,7 +37,7 @@
                   <GridIcon />
                 </span>
                 <h3 class="font-bold text-gray-900 dark:text-white">{{ $t('coupon.creationGateway.productCoupon.title')
-                }}</h3>
+                  }}</h3>
               </div>
               <p class="text-sm text-gray-500 mb-4">{{ $t('coupon.creationGateway.productCoupon.description') }}</p>
             </div>
@@ -57,7 +57,7 @@
                   <LockIcon />
                 </span>
                 <h3 class="font-bold text-gray-900 dark:text-white">{{ $t('coupon.creationGateway.privateCoupon.title')
-                }}
+                  }}
                 </h3>
               </div>
               <p class="text-sm text-gray-500 mb-4">{{ $t('coupon.creationGateway.privateCoupon.description') }}</p>
@@ -171,7 +171,7 @@
                   <td class="px-5 py-4 sm:px-6">
                     <div class="flex flex-col">
                       <span class="text-sm font-medium text-gray-900 dark:text-white">{{ formatDiscount(coupon)
-                      }}</span>
+                        }}</span>
                       <span v-if="coupon.minOrderAmount > 0" class="text-xs text-gray-500">Min spend: {{
                         formatMoney(coupon.minOrderAmount, coupon.discountCurrency) }}</span>
                     </div>
@@ -355,7 +355,7 @@ const handleDeleteCoupon = async (coupon: CouponSummaryDto) => {
 // Watchers
 watch(activeTab, () => {
   page.value = 1 // Reset page on tab change
-  couponStore.coupons = [] // Update the list to empty when tab changes
+  couponStore.clearCoupons() // Clear stale list before re-fetching
   fetchCoupons()
 })
 

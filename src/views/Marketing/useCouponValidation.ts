@@ -1,5 +1,28 @@
 import type { Ref } from 'vue'
-import { DiscountType } from '@/types'
+import { CouponType, DiscountType, RewardType } from '@/types'
+
+export interface CouponFormData {
+    type: CouponType
+    name: string
+    prefix: string
+    code: string
+    startDate: string
+    endDate: string
+    allowEarlySave: boolean
+    earlySaveDate: string
+    rewardType: RewardType
+    discountType: DiscountType
+    discountAmount: string
+    hasMaxDiscount: boolean
+    maxDiscountAmount: string
+    minOrderValue: string
+    totalUsages: string
+    maxUsagesPerBuyer: string
+    displaySettings: boolean
+    currency: string
+    applicableProductsType: CouponType
+    initialEarlySavePassed: boolean
+}
 
 export interface CouponFormErrors {
     common: string[]
@@ -16,13 +39,14 @@ export interface CouponFormErrors {
 }
 
 export function useCouponValidation(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    form: Ref<Record<string, any>>,
+    form: Ref<CouponFormData>,
     errors: CouponFormErrors,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    t: (key: string, values?: any) => string,
-    isEditMode?: Ref<boolean>
+    t: (key: string, values?: Record<string, string | number | boolean>) => string,
+    isEditMode?: Ref<boolean>,
+    initialStartDate?: Ref<string>
 ) {
+    /** Returns true only when value is a finite number greater than zero. */
+    const isPositiveFinite = (value: number): boolean => Number.isFinite(value) && value > 0
     /** Name: Required, max 100 chars */
     const validateName = (): boolean => {
         const name = form.value.name.trim()
@@ -57,18 +81,21 @@ export function useCouponValidation(
         return true
     }
 
-    /** StartDate: Required, must be in the future (unless editing a started coupon) */
+    /** StartDate: Required, must be in the future unless editing and the date is unchanged */
     const validateStartDateTime = (): boolean => {
         if (!form.value.startDate) {
             errors.startDateTime = t('coupon.detail.validation.startDateRequired')
             return false
         }
 
-        // Only require future for new coupons or if the date is being changed to something new
-        const isFuture = new Date(form.value.startDate) > new Date()
-        if (!isEditMode?.value && !isFuture) {
-            errors.startDateTime = t('coupon.detail.validation.startDateFuture')
-            return false
+        // Skip the future check only when editing AND the user has not changed the start date
+        const dateUnchanged = isEditMode?.value && form.value.startDate === initialStartDate?.value
+        if (!dateUnchanged) {
+            const isFuture = new Date(form.value.startDate) > new Date()
+            if (!isFuture) {
+                errors.startDateTime = t('coupon.detail.validation.startDateFuture')
+                return false
+            }
         }
 
         errors.startDateTime = ''
@@ -81,7 +108,7 @@ export function useCouponValidation(
             errors.endDateTime = t('coupon.detail.validation.endDateRequired')
             return false
         }
-        if (new Date(form.value.endDate) < new Date(form.value.startDate)) {
+        if (new Date(form.value.endDate) <= new Date(form.value.startDate)) {
             errors.endDateTime = t('coupon.detail.validation.endDateAfterStart')
             return false
         }
@@ -92,6 +119,7 @@ export function useCouponValidation(
     /** EarlySaveDate: Must be before startDateTime (can be in the past) */
     const validateEarlySaveDateTime = (): boolean => {
         if (!form.value.allowEarlySave || !form.value.earlySaveDate) {
+            errors.earlySaveDateTime = ''
             return true
         }
 
@@ -116,7 +144,7 @@ export function useCouponValidation(
     const validateDiscountAmount = (): boolean => {
         const value = Number(form.value.discountAmount)
         if (form.value.discountType === DiscountType.FixedAmount) {
-            if (!form.value.discountAmount || value <= 0) {
+            if (!form.value.discountAmount || !isPositiveFinite(value)) {
                 errors.discountAmount = t('coupon.detail.validation.discountAmountRequired')
                 return false
             }
@@ -125,7 +153,7 @@ export function useCouponValidation(
                 errors.discountAmount = t('coupon.detail.validation.discountPercentageRequired')
                 return false
             }
-            if (value <= 0 || value > 100) {
+            if (!isPositiveFinite(value) || value > 100) {
                 errors.discountAmount = t('coupon.detail.validation.discountPercentageRange')
                 return false
             }
@@ -141,7 +169,7 @@ export function useCouponValidation(
     const validateMaxDiscountAmount = (): boolean => {
         if (form.value.discountType === DiscountType.Percentage && form.value.hasMaxDiscount) {
             const value = Number(form.value.maxDiscountAmount)
-            if (!form.value.maxDiscountAmount || value <= 0) {
+            if (!form.value.maxDiscountAmount || !isPositiveFinite(value)) {
                 errors.maxDiscountAmount = t('coupon.detail.validation.maxDiscountAmountRequired')
                 return false
             }
@@ -153,7 +181,7 @@ export function useCouponValidation(
     /** MinOrderAmount: GreaterThan(0) */
     const validateMinOrderAmount = (): boolean => {
         const value = Number(form.value.minOrderValue)
-        if (!form.value.minOrderValue || value <= 0) {
+        if (!form.value.minOrderValue || !isPositiveFinite(value)) {
             errors.minOrderAmount = t('coupon.detail.validation.minOrderValueRequired')
             return false
         }
@@ -188,7 +216,7 @@ export function useCouponValidation(
     /** MaxUsageCount: GreaterThan(0) */
     const validateMaxUsageCount = (): boolean => {
         const value = Number(form.value.totalUsages)
-        if (!form.value.totalUsages || value <= 0) {
+        if (!form.value.totalUsages || !isPositiveFinite(value)) {
             errors.maxUsageCount = t('coupon.detail.validation.totalUsagesRequired')
             return false
         }
@@ -199,7 +227,7 @@ export function useCouponValidation(
     /** MaxUsagePerUser: GreaterThan(0) */
     const validateMaxUsagePerUser = (): boolean => {
         const value = Number(form.value.maxUsagesPerBuyer)
-        if (!form.value.maxUsagesPerBuyer || value <= 0) {
+        if (!form.value.maxUsagesPerBuyer || !isPositiveFinite(value)) {
             errors.maxUsagePerUser = t('coupon.detail.validation.maxUsagesPerBuyerRequired')
             return false
         }
