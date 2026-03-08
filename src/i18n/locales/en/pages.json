@@ -1,8 +1,7 @@
 {
-  "userManagement": "User Management",
-  "adminManagement": "Admin Management",
-  "listOfUsers": "List of user",
-  "listOfAdmins": "List of admin",
+  "products": "Products",
+  "marketing": "Marketing",
+  "coupons": "Coupons",
   "productList": "Product List",
   "addNewProduct": "Add New Product",
   "maintenance": {

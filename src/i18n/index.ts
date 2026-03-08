@@ -8,6 +8,7 @@ import enRegisterStore from './locales/en/register-store.json'
 import enVerifyEmail from './locales/en/verifyEmail.json'
 import enVerifyEmailCallback from './locales/en/verifyEmailCallback.json'
 import enProduct from './locales/en/product.json'
+import enCoupon from './locales/en/coupon.json'
 
 // Import Vietnamese translation files
 import viPages from './locales/vi/pages.json'
@@ -16,6 +17,7 @@ import viRegisterStore from './locales/vi/register-store.json'
 import viVerifyEmail from './locales/vi/verifyEmail.json'
 import viVerifyEmailCallback from './locales/vi/verifyEmailCallback.json'
 import viProduct from './locales/vi/product.json'
+import viCoupon from './locales/vi/coupon.json'
 
 // Merge translations for each language
 const en = {
@@ -26,6 +28,7 @@ const en = {
   verifyEmail: enVerifyEmail,
   verifyEmailCallback: enVerifyEmailCallback,
   product: enProduct,
+  coupon: enCoupon,
 }
 
 const vi = {
@@ -36,6 +39,7 @@ const vi = {
   registerStore: viRegisterStore,
   verifyEmail: viVerifyEmail,
   verifyEmailCallback: viVerifyEmailCallback,
+  coupon: viCoupon,
 }
 
 const i18n = createI18n({
