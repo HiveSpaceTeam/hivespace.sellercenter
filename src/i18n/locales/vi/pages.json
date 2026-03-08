@@ -1,8 +1,7 @@
 {
-  "userManagement": "Quản lý người dùng",
-  "adminManagement": "Quản lý quản trị viên",
-  "listOfUsers": "Danh sách người dùng",
-  "listOfAdmins": "Danh sách quản trị viên",
+  "products": "Sản phẩm",
+  "marketing": "Marketing",
+  "coupons": "Mã giảm giá",
   "productList": "Danh sách sản phẩm",
   "addNewProduct": "Thêm sản phẩm mới",
   "maintenance": {

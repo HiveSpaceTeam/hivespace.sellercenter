@@ -10,7 +10,7 @@
     },
   ]" @mouseenter="!isExpanded && (isHovered = true)" @mouseleave="isHovered = false">
     <div :class="['py-8 flex', !isExpanded && !isHovered ? 'lg:justify-center' : 'justify-start']">
-      <router-link to="/demo">
+      <router-link to="/">
         <img v-if="isExpanded || isHovered || isMobileOpen" class="dark:hidden" src="/images/logo/logo-light.svg"
           alt="Logo" width="150" height="40" />
         <img v-if="isExpanded || isHovered || isMobileOpen" class="hidden dark:block" src="/images/logo/logo-dark.svg"
@@ -107,7 +107,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { GridIcon, ChevronDownIcon, HorizontalDots, TableIcon } from '@/icons'
+import { GridIcon, ChevronDownIcon, HorizontalDots, TableIcon, BoxIcon } from '@/icons'
 import { useSidebar, SidebarWidget } from '@hivespace/shared'
 import { isDevelopment } from '@/config'
 
@@ -137,11 +137,18 @@ const { isExpanded, isMobileOpen, isHovered, openSubmenu } = useSidebar()
 const menuGroups = computed<MenuGroup[]>(() => {
   const mainMenuItems: MenuItem[] = [
     {
-      name: t('common.sidebar.products'),
+      name: t('pages.products'),
       icon: TableIcon,
       subItems: [
         { name: t('pages.productList'), path: '/product/list', pro: false },
         { name: t('pages.addNewProduct'), path: '/product/new', pro: false },
+      ],
+    },
+    {
+      name: t('pages.marketing') || 'Marketing',
+      icon: BoxIcon,
+      subItems: [
+        { name: t('pages.coupons') || 'Coupons', path: '/marketing/coupons', pro: false },
       ],
     },
   ]
@@ -151,28 +158,7 @@ const menuGroups = computed<MenuGroup[]>(() => {
     mainMenuItems.push({
       icon: GridIcon,
       name: 'Demo',
-      subItems: [
-        { name: 'Component', path: '/demo/components' },
-        { name: 'Ecommerce', path: '/demo' },
-        { name: 'Calendar', path: '/demo/calendar' },
-        { name: 'User Profile', path: '/demo/profile' },
-        { name: 'Form Elements', path: '/demo/form-elements' },
-        { name: 'Quill', path: '/demo/quill' },
-        { name: 'Basic Tables', path: '/demo/basic-tables' },
-        { name: 'Black Page', path: '/demo/blank' },
-        { name: '404 Page', path: '/demo/error-404' },
-        { name: 'Line Chart', path: '/demo/line-chart' },
-        { name: 'Bar Chart', path: '/demo/bar-chart' },
-        { name: 'Alerts', path: '/demo/alerts' },
-        { name: 'Toast Notifications', path: '/demo/toast' },
-        { name: 'Modal Popups', path: '/demo/modal' },
-        { name: 'Avatars', path: '/demo/avatars' },
-        { name: 'Badge', path: '/demo/badge' },
-        { name: 'Buttons', path: '/demo/buttons' },
-        { name: 'Images', path: '/demo/images' },
-        { name: 'Videos', path: '/demo/videos' },
-        { name: 'Icons', path: '/demo/icons' },
-      ] as SubMenuItem[],
+      path: '/demo',
     })
   }
 

@@ -116,6 +116,33 @@ const router = createRouter({
       ],
     },
     {
+      path: '/marketing',
+      children: [
+        {
+          path: '',
+          redirect: '/marketing/coupons',
+        },
+        {
+          path: 'coupons',
+          name: 'Coupon Management',
+          component: () => import('@/views/Marketing/CouponList.vue'),
+          meta: { title: 'Coupon Management' },
+        },
+        {
+          path: 'coupons/create',
+          name: 'Create Coupon',
+          component: () => import('@/views/Marketing/CouponDetail.vue'),
+          meta: { title: 'Create Coupon' },
+        },
+        {
+          path: 'coupons/detail/:id',
+          name: 'Coupon Detail',
+          component: () => import('@/views/Marketing/CouponDetail.vue'),
+          meta: { title: 'Coupon Detail' },
+        }
+      ],
+    },
+    {
       path: '/register-seller',
       name: 'Register Seller',
       component: () => import('@/views/RegisterStore.vue'),

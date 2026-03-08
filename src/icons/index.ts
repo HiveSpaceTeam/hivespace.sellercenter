@@ -76,8 +76,12 @@ import EyeOffIcon from './EyeOffIcon.vue'
 import PaymentIcon from './PaymentIcon.vue'
 import ShowPasswordIcon from './ShowPasswordIcon.vue'
 import HidePasswordIcon from './HidePasswordIcon.vue'
+import LockIcon from './LockIcon.vue'
+import PercentageIcon from './PercentageIcon.vue'
+import FixedAmountIcon from './FixedAmountIcon.vue'
 
 export {
+  LockIcon,
   BarChartIcon,
   LayoutDashboardIcon,
   UserGroupIcon,
@@ -157,4 +161,6 @@ export {
   FilterIcon,
   BreadcrumbArrowIcon,
   MenuDotsIcon,
+  PercentageIcon,
+  FixedAmountIcon,
 }
