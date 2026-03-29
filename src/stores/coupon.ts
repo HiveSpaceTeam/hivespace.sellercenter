@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import i18n from '@/i18n'
 import { useAppStore } from '@hivespace/shared'
-import type { Pagination } from '@hivespace/shared'
+import type { PaginationMetadata } from '@hivespace/shared'
 import { CouponStatus } from '@/types'
 import type { CreateCouponRequest, UpdateCouponRequest, CouponDto, CouponSummaryDto, GetCouponListRequest } from '@/types'
 import { couponService } from '@/services/coupon.service'
@@ -21,7 +21,7 @@ export const useCouponStore = defineStore('coupon', () => {
     const createdCoupon = ref<CouponDto | null>(null)
     const currentCoupon = ref<CouponDto | null>(null)
     const coupons = ref<CouponSummaryDto[]>([])
-    const pagination = ref<Pagination | null>(null)
+    const pagination = ref<PaginationMetadata | null>(null)
     const isFetching = ref(false)
     const activeTab = ref<string>(String(CouponStatus.All))
 
