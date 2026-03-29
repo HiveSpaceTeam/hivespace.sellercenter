@@ -84,7 +84,7 @@ const mainRoutes = [
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  scrollBehavior(to, from, savedPosition) {
+  scrollBehavior(_to, _from, savedPosition) {
     return savedPosition || { left: 0, top: 0 }
   },
   routes: [
@@ -161,7 +161,7 @@ const router = createRouter({
 
 export default router
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, _from, next) => {
   document.title = `${to.meta.title}`
   // Let callback/error routes through without auth checks
   if (to.meta.allowAnonymous) {
