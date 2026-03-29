@@ -205,7 +205,6 @@ const goToVerifyEmail = () => {
 // Verify email with token
 const verifyEmailToken = async (userId: string, token: string) => {
   try {
-    debugger
     await accountService.verifyEmail(userId, token)
 
     // Success

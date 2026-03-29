@@ -71,12 +71,11 @@ interface Props {
   showSidebarToggle?: boolean
 }
 
-const { getCurrentUser, logout } = useAuth()
+const { currentUser: user, getCurrentUser, logout } = useAuth()
 const props = withDefaults(defineProps<Props>(), {
   showSidebarToggle: true,
 })
 const userStore = useUserStore()
-const user = ref()
 
 const menuItems: MenuItem[] = [
   { href: '/profile', icon: UserCircleIcon, textKey: 'common.profile.editProfile' },
@@ -117,6 +116,6 @@ const toggleApplicationMenu = () => {
 }
 
 onMounted(async () => {
-  user.value = await getCurrentUser()
+  await getCurrentUser()
 })
 </script>

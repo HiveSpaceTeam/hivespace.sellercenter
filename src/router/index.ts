@@ -168,7 +168,6 @@ router.beforeEach(async (to, from, next) => {
     next()
     return
   }
-
   // For other routes, enforce presence of a local user; if missing, route to '/'
   const { getCurrentUser, login, logout } = useAuth()
   const user = await getCurrentUser()

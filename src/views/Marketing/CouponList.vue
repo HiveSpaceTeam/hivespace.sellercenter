@@ -37,7 +37,7 @@
                   <GridIcon />
                 </span>
                 <h3 class="font-bold text-gray-900 dark:text-white">{{ $t('coupon.creationGateway.productCoupon.title')
-                  }}</h3>
+                }}</h3>
               </div>
               <p class="text-sm text-gray-500 mb-4">{{ $t('coupon.creationGateway.productCoupon.description') }}</p>
             </div>
@@ -57,7 +57,7 @@
                   <LockIcon />
                 </span>
                 <h3 class="font-bold text-gray-900 dark:text-white">{{ $t('coupon.creationGateway.privateCoupon.title')
-                  }}
+                }}
                 </h3>
               </div>
               <p class="text-sm text-gray-500 mb-4">{{ $t('coupon.creationGateway.privateCoupon.description') }}</p>
@@ -86,7 +86,7 @@
               <div class="w-full sm:w-64">
                 <Input type="text" v-model="searchQuery" :placeholder="$t('coupon.list.searchPlaceholder')" />
               </div>
-              <Button class="shrink-0" @click="fetchCoupons">{{ $t('coupon.list.searchButton') }}</Button>
+              <Button class="shrink-0" @click="handleSearch">{{ $t('coupon.list.searchButton') }}</Button>
             </div>
           </div>
 
@@ -101,29 +101,29 @@
             <table class="min-w-full">
               <thead>
                 <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-                  <th class="px-5 py-3 text-left w-3/16 sm:px-6">
+                  <th class="px-5 py-3 text-left w-3/16 sm:px-6 whitespace-nowrap">
                     <p class="font-medium text-gray-500 text-theme-xs">{{ $t('coupon.list.table.nameAndCode') }}</p>
                   </th>
-                  <th class="px-5 py-3 text-left w-1/8 sm:px-6">
+                  <th class="px-5 py-3 text-left w-1/8 sm:px-6 whitespace-nowrap">
                     <p class="font-medium text-gray-500 text-theme-xs">{{ $t('coupon.list.table.type') }}</p>
                   </th>
-                  <th class="px-5 py-3 text-left w-1/8 sm:px-6">
+                  <th class="px-5 py-3 text-left w-1/8 sm:px-6 whitespace-nowrap">
                     <p class="font-medium text-gray-500 text-theme-xs">{{ $t('coupon.list.table.applicableProducts') }}
                     </p>
                   </th>
-                  <th class="px-5 py-3 text-left w-1/8 sm:px-6">
+                  <th class="px-5 py-3 text-left w-1/8 sm:px-6 whitespace-nowrap">
                     <p class="font-medium text-gray-500 text-theme-xs">{{ $t('coupon.list.table.discount') }}</p>
                   </th>
-                  <th class="px-5 py-3 text-center w-1/16 sm:px-3">
+                  <th class="px-5 py-3 text-center w-1/16 sm:px-3 whitespace-nowrap">
                     <p class="font-medium text-gray-500 text-theme-xs">{{ $t('coupon.list.table.usage') }}</p>
                   </th>
-                  <th class="px-5 py-3 text-center w-1/8 sm:px-3">
+                  <th class="px-5 py-3 text-center w-1/8 sm:px-3 whitespace-nowrap">
                     <p class="font-medium text-gray-500 text-theme-xs">{{ $t('coupon.list.table.usageQuantity') }}</p>
                   </th>
-                  <th class="px-5 py-3 text-left w-3/16 sm:px-6">
+                  <th class="px-5 py-3 text-left w-3/16 sm:px-6 whitespace-nowrap">
                     <p class="font-medium text-gray-500 text-theme-xs">{{ $t('coupon.list.table.duration') }}</p>
                   </th>
-                  <th class="px-5 py-3 text-center w-1/16 sm:px-6">
+                  <th class="px-5 py-3 text-center w-1/16 sm:px-6 whitespace-nowrap">
                     <p class="font-medium text-gray-500 text-theme-xs">{{ $t('coupon.list.table.actions') }}</p>
                   </th>
                 </tr>
@@ -153,7 +153,8 @@
                         </Badge>
                         <span class="text-sm font-medium text-gray-900 dark:text-white leading-tight mt-0.5">{{
                           coupon.name }}</span>
-                        <span class="text-xs text-gray-500 leading-tight">{{ $t('coupon.list.codePrefix') }}{{ coupon.code }}</span>
+                        <span class="text-xs text-gray-500 leading-tight">{{ $t('coupon.list.codePrefix') }}{{
+                          coupon.code }}</span>
                       </div>
                     </div>
                   </td>
@@ -172,9 +173,10 @@
                   <td class="px-5 py-4 sm:px-6">
                     <div class="flex flex-col">
                       <span class="text-sm font-medium text-gray-900 dark:text-white">{{ formatDiscount(coupon)
-                        }}</span>
-                      <span v-if="coupon.minOrderAmount > 0" class="text-xs text-gray-500">{{ $t('coupon.list.minSpend') }} {{
-                        formatMoney(coupon.minOrderAmount, coupon.discountCurrency) }}</span>
+                      }}</span>
+                      <span v-if="coupon.minOrderAmount > 0" class="text-xs text-gray-500">{{ $t('coupon.list.minSpend')
+                        }} {{
+                          formatMoney(coupon.minOrderAmount, coupon.discountCurrency) }}</span>
                     </div>
                   </td>
                   <td class="px-5 py-4 sm:px-6 text-center">
@@ -238,6 +240,13 @@
               </tbody>
             </table>
           </div>
+
+          <!-- Pagination -->
+          <div v-if="couponStore.pagination && couponStore.pagination.totalPages > 1"
+            class="p-4 border-t border-gray-200 dark:border-gray-700">
+            <Pagination :currentPage="page" :totalPages="couponStore.pagination.totalPages" :pageSize="pageSize"
+              :totalItems="couponStore.pagination.totalItems" @update:currentPage="handlePageChange" />
+          </div>
         </div>
       </ComponentCard>
     </div>
@@ -248,7 +257,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import DictionaryLayout from '@/components/layout/DictionaryLayout.vue'
-import { PageBreadcrumb, ComponentCard, Button, Input, Tabs, useFormatDate, Badge, DropdownMenu, useConfirmModal, useAppStore } from '@hivespace/shared'
+import { PageBreadcrumb, ComponentCard, Button, Input, Tabs, useFormatDate, Badge, DropdownMenu, useConfirmModal, useAppStore, Pagination } from '@hivespace/shared'
 import { GridIcon, BoxIcon, LockIcon, PercentageIcon, FixedAmountIcon, HorizontalDots, EyeIcon, EditIcon, CopyIcon, TrashRedIcon, CloseIcon } from '@/icons'
 import { CouponType, CouponStatus, DiscountType } from '@/types'
 import type { CouponSummaryDto } from '@/types'
@@ -311,7 +320,7 @@ const getCouponStatusBadge = (coupon: CouponSummaryDto) => {
 
 // Pagination state
 const page = ref(1)
-const pageSize = ref(10)
+const pageSize = ref(2)
 
 const fetchCoupons = async () => {
   await couponStore.fetchCoupons({
@@ -320,6 +329,16 @@ const fetchCoupons = async () => {
     pageSize: pageSize.value,
     couponName: searchQuery.value, // Optional text search mapping
   })
+}
+
+const handleSearch = () => {
+  page.value = 1
+  fetchCoupons()
+}
+
+const handlePageChange = (newPage: number) => {
+  page.value = newPage
+  fetchCoupons()
 }
 
 // Action Handlers
