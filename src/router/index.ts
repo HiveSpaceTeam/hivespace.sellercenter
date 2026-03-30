@@ -116,6 +116,21 @@ const router = createRouter({
       ],
     },
     {
+      path: '/orders',
+      children: [
+        {
+          path: '',
+          redirect: '/orders/all',
+        },
+        {
+          path: 'all',
+          name: 'Order Management',
+          component: () => import('@/views/Orders/OrderManagementView.vue'),
+          meta: { title: 'Quản lý đơn hàng' },
+        },
+      ],
+    },
+    {
       path: '/marketing',
       children: [
         {

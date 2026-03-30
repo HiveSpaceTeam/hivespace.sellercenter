@@ -107,7 +107,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { GridIcon, ChevronDownIcon, HorizontalDots, TableIcon, BoxIcon } from '@/icons'
+import { GridIcon, ChevronDownIcon, HorizontalDots, TableIcon, BoxIcon, ListIcon } from '@/icons'
 import { useSidebar, SidebarWidget } from '@hivespace/shared'
 import { isDevelopment } from '@/config'
 
@@ -136,6 +136,13 @@ const { t } = useI18n()
 const { isExpanded, isMobileOpen, isHovered, openSubmenu } = useSidebar()
 const menuGroups = computed<MenuGroup[]>(() => {
   const mainMenuItems: MenuItem[] = [
+    {
+      name: t('pages.orders'),
+      icon: ListIcon,
+      subItems: [
+        { name: t('pages.orderAll'), path: '/orders/all', pro: false },
+      ],
+    },
     {
       name: t('pages.products'),
       icon: TableIcon,
