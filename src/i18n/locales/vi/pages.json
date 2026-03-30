@@ -19,7 +19,11 @@
     "message": "Đã xảy ra sự cố từ phía chúng tôi. Vui lòng thử lại sau hoặc liên hệ hỗ trợ nếu vấn đề vẫn tiếp diễn."
   },
   "common": {
-    "backHome": "Quay lại trang chủ"
+    "backHome": "Quay lại trang chủ",
+    "showing": "Hiển thị",
+    "of": "trên",
+    "prev": "Trước",
+    "next": "Tiếp"
   },
   "default": {
     "welcome": "Chào mừng đến HiveSpace Seller Center.",
