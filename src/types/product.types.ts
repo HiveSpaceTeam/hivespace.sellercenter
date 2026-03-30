@@ -5,7 +5,7 @@ export interface ProductVariantOption {
 }
 
 export interface ProductVariant {
-  id: string // Using UUID string
+  id: number // Using UUID string
   name: string
   options: ProductVariantOption[]
 }
@@ -15,11 +15,16 @@ export interface ProductSkuImage {
   fileId: string
 }
 
+export interface ProductImage {
+  skuId?: string
+  fileId: string
+}
+
 export interface ProductSku {
-  id?: string // Keep for backward compatibility
+  id?: Number // Keep for backward compatibility
   key?: string // New composite key based on variant combinations
   skuVariants: {
-    variantId: string // Using UUID string to match ProductVariant.id
+    variantName: string
     value: string
     optionId: string
   }[]
@@ -31,12 +36,13 @@ export interface ProductSku {
 }
 
 export interface Product {
-  id?: string
+  id?: Number
   name: string
   category: string
   description?: string
   variants: ProductVariant[]
   skus: ProductSku[]
+  images?: ProductImage[]
   // Add more fields as needed
 }
 

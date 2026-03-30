@@ -51,6 +51,7 @@
     "productSavedSuccessfully": "Product saved successfully!"
   },
   "imagesBySku": "Images by Variant",
+  "productImages": "Product Images",
   "noSkusForImages": "Please add variant SKUs before uploading images.",
   "variantCombination": "Variant combination",
   "image": "Image",
@@ -59,5 +60,15 @@
   "uploadSkuImage": "Upload image",
   "uploadSkuImageHelp": "Minimum 500x500px, JPG or PNG, up to 10MB.",
   "previewImage": "Preview image",
-  "closeImage": "Close image"
+  "closeImage": "Close image",
+  "uploadProductImages": "Upload Product Images",
+  "uploadProductImagesHelp": "Choose image files to upload",
+  "noProductImages": "No images uploaded yet. Click the upload button to add images.",
+  "deleteImage": "Delete Image",
+  "deleteImageConfirm": "Are you sure you want to delete this image?",
+  "imageUploadError": "Failed to upload image",
+  "imageUploadSuccess": "Image uploaded successfully",
+  "removeImage": "Remove",
+  "existingProductImages": "Existing Product Images",
+  "newProductImages": "New Product Images"
 }

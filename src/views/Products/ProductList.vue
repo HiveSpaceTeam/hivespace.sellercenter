@@ -96,6 +96,21 @@
               </tbody>
             </table>
           </div>
+
+          <!-- pagination footer -->
+          <div v-if="!loading" class="p-4 flex flex-col sm:flex-row items-center justify-between text-sm text-gray-600 dark:text-gray-400">
+            <div>
+              {{ t('pages.common.showing') }} {{ startItem }} - {{ endItem }} {{ t('pages.common.of') }} {{ totalCount }}
+            </div>
+            <div class="flex items-center gap-2 mt-2 sm:mt-0">
+              <Button variant="outline" :disabled="pageIndex === 1" @click="prevPage">
+                {{ t('pages.common.prev') }}
+              </Button>
+              <Button variant="outline" :disabled="pageIndex >= totalPages" @click="nextPage">
+                {{ t('pages.common.next') }}
+              </Button>
+            </div>
+          </div>
         </div>
         <!-- Footer -->
         <template #footer> </template>
@@ -136,8 +151,18 @@ const statusFilter = ref('all')
 const lastUpdated = ref('')
 const products = ref<Product[]>([])
 const pageIndex = ref(1)
-const pageSize = ref(100)
+const pageSize = ref(10)
 const totalCount = ref(0)
+
+// derived paging values
+const startItem = computed(() => {
+  if (totalCount.value === 0) return 0
+  return (pageIndex.value - 1) * pageSize.value + 1
+})
+const endItem = computed(() => {
+  return Math.min(pageIndex.value * pageSize.value, totalCount.value)
+})
+const totalPages = computed(() => Math.ceil(totalCount.value / pageSize.value))
 
 // Global modal handler
 const { deleteConfirm } = useConfirmModal()
@@ -188,7 +213,9 @@ const tableHandleSearchInput = (event: Event) => {
 
 const handleSearch = (query: string) => {
   searchQuery.value = query
+  pageIndex.value = 1 // reset page when filtering
   console.log('Search query:', query)
+  fetchProducts()
 }
 
 // Filters are bound via v-model on Select; no manual handlers required here.
@@ -251,6 +278,8 @@ const fetchProducts = async () => {
     const result: PagedResponse<Product> = await productService.getProducts(params)
     products.value = result.items ?? result.data ?? []
     totalCount.value = result.totalCount ?? result.total ?? 0
+    if (result.pageIndex != null) pageIndex.value = result.pageIndex
+    if (result.pageSize != null) pageSize.value = result.pageSize
     updateLastUpdated()
   } catch (err) {
     // Errors are centrally handled in api service; keep console for dev context
@@ -261,11 +290,26 @@ const fetchProducts = async () => {
 }
 
 const refreshTables = async () => {
+  // refresh current page
   await fetchProducts()
 }
 
 const updateLastUpdated = () => {
   lastUpdated.value = new Date().toLocaleString()
+}
+
+// paging helpers
+const prevPage = () => {
+  if (pageIndex.value > 1) {
+    pageIndex.value--
+    fetchProducts()
+  }
+}
+const nextPage = () => {
+  if (pageIndex.value < totalPages.value) {
+    pageIndex.value++
+    fetchProducts()
+  }
 }
 
 const addNewProduct = () => {
