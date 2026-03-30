@@ -2,7 +2,7 @@
 // Marketing Domain - Coupon Types
 // Mirrors the backend HiveSpace.OrderService domain contracts
 // ============================================================
-import type { Pagination } from '@hivespace/shared'
+import type { PaginationMetadata } from '@hivespace/shared'
 
 /** Front-end coupon category selection enum */
 export enum CouponType {
@@ -174,5 +174,5 @@ export interface CouponSummaryDto {
 
 export interface GetCouponListResponse {
     coupons: CouponSummaryDto[]
-    pagination: Pagination
+    pagination: PaginationMetadata
 }
