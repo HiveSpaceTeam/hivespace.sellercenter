@@ -19,7 +19,11 @@
     "message": "Something went wrong on our end. Please try again in a moment or contact support if the issue persists."
   },
   "common": {
-    "backHome": "Back to Home Page"
+    "backHome": "Back to Home Page",
+    "showing": "Showing",
+    "of": "of",
+    "prev": "Previous",
+    "next": "Next"
   },
   "default": {
     "welcome": "Welcome to HiveSpace Seller Center.",
