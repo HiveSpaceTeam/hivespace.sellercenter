@@ -45,20 +45,15 @@
         <div class="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
           <div class="flex flex-wrap items-center gap-3">
             <!-- Search field selector + input -->
-            <div class="flex items-center border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden h-10 min-w-[320px]">
-              <select
-                v-model="searchField"
-                class="h-full px-3 text-sm text-gray-700 bg-white dark:bg-gray-900 dark:text-gray-300 border-r border-gray-300 dark:border-gray-700 outline-none cursor-pointer min-w-[140px]"
-              >
-                <option value="orderCode">{{ $t('order.search.fieldOrderCode') }}</option>
-                <option value="customerName">{{ $t('order.search.fieldCustomerName') }}</option>
-                <option value="product">{{ $t('order.search.fieldProduct') }}</option>
-              </select>
+            <div class="flex items-center gap-2 min-w-[320px]">
+              <div class="min-w-[160px]">
+                <Select v-model="searchField" :options="searchFieldOptions" />
+              </div>
               <input
                 v-model="searchValue"
                 type="text"
                 :placeholder="searchPlaceholder"
-                class="flex-1 h-full px-3 text-sm text-gray-800 bg-white dark:bg-gray-900 dark:text-gray-300 outline-none"
+                class="flex-1 h-11 px-3 text-sm text-gray-800 bg-white dark:bg-gray-900 dark:text-gray-300 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:border-brand-300 focus:ring-2 focus:ring-brand-500/10"
                 @keyup.enter="handleApply"
               />
             </div>
