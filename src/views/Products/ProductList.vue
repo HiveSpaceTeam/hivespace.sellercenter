@@ -98,9 +98,11 @@
           </div>
 
           <!-- pagination footer -->
-          <div v-if="!loading" class="p-4 flex flex-col sm:flex-row items-center justify-between text-sm text-gray-600 dark:text-gray-400">
+          <div v-if="!loading"
+            class="p-4 flex flex-col sm:flex-row items-center justify-between text-sm text-gray-600 dark:text-gray-400">
             <div>
-              {{ t('pages.common.showing') }} {{ startItem }} - {{ endItem }} {{ t('pages.common.of') }} {{ totalCount }}
+              {{ t('pages.common.showing') }} {{ startItem }} - {{ endItem }} {{ t('pages.common.of') }} {{ totalCount
+              }}
             </div>
             <div class="flex items-center gap-2 mt-2 sm:mt-0">
               <Button variant="outline" :disabled="pageIndex === 1" @click="prevPage">
@@ -276,10 +278,10 @@ const fetchProducts = async () => {
       pageSize: pageSize.value,
     }
     const result: PagedResponse<Product> = await productService.getProducts(params)
-    products.value = result.items ?? result.data ?? []
-    totalCount.value = result.totalCount ?? result.total ?? 0
-    if (result.pageIndex != null) pageIndex.value = result.pageIndex
-    if (result.pageSize != null) pageSize.value = result.pageSize
+    products.value = result.items
+    totalCount.value = result.pagination.totalItems
+    pageIndex.value = result.pagination.currentPage
+    pageSize.value = result.pagination.pageSize
     updateLastUpdated()
   } catch (err) {
     // Errors are centrally handled in api service; keep console for dev context

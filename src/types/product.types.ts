@@ -21,7 +21,7 @@ export interface ProductImage {
 }
 
 export interface ProductSku {
-  id?: Number // Keep for backward compatibility
+  id?: number // Keep for backward compatibility
   key?: string // New composite key based on variant combinations
   skuVariants: {
     variantName: string
@@ -36,7 +36,7 @@ export interface ProductSku {
 }
 
 export interface Product {
-  id?: Number
+  id?: number
   name: string
   category: string
   description?: string
@@ -55,13 +55,15 @@ export interface ProductSearchRequest {
 }
 
 export interface PagedResponse<TItem> {
-  // Support multiple backend shapes
-  items?: TItem[]
-  data?: TItem[]
-  totalCount?: number
-  total?: number
-  pageIndex?: number
-  pageSize?: number
+  items: TItem[]
+  pagination: {
+    currentPage: number
+    pageSize: number
+    totalItems: number
+    totalPages: number
+    hasNextPage: boolean
+    hasPreviousPage: boolean
+  }
 }
 
 // Update request shares the same payload shape as create for now
