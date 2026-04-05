@@ -20,6 +20,7 @@ npm run format       # Prettier formatting
 ```
 
 **Known baseline failures** (do not fix unless working on those files):
+
 - `type-check`: ~11 errors — missing `@/services/user.service`, missing `quill-image-uploader` types, TS strict violations in demo files.
 - `lint`: ~15 errors in demo components.
 - `build` still succeeds.
@@ -43,7 +44,7 @@ Config singleton built at startup in `src/config/index.ts`. Gateway URL resolved
 
 ## Architecture
 
-```
+```text
 src/
 ├── components/     # Reusable UI (common/, charts/, forms/, layout/, tables/)
 ├── views/          # Page-level route components
@@ -62,6 +63,7 @@ src/
 ### Shared library (`@hivespace/shared`)
 
 Do **not** re-implement anything already exported by `@hivespace/shared`:
+
 - `useAuth`, `useAppStore`, `ApiService`, `AppUser` — auth, notifications, HTTP
 - Layout shells: `Default`, `Maintenance`, `NotFound`, `ServerError`, `demoRoutes`
 - Shared i18n base translations — merge with local overrides in `src/i18n/index.ts`
@@ -71,6 +73,7 @@ Do **not** re-implement anything already exported by `@hivespace/shared`:
 ### API layer (`src/services/api.ts`)
 
 `apiService` is an `ApiService` instance configured with:
+
 - Base URL from `config.api.baseUrl`
 - `ensureFreshUser` callback → runs refresh-token exchange via `src/services/refresh.service.ts`; forces logout on `invalid_grant`
 - `notifyCallback` → calls `useAppStore().notifyError(...)` for HTTP error toasts with i18n-sourced messages

@@ -278,8 +278,10 @@ const fetchProducts = async () => {
       pageSize: pageSize.value,
     }
     const result: PagedResponse<Product> = await productService.getProducts(params)
-    products.value = result.items ?? []
-    totalCount.value = result.pagination?.totalItems ?? 0
+    products.value = result.items
+    totalCount.value = result.pagination.totalItems
+    pageIndex.value = result.pagination.currentPage
+    pageSize.value = result.pagination.pageSize
     updateLastUpdated()
   } catch (err) {
     // Errors are centrally handled in api service; keep console for dev context
