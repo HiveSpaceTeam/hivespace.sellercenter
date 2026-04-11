@@ -20,7 +20,7 @@
       >
         <!-- Tabs -->
         <div class="border-b border-gray-200 dark:border-gray-700 px-2 pt-1">
-          <Tabs v-model="activeTab" :options="tabOptions" @update:modelValue="handleTabChange" />
+          <Tabs v-model="activeTab" :options="tabOptions" />
         </div>
 
         <!-- Order type + process status filters -->
@@ -443,10 +443,6 @@ const searchPlaceholder = computed(() => {
 })
 
 // ── Handlers ─────────────────────────────────────────────
-const handleTabChange = (tab: string) => {
-  orderStore.setTab(tab)
-}
-
 const handleApply = () => {
   orderStore.applyFilters()
 }

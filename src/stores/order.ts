@@ -30,19 +30,46 @@ export const useOrderStore = defineStore('order', () => {
   const fetchOrders = async () => {
     isFetching.value = true
     try {
-      const result = orderService.getOrders({
-        tab: activeTab.value as OrderTabStatus,
-        orderType: orderTypeFilter.value as OrderType,
-        processStatus: processStatusFilter.value as OrderProcessStatus,
+      const result = await orderService.getOrders({
+        processStatus: activeTab.value,
         searchField: searchField.value,
         searchValue: searchValue.value,
-        shippingUnit: shippingFilter.value,
         page: page.value,
         pageSize: pageSize.value,
       })
-      orders.value = result.orders
-      totalOrders.value = result.total
-      tabCounts.value = orderService.getTabCounts()
+
+      // Client-side secondary filters (orderType, processStatus, shipping not supported by API)
+      let filtered = result.mapped
+
+      if (orderTypeFilter.value !== OrderType.All) {
+        filtered = filtered.filter((o) => o.orderType === orderTypeFilter.value)
+      }
+      if (processStatusFilter.value === OrderProcessStatus.Unprocessed) {
+        filtered = filtered.filter((o) => !o.isProcessed)
+      } else if (processStatusFilter.value === OrderProcessStatus.Processed) {
+        filtered = filtered.filter((o) => o.isProcessed)
+      }
+      if (shippingFilter.value && shippingFilter.value !== 'all') {
+        filtered = filtered.filter((o) =>
+          o.shippingUnit.provider.toLowerCase().includes(shippingFilter.value.toLowerCase()),
+        )
+      }
+
+      orders.value = filtered
+      totalOrders.value = result.pagination.totalItems
+
+      // Update count for the active tab using API total
+      tabCounts.value = [
+        OrderTabStatus.All,
+        OrderTabStatus.PendingConfirmation,
+        OrderTabStatus.ReadyToShip,
+        OrderTabStatus.Shipping,
+        OrderTabStatus.Delivered,
+        OrderTabStatus.ReturnCancel,
+      ].map((tab) => ({
+        tab,
+        count: tab === activeTab.value ? result.pagination.totalItems : 0,
+      }))
     } finally {
       isFetching.value = false
     }
@@ -90,7 +117,7 @@ export const useOrderStore = defineStore('order', () => {
     const appStore = useAppStore()
     try {
       appStore.setLoading(true)
-      await orderService.cancelOrder(orderId)
+      await orderService.rejectOrder(orderId)
       appStore.notifySuccess(
         i18n.global.t('order.notifications.cancelSuccess.title'),
         i18n.global.t('order.notifications.cancelSuccess.message'),

@@ -65,3 +65,45 @@ export interface OrderTabCount {
   tab: OrderTabStatus
   count: number
 }
+
+// ── API response types ────────────────────────────────────
+export interface SellerOrderItemApi {
+  id: string
+  productName: string
+  productImageUrl: string
+  variation: string
+  quantity: number
+  tag: string
+}
+
+export interface SellerOrderApi {
+  id: string
+  orderCode: string
+  buyerName: string
+  status: string
+  paymentMethod: string
+  totalAmount: number
+  actionDateTime: string
+  createdAt: string
+  items: SellerOrderItemApi[]
+}
+
+export interface SellerOrderListResponse {
+  orders: SellerOrderApi[]
+  pagination: {
+    currentPage: number
+    pageSize: number
+    totalItems: number
+    totalPages: number
+    hasNextPage: boolean
+    hasPreviousPage: boolean
+  }
+}
+
+export interface SellerOrderQuery {
+  processStatus: string
+  searchField: string
+  searchValue: string
+  page: number
+  pageSize: number
+}
