@@ -92,7 +92,7 @@
 
           <!-- Loading State -->
           <div v-if="appStore.isLoading || couponStore.isFetching" class="p-8 text-center">
-            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500"></div>
+            <Spinner />
             <p class="mt-2 text-gray-600 dark:text-gray-400">{{ $t('coupon.list.loading') }}</p>
           </div>
 
@@ -257,7 +257,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import DictionaryLayout from '@/components/layout/DictionaryLayout.vue'
-import { PageBreadcrumb, ComponentCard, Button, Input, Tabs, useFormatDate, Badge, DropdownMenu, useConfirmModal, useAppStore, Pagination } from '@hivespace/shared'
+import { PageBreadcrumb, ComponentCard, Button, Input, Tabs, useFormatDate, Badge, DropdownMenu, useConfirmModal, useAppStore, Pagination, Spinner } from '@hivespace/shared'
 import { GridIcon, BoxIcon, LockIcon, PercentageIcon, FixedAmountIcon, HorizontalDots, EyeIcon, EditIcon, CopyIcon, TrashRedIcon, CloseIcon } from '@/icons'
 import { CouponType, CouponStatus, DiscountType } from '@/types'
 import type { CouponSummaryDto } from '@/types'

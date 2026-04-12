@@ -37,7 +37,7 @@
 
           <!-- Loading State -->
           <div v-if="loading" class="p-8 text-center">
-            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <Spinner />
             <p class="mt-2 text-gray-600 dark:text-gray-400">{{ $t('table.loading') }}</p>
           </div>
 
@@ -124,7 +124,7 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Button, Select, Input, PageBreadcrumb, ComponentCard } from '@hivespace/shared'
+import { Button, Select, Input, PageBreadcrumb, ComponentCard, Spinner } from '@hivespace/shared'
 import DictionaryLayout from '@/components/layout/DictionaryLayout.vue'
 import { useConfirmModal } from '@hivespace/shared'
 import { productService } from '@/services'

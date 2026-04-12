@@ -86,9 +86,7 @@
 
         <!-- Loading -->
         <div v-if="orderStore.isFetching" class="p-12 text-center">
-          <div
-            class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500"
-          ></div>
+          <Spinner />
         </div>
 
         <template v-else>
@@ -311,6 +309,7 @@ import {
   Pagination,
   Avatar,
   FilterChips,
+  Spinner,
 } from '@hivespace/shared'
 import { MailIcon, ArrowDownRedIcon, ListIcon } from '@/icons'
 import { OrderTabStatus, OrderType, OrderProcessStatus } from '@/types'
