@@ -113,11 +113,11 @@ export const useOrderStore = defineStore('order', () => {
     }
   }
 
-  const cancelOrder = async (orderId: string) => {
+  const cancelOrder = async (orderId: string, reason: string) => {
     const appStore = useAppStore()
     try {
       appStore.setLoading(true)
-      await orderService.rejectOrder(orderId)
+      await orderService.rejectOrder(orderId, reason)
       appStore.notifySuccess(
         i18n.global.t('order.notifications.cancelSuccess.title'),
         i18n.global.t('order.notifications.cancelSuccess.message'),

@@ -56,6 +56,10 @@
       "title": "Xác nhận thành công",
       "message": "Đơn hàng đã được xác nhận và chuyển sang trạng thái chờ lấy hàng"
     },
+    "cancelConfirm": {
+      "message": "Bạn có chắc muốn huỷ đơn hàng này không?",
+      "defaultReason": "Người bán huỷ đơn"
+    },
     "cancelSuccess": {
       "title": "Huỷ thành công",
       "message": "Đơn hàng đã được huỷ"
