@@ -472,13 +472,16 @@ const handleConfirm = async (orderId: string) => {
   }
 }
 
+const cancelReason = ref('')
+
 const handleCancel = async (orderId: string) => {
+  cancelReason.value = ''
   const confirmed = await deleteConfirm(
     t('order.actions.cancel'),
-    'Bạn có chắc muốn huỷ đơn hàng này không?',
+    t('order.notifications.cancelConfirm.message'),
   )
   if (confirmed) {
-    await orderStore.cancelOrder(orderId)
+    await orderStore.cancelOrder(orderId, cancelReason.value || t('order.notifications.cancelConfirm.defaultReason'))
   }
 }
 

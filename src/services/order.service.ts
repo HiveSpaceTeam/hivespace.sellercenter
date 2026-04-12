@@ -8,6 +8,15 @@ import type {
   SellerOrderQuery,
 } from '@/types'
 
+// Maps frontend OrderTabStatus string → backend SellerOrderProcessStatus integer
+const PROCESS_STATUS_MAP: Partial<Record<OrderTabStatus, number>> = {
+  [OrderTabStatus.PendingConfirmation]: 1,
+  [OrderTabStatus.ReadyToShip]: 2,
+  [OrderTabStatus.Shipping]: 3,
+  [OrderTabStatus.Delivered]: 4,
+  [OrderTabStatus.ReturnCancel]: 5,
+}
+
 const ORDER_ENDPOINTS = {
   SELLER: '/orders/seller',
   CONFIRM: (id: string) => `/orders/${id}/confirm`,
@@ -52,13 +61,14 @@ const mapApiOrder = (api: SellerOrderApi): Order => ({
 class OrderService {
   async getOrders(query: SellerOrderQuery): Promise<SellerOrderListResponse & { mapped: Order[] }> {
     const url = buildApiUrl(ORDER_ENDPOINTS.SELLER)
+    const numericStatus = PROCESS_STATUS_MAP[query.processStatus as OrderTabStatus]
     const params: Record<string, string | number> = {
-      processStatus: query.processStatus,
-      searchField: query.searchField,
-      searchValue: query.searchValue,
       page: query.page,
       pageSize: query.pageSize,
     }
+    if (query.searchField) params.searchField = query.searchField
+    if (query.searchValue) params.searchValue = query.searchValue
+    if (numericStatus !== undefined) params.processStatus = numericStatus
     const response = await apiService.get<SellerOrderListResponse>(url, { params })
     return {
       ...response,
@@ -71,9 +81,9 @@ class OrderService {
     await apiService.post(url, {})
   }
 
-  async rejectOrder(orderId: string): Promise<void> {
+  async rejectOrder(orderId: string, reason: string): Promise<void> {
     const url = buildApiUrl(ORDER_ENDPOINTS.REJECT(orderId))
-    await apiService.post(url, {})
+    await apiService.post(url, { reason })
   }
 }
 

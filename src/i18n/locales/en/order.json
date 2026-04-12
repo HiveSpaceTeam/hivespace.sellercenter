@@ -56,6 +56,10 @@
       "title": "Order Confirmed",
       "message": "Order has been confirmed and is now ready to ship"
     },
+    "cancelConfirm": {
+      "message": "Are you sure you want to cancel this order?",
+      "defaultReason": "Cancelled by seller"
+    },
     "cancelSuccess": {
       "title": "Order Cancelled",
       "message": "Order has been cancelled"
