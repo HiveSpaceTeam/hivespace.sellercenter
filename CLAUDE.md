@@ -128,6 +128,33 @@ For each new backend domain, follow these four steps in order:
 - **Composables**: Extract reusable stateful logic into `src/composables/` (e.g. `useModal.ts`, `usePagination.ts`). One composable per logical concern.
 - **Icons**: New SVG icons go into `src/icons/` as `.vue` components and must be exported from `src/icons/index.ts`.
 
+## Loading States
+
+Always use the shared loading components from `@hivespace/shared`. Never write raw `<div class="animate-spin ...">` inline.
+
+| Situation | Component | When to use |
+|---|---|---|
+| Data loading inside a page section (table, list, card) | `<Spinner />` | The rest of the page stays interactive; only the content area is replaced |
+| Blocking the entire UI (form submit, destructive action) | `<FullscreenLoader :visible="bool" :message="string" />` | User must not interact until the operation finishes |
+
+**`Spinner`** — props: `size` (`'sm'` \| `'md'` \| `'lg'`, default `'md'`). Import from `@hivespace/shared`.
+
+```vue
+<!-- inline table/list loading state -->
+<div v-if="appStore.isLoading" class="p-8 text-center">
+  <Spinner />
+  <p class="mt-2 text-gray-600 dark:text-gray-400">{{ $t('...loading') }}</p>
+</div>
+```
+
+**`FullscreenLoader`** — props: `visible` (boolean, required), `message` (string, optional). Import from `@hivespace/shared`. Place it at the root of the template so it teleports to `<body>`.
+
+```vue
+<FullscreenLoader :visible="submitting" :message="$t('...processing')" />
+```
+
+If unsure which to use, ask: "Does the user need to wait for this before doing anything else on the page?" → yes → `FullscreenLoader`; no → `Spinner`.
+
 ## Types & Interfaces
 
 ```
