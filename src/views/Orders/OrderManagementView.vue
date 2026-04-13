@@ -8,10 +8,6 @@
         <h1 class="text-xl font-semibold text-gray-900 dark:text-white">
           {{ $t('order.breadcrumb') }}
         </h1>
-        <div class="flex items-center gap-2">
-          <Button variant="outline" size="sm">{{ $t('order.actions.export') }}</Button>
-          <Button variant="outline" size="sm">{{ $t('order.actions.exportHistory') }}</Button>
-        </div>
       </div>
 
       <!-- ── Main Card ───────────────────────────────────────── -->
@@ -23,23 +19,6 @@
           <Tabs v-model="activeTab" :options="tabOptions" />
         </div>
 
-        <!-- Order type + process status filters -->
-        <div
-          class="px-4 pt-4 pb-3 border-b border-gray-100 dark:border-gray-800 space-y-3"
-        >
-          <div class="flex items-center gap-4 flex-wrap">
-            <span class="text-sm text-gray-500 min-w-[140px]">
-              {{ $t('order.filters.orderType') }}
-            </span>
-            <FilterChips v-model="orderTypeFilter" :options="orderTypeOptions" />
-          </div>
-          <div class="flex items-center gap-4 flex-wrap">
-            <span class="text-sm text-gray-500 min-w-[140px]">
-              {{ $t('order.filters.processStatus') }}
-            </span>
-            <FilterChips v-model="processStatusFilter" :options="processStatusOptions" />
-          </div>
-        </div>
 
         <!-- Search / shipping filter bar -->
         <div class="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
@@ -56,20 +35,6 @@
                 class="flex-1 h-11 px-3 text-sm text-gray-800 bg-white dark:bg-gray-900 dark:text-gray-300 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:border-brand-300 focus:ring-2 focus:ring-brand-500/10"
                 @keyup.enter="handleApply"
               />
-            </div>
-
-            <!-- Shipping filter -->
-            <div class="flex items-center gap-2 min-w-[240px]">
-              <span class="text-sm text-gray-500 whitespace-nowrap">
-                {{ $t('order.search.shippingUnit') }}
-              </span>
-              <div class="flex-1">
-                <Select
-                  v-model="shippingFilter"
-                  :options="shippingOptions"
-                  :placeholder="$t('order.search.allShipping')"
-                />
-              </div>
             </div>
 
             <!-- Apply / Reset -->
