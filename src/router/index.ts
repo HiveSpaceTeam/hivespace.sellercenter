@@ -158,6 +158,12 @@ const router = createRouter({
       ],
     },
     {
+      path: '/notifications',
+      name: 'Notifications',
+      component: () => import('@/views/Notifications/NotificationsView.vue'),
+      meta: { title: 'Notifications' },
+    },
+    {
       path: '/register-seller',
       name: 'Register Seller',
       component: () => import('@/views/RegisterStore.vue'),

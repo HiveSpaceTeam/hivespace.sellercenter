@@ -31,3 +31,4 @@ coverage
 .vercel
 .package-lock.json
 /.vs
+.gitnexus
