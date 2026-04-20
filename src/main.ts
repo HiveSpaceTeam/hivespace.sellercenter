@@ -49,7 +49,6 @@ const initializeApp = async () => {
   // 4. Use logic that depends on plugins/auth
   const { isAuthenticated } = useAuth()
   const userStore = useUserStore()
-
   if (await isAuthenticated.value) {
     const settings = await userStore.fetchUserSettings()
     i18n.global.locale.value = numericToStringCulture(settings.culture)

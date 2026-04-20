@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs grep:*)",
+      "Bash(npm link:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(grep -E \"\\\\.\\(json|yaml|yml|cs\\)$\")",
+      "Bash(node -e ' *)",
+      "Bash(curl -sk http://localhost:5000/health)",
+      "Bash(curl -sk https://localhost:5006/health)",
+      "Bash(curl -sv http://localhost:5000/hubs/notifications/negotiate?negotiateVersion=1 -X POST)"
+    ]
+  }
+}

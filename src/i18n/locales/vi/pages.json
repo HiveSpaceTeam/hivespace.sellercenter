@@ -29,5 +29,9 @@
     "welcome": "Chào mừng đến HiveSpace Seller Center.",
     "signIn": "Đăng nhập",
     "signUp": "Đăng ký"
+  },
+  "header": {
+    "openApplicationMenu": "Mở menu ứng dụng",
+    "closeApplicationMenu": "Đóng menu ứng dụng"
   }
 }
