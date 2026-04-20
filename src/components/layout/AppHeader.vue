@@ -18,8 +18,8 @@
         <!-- Spacer when toggle button is hidden to maintain layout -->
         <div v-else class="w-10 h-10 lg:w-11 lg:h-11"></div>
         <button @click="toggleApplicationMenu" :aria-label="isApplicationMenuOpen
-          ? $t('common.sidebar.close')
-          : $t('common.sidebar.open')
+          ? $t('pages.header.closeApplicationMenu')
+          : $t('pages.header.openApplicationMenu')
           " :aria-expanded="isApplicationMenuOpen" aria-controls="application-menu"
           class="flex items-center justify-center w-10 h-10 text-gray-700 rounded-lg z-999 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 lg:hidden">
           <MenuDotsIcon />

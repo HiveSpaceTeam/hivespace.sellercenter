@@ -59,10 +59,12 @@ const router = useRouter()
 const notificationStore = useNotificationStore()
 const { notifications, isLoading, page, totalPages } = storeToRefs(notificationStore)
 
-const handleRowClick = async (id: string) => {
+const handleRowClick = (id: string) => {
   const notification = notifications.value.find((n) => n.id === id)
-  await notificationStore.markAsRead(id)
   if (notification?.link) router.push(notification.link)
+  void notificationStore.markAsRead(id).catch((error) => {
+    console.error('Failed to mark notification as read:', error)
+  })
 }
 
 onMounted(() => {

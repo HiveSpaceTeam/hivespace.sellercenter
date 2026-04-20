@@ -15,13 +15,13 @@ const resolveMessage = (eventType: string, payload: Record<string, unknown>): st
   switch (eventType) {
     case 'seller.new_order':
       return t('notification.events.newOrder', {
-        orderCode: payload.orderCode ?? '',
-        buyerName: payload.buyerName ?? '',
+        orderCode: String(payload.orderCode ?? ''),
+        buyerName: String(payload.buyerName ?? ''),
       })
     case 'inventory.low_stock':
       return t('notification.events.lowStock', {
-        productName: payload.productName ?? '',
-        remaining: payload.remaining ?? 0,
+        productName: String(payload.productName ?? ''),
+        remaining: Number(payload.remaining ?? 0),
       })
     default:
       return t('notification.events.generic', { eventType })

@@ -4,7 +4,7 @@
   "loadMore": "Load more",
   "loading": "Loading...",
   "events": {
-    "newOrder": "{buyerName} have placed an order in your shop, order code: #{orderCode}",
+    "newOrder": "{buyerName} has placed an order in your shop, order code: #{orderCode}",
     "lowStock": "{productName} is running low ({remaining} left)",
     "generic": "Event: {eventType}"
   },

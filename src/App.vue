@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, watch } from 'vue'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { ToastContainer, SidebarProvider, ModalManager, useAuth, useNotificationHub, NotificationPreviewToast } from '@hivespace/shared'
 import { useAppStore } from '@hivespace/shared'
@@ -24,11 +24,24 @@ const router = useRouter()
 const { currentUser, getCurrentUser } = useAuth()
 const notificationStore = useNotificationStore()
 const { toastQueue } = storeToRefs(notificationStore)
+const isHubConnected = ref(false)
 
 const { connect, disconnect } = useNotificationHub(
   config.api.baseUrl,
   (event) => notificationStore.prependFromHub(event),
 )
+
+const connectHub = async () => {
+  if (isHubConnected.value) return
+  await connect()
+  isHubConnected.value = true
+}
+
+const disconnectHub = async () => {
+  if (!isHubConnected.value) return
+  await disconnect()
+  isHubConnected.value = false
+}
 
 const handleNavigate = (path: string) => {
   router.push(path)
@@ -36,36 +49,33 @@ const handleNavigate = (path: string) => {
 
 const handleToastClick = (id: string) => {
   const notification = toastQueue.value.find((n) => n.id === id)
-  notificationStore.markAsRead(id)
+  void notificationStore.markAsRead(id).catch((error) => {
+    console.error('Failed to mark notification as read:', error)
+  })
   notificationStore.dismissToast(id)
   router.push(notification?.link ?? '/notifications')
 }
 
-const initNotifications = async () => {
-  await connect()
-}
-
-onMounted(async () => {
+onMounted(() => {
   // getCurrentUser() validates the token — safer than reading isAuthenticated
   // which may reflect stale storage before OIDC session is confirmed
-  const user = await getCurrentUser()
-  if (user) {
-    await initNotifications()
-    await notificationStore.fetchUnreadCount()
-  }
+  // Watcher below handles connection lifecycle.
+  void getCurrentUser()
 })
 
-watch(currentUser, async (user, prevUser) => {
-  const tokenChanged = user?.access_token !== prevUser?.access_token
-  if (user && tokenChanged) {
-    await initNotifications()
+watch(() => currentUser.value?.access_token, async (token, prevToken) => {
+  if (token) {
+    if (prevToken && prevToken !== token) {
+      await disconnectHub()
+    }
+    await connectHub()
     await notificationStore.fetchUnreadCount()
-  } else if (!user && prevUser) {
-    await disconnect()
+  } else if (prevToken) {
+    await disconnectHub()
   }
-})
+}, { immediate: true })
 
 onUnmounted(async () => {
-  await disconnect()
+  await disconnectHub()
 })
 </script>
