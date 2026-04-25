@@ -9,9 +9,9 @@ const ENDPOINTS = {
 } as const
 
 class NotificationService implements INotificationService {
-  getNotifications(page = 1, pageSize = 20): Promise<NotificationListResponse> {
+  getNotifications(page = 1, pageSize = 20, unreadOnly = false): Promise<NotificationListResponse> {
     return apiService.get<NotificationListResponse>(buildApiUrl(ENDPOINTS.LIST), {
-      params: { page, pageSize },
+      params: { page, pageSize, unreadOnly },
     })
   }
 
