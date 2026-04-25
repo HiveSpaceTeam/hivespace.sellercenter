@@ -27,7 +27,7 @@
           />
         </div>
 
-        <div v-if="page < totalPages" class="border-t border-gray-200 dark:border-gray-800 p-4 flex justify-center">
+        <div v-if="hasMore" class="border-t border-gray-200 dark:border-gray-800 p-4 flex justify-center">
           <button
             :disabled="isLoading"
             class="rounded-lg border border-gray-300 bg-white px-6 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03]"
@@ -57,7 +57,7 @@ import DictionaryLayout from '@/components/layout/DictionaryLayout.vue'
 
 const router = useRouter()
 const notificationStore = useNotificationStore()
-const { notifications, isLoading, page, totalPages } = storeToRefs(notificationStore)
+const { notifications, isLoading, hasMore } = storeToRefs(notificationStore)
 
 const handleRowClick = (id: string) => {
   const notification = notifications.value.find((n) => n.id === id)

@@ -70,6 +70,33 @@ Do **not** re-implement anything already exported by `@hivespace/shared`:
 
 **Before building any new UI component**, check `hivespace.ui-shared/src/components/` for an existing implementation. The shared library provides components in `common/`, `charts/`, `layout/`, `modal/`, `tables/` — reuse before creating.
 
+### Modal & Popup pattern
+
+Always use `useModal` from `@hivespace/shared` for all modals and popups. Never create a local `ref<boolean>` to control modal visibility.
+
+```typescript
+import { useModal } from '@hivespace/shared'
+
+const { openModal, closeModal } = useModal()
+
+// Open a modal and await the user's result
+const result = await openModal(MyModalComponent, { prop1: value1 })
+```
+
+**Key components** (import from `@hivespace/shared`):
+
+| Component | Role |
+|---|---|
+| `ModalManager` | Place once in `App.vue` — renders whichever modal is currently active |
+| `ModalWrapper` | Shell for modal content — provides title, description, close button, max-width |
+| `ConfirmModal` | Pre-built confirmation dialog — use for delete / destructive actions |
+
+Rules:
+- `ModalManager` must exist in `App.vue` or the root layout; add it if it is missing
+- The component passed to `openModal()` calls `closeModal(result)` to resolve the awaited promise
+- Use `ConfirmModal` for any "are you sure?" interaction — never build a custom one
+- Wrap form / content inside `ModalWrapper` so the modal chrome (header, close button) is consistent
+
 ### API layer (`src/services/api.ts`)
 
 `apiService` is an `ApiService` instance configured with:
@@ -154,6 +181,25 @@ Always use the shared loading components from `@hivespace/shared`. Never write r
 ```
 
 If unsure which to use, ask: "Does the user need to wait for this before doing anything else on the page?" → yes → `FullscreenLoader`; no → `Spinner`.
+
+## UI Coding from Design Images
+
+When the user shares a design image (screenshot, mockup, Figma export) and asks you to implement the UI:
+
+1. **Scan `hivespace.ui-shared/src/components/` first** — before writing any new markup, identify which shared components can be reused or composed.
+2. **Ask the user before coding** — list the shared components that map to elements in the design and confirm: _"I see `Button`, `Input`, `Select`, and `Tabs` from the shared library fit this design. Shall I use those, or do you have a reason to use a custom implementation?"_
+3. **Propose shared component updates over local copies** — if a shared component is close but needs a new prop or variant, suggest updating it in `hivespace.ui-shared` rather than duplicating it locally.
+4. **Never create local duplicates** — do not build a local `Button.vue`, `Modal.vue`, etc. when one already exists in `@hivespace/shared`.
+
+**Shared component catalogue** (check `hivespace.ui-shared/src/components/common/` for the authoritative list):
+
+| Category | Components available |
+|---|---|
+| Input / Form | `Input`, `TextArea`, `Select`, `MultipleSelect`, `Checkbox`, `Radio`, `RadioGroup`, `ToggleSwitch`, `FileInput`, `Dropzone`, `DatePicker`, `DateTimePicker`, `TimePicker`, `QuantityControl` |
+| Feedback | `Alert`, `Toast`, `ToastContainer`, `Spinner`, `FullscreenLoader`, `Badge` |
+| Navigation | `Tabs`, `Pagination`, `PageBreadcrumb`, `FilterChips`, `DropdownMenu` |
+| Overlay / Modal | `ModalWrapper`, `ConfirmModal` (always via `useModal`) |
+| Layout / Display | `ComponentCard`, `Avatar`, `Button`, `Link`, `ResponsiveImage`, `YouTubeEmbed` |
 
 ## Types & Interfaces
 
