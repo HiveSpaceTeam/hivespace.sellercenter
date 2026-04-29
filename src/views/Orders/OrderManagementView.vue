@@ -11,9 +11,7 @@
       </div>
 
       <!-- ── Main Card ───────────────────────────────────────── -->
-      <div
-        class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3"
-      >
+      <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
         <!-- Tabs -->
         <div class="border-b border-gray-200 dark:border-gray-700 px-2 pt-1">
           <Tabs v-model="activeTab" :options="tabOptions" />
@@ -28,13 +26,9 @@
               <div class="min-w-[160px]">
                 <Select v-model="searchField" :options="searchFieldOptions" />
               </div>
-              <input
-                v-model="searchValue"
-                type="text"
-                :placeholder="searchPlaceholder"
+              <input v-model="searchValue" type="text" :placeholder="searchPlaceholder"
                 class="flex-1 h-11 px-3 text-sm text-gray-800 bg-white dark:bg-gray-900 dark:text-gray-300 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:border-brand-300 focus:ring-2 focus:ring-brand-500/10"
-                @keyup.enter="handleApply"
-              />
+                @keyup.enter="handleApply" />
             </div>
 
             <!-- Apply / Reset -->
@@ -65,12 +59,8 @@
                 <ArrowDownRedIcon class="w-4 h-4" />
                 <span>{{ $t('order.sort.label') }}</span>
               </div>
-              <Button
-                v-if="activeTab === OrderTabStatus.ReadyToShip || activeTab === OrderTabStatus.All"
-                variant="primary"
-                size="sm"
-                :startIcon="ListIcon"
-              >
+              <Button v-if="activeTab === OrderTabStatus.ReadyToShip || activeTab === OrderTabStatus.All"
+                variant="primary" size="sm" :startIcon="ListIcon">
                 {{ $t('order.actions.bulkShip') }}
               </Button>
             </div>
@@ -99,7 +89,8 @@
                   <th class="px-4 py-3 text-left w-[180px]">
                     <p class="font-medium text-gray-500 text-theme-xs flex items-center gap-1">
                       {{ $t('order.table.countdown') }}
-                      <span class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-400 text-[10px] text-gray-400 cursor-help">?</span>
+                      <span
+                        class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-400 text-[10px] text-gray-400 cursor-help">?</span>
                     </p>
                   </th>
                   <th class="px-4 py-3 text-left w-[150px]">
@@ -125,26 +116,19 @@
               </tbody>
 
               <!-- Order groups -->
-              <tbody
-                v-for="order in orderStore.orders"
-                :key="order.id"
-                class="border-b border-gray-200 dark:border-gray-700"
-              >
+              <tbody v-for="order in orderStore.orders" :key="order.id"
+                class="border-b border-gray-200 dark:border-gray-700">
                 <!-- Group header row -->
                 <tr class="bg-gray-50/70 dark:bg-gray-800/30">
                   <td colspan="6" class="px-4 py-2">
                     <div class="flex items-center justify-between">
                       <div class="flex items-center gap-2">
-                        <Avatar :name="order.customerName" size="sm" />
+                        <Avatar :name="order.customerName" size="small" />
                         <span class="text-sm font-medium text-gray-700 dark:text-gray-200">
                           {{ order.customerName }}
                         </span>
                         <MailIcon class="w-4 h-4 text-gray-400" />
-                        <Badge
-                          v-if="order.orderType === OrderType.Express"
-                          size="sm"
-                          color="error"
-                        >
+                        <Badge v-if="order.orderType === OrderType.Express" size="sm" color="error">
                           Hoả Tốc
                         </Badge>
                       </div>
@@ -156,17 +140,11 @@
                 </tr>
 
                 <!-- First product row (with rowspan for right columns) -->
-                <tr
-                  v-if="order.items.length > 0"
-                  class="hover:bg-gray-50/50 dark:hover:bg-gray-800/20"
-                >
+                <tr v-if="order.items.length > 0" class="hover:bg-gray-50/50 dark:hover:bg-gray-800/20">
                   <td class="px-4 py-3">
                     <ProductCell :item="order.items[0]" />
                   </td>
-                  <td
-                    :rowspan="order.items.length"
-                    class="px-4 py-3 align-top text-right"
-                  >
+                  <td :rowspan="order.items.length" class="px-4 py-3 align-top text-right">
                     <p class="text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
                       đ{{ formatMoney(order.totalAmount) }}
                     </p>
@@ -175,10 +153,8 @@
                   <td :rowspan="order.items.length" class="px-4 py-3 align-top">
                     <p class="text-sm text-gray-700 dark:text-gray-300">{{ order.statusLabel }}</p>
                   </td>
-                  <td
-                    :rowspan="order.items.length"
-                    class="px-4 py-3 align-top text-xs text-gray-500 dark:text-gray-400 max-w-[180px]"
-                  >
+                  <td :rowspan="order.items.length"
+                    class="px-4 py-3 align-top text-xs text-gray-500 dark:text-gray-400 max-w-[180px]">
                     {{ order.deadlineNote }}
                   </td>
                   <td :rowspan="order.items.length" class="px-4 py-3 align-top">
@@ -190,49 +166,29 @@
                   </td>
                   <td :rowspan="order.items.length" class="px-4 py-3 align-top">
                     <!-- Chờ xác nhận: confirm + cancel -->
-                    <div
-                      v-if="activeTab === OrderTabStatus.PendingConfirmation"
-                      class="flex flex-col gap-2"
-                    >
-                      <Button
-                        variant="primary"
-                        size="sm"
-                        @click="handleConfirm(order.id)"
-                      >
+                    <div v-if="activeTab === OrderTabStatus.PendingConfirmation" class="flex flex-col gap-2">
+                      <Button variant="primary" size="sm" @click="handleConfirm(order.id)">
                         {{ $t('order.actions.confirm') }}
                       </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        @click="handleCancel(order.id)"
-                      >
+                      <Button variant="outline" size="sm" @click="handleCancel(order.id)">
                         {{ $t('order.actions.cancel') }}
                       </Button>
                     </div>
                     <!-- Chờ lấy hàng: chuẩn bị hàng -->
-                    <button
-                      v-else-if="activeTab === OrderTabStatus.ReadyToShip"
-                      class="text-sm text-brand-500 hover:underline font-medium"
-                      @click="handlePrepare(order.id)"
-                    >
+                    <button v-else-if="activeTab === OrderTabStatus.ReadyToShip"
+                      class="text-sm text-brand-500 hover:underline font-medium" @click="handlePrepare(order.id)">
                       {{ $t('order.actions.prepareGoods') }}
                     </button>
                     <!-- Other tabs: view detail -->
-                    <button
-                      v-else
-                      class="text-sm text-brand-500 hover:underline"
-                    >
+                    <button v-else class="text-sm text-brand-500 hover:underline">
                       {{ $t('order.actions.viewDetail') }}
                     </button>
                   </td>
                 </tr>
 
                 <!-- Subsequent product rows -->
-                <tr
-                  v-for="item in order.items.slice(1)"
-                  :key="item.id"
-                  class="hover:bg-gray-50/50 dark:hover:bg-gray-800/20"
-                >
+                <tr v-for="item in order.items.slice(1)" :key="item.id"
+                  class="hover:bg-gray-50/50 dark:hover:bg-gray-800/20">
                   <td class="px-4 py-3 border-t border-gray-100 dark:border-gray-800">
                     <ProductCell :item="item" />
                   </td>
@@ -242,18 +198,11 @@
           </div>
 
           <!-- Pagination -->
-          <div
-            v-if="orderStore.totalOrders > orderStore.pageSize"
-            class="px-4 py-4 border-t border-gray-200 dark:border-gray-700"
-          >
-            <Pagination
-              :currentPage="orderStore.page"
-              :totalPages="orderStore.totalPages"
-              :pageSize="orderStore.pageSize"
-              :totalItems="orderStore.totalOrders"
-              @update:currentPage="handlePageChange"
-              @update:pageSize="handlePageSizeChange"
-            />
+          <div v-if="orderStore.totalOrders > orderStore.pageSize"
+            class="px-4 py-4 border-t border-gray-200 dark:border-gray-700">
+            <Pagination :currentPage="orderStore.page" :totalPages="orderStore.totalPages"
+              :pageSize="orderStore.pageSize" :totalItems="orderStore.totalOrders"
+              @update:currentPage="handlePageChange" @update:pageSize="handlePageSizeChange" />
           </div>
         </template>
       </div>
