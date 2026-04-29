@@ -30,10 +30,12 @@ export const useOrderStore = defineStore('order', () => {
   const fetchOrders = async () => {
     isFetching.value = true
     try {
+      const trimmedSearchValue = searchValue.value.trim()
+      const hasSearch = trimmedSearchValue.length > 0
       const result = await orderService.getOrders({
         processStatus: activeTab.value,
-        searchField: searchField.value,
-        searchValue: searchValue.value,
+        searchField: hasSearch ? searchField.value : undefined,
+        searchValue: hasSearch ? trimmedSearchValue : undefined,
         page: page.value,
         pageSize: pageSize.value,
       })
