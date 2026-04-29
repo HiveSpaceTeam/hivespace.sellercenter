@@ -102,8 +102,8 @@ export interface SellerOrderListResponse {
 
 export interface SellerOrderQuery {
   processStatus: string
-  searchField: string | undefined
-  searchValue: string | undefined
+  searchField?: string
+  searchValue?: string
   page: number
   pageSize: number
 }
