@@ -388,6 +388,8 @@ import type { CreateCouponRequest, UpdateCouponRequest, CouponDto } from '@/type
 import { useCouponStore } from '@/stores/coupon'
 import SelectProductsModal from '@/views/Marketing/Popups/SelectProductsModal.vue'
 import { useCouponValidation, type CouponFormErrors, type CouponFormData } from './useCouponValidation'
+import { productService } from '@/services'
+import type { Product } from '@/types'
 
 const { t, locale } = useI18n()
 const route = useRoute()
@@ -582,6 +584,16 @@ const discountTypeOptions = computed(() => [
 const { openModal } = useModal()
 const selectedProductIds = ref<number[]>([])
 
+type SelectedProductRow = {
+  id: number
+  name: string
+  image: string
+  priceMin: number
+  priceMax: number
+  stock: number
+}
+const selectedProductsById = ref<Record<number, SelectedProductRow>>({})
+
 const handleAddProducts = async () => {
   const result = await openModal(SelectProductsModal, {
     title: t('coupon.detail.selectProductsModal.title'),
@@ -596,40 +608,64 @@ const handleAddProducts = async () => {
   }
 }
 
-// Mock data sync to match Modal display
-const mockProductsDB = [
-  {
-    id: 56900158122,
-    name: 'xvsdthne5r7jne',
+const mapProductToSelectedRow = (product: Product): SelectedProductRow | null => {
+  if (!product.id) return null
+
+  const skuPrices = product.skus
+    .map((sku) => sku.price?.amount)
+    .filter((price): price is number => typeof price === 'number')
+  const priceMin = skuPrices.length ? Math.min(...skuPrices) : 0
+  const priceMax = skuPrices.length ? Math.max(...skuPrices) : 0
+  const stock = product.skus.reduce((sum, sku) => {
+    const quantity = typeof sku.quantity === 'string' ? Number(sku.quantity) : sku.quantity ?? 0
+    return sum + (Number.isFinite(quantity) ? quantity : 0)
+  }, 0)
+
+  return {
+    id: product.id,
+    name: product.name,
     image: '',
-    sales: 0,
-    priceMin: 1000,
-    priceMax: 1000,
-    stock: 48,
-  },
-  {
-    id: 29717641908,
-    name: 'Computers & Accessories',
-    image: '',
-    sales: 0,
-    priceMin: 1000,
-    priceMax: 2000,
-    stock: 42,
-  },
-  {
-    id: 29268188867,
-    name: 'Computers & AccessoriesComputers & ...',
-    image: '',
-    sales: 0,
-    priceMin: 1000000,
-    priceMax: 1000000,
-    stock: 123,
-  },
-]
+    priceMin,
+    priceMax,
+    stock,
+  }
+}
+
+const syncSelectedProductDetails = async () => {
+  const ids = [...selectedProductIds.value]
+  const currentMap = { ...selectedProductsById.value }
+
+  for (const key of Object.keys(currentMap)) {
+    const numericId = Number(key)
+    if (!ids.includes(numericId)) {
+      delete currentMap[numericId]
+    }
+  }
+
+  const missingIds = ids.filter((id) => !currentMap[id])
+  if (missingIds.length > 0) {
+    const loaded = await Promise.all(
+      missingIds.map(async (id) => {
+        try {
+          const product = await productService.getProductById(String(id))
+          return mapProductToSelectedRow(product)
+        } catch {
+          return null
+        }
+      }),
+    )
+
+    for (const item of loaded) {
+      if (item) currentMap[item.id] = item
+    }
+  }
+
+  selectedProductsById.value = currentMap
+}
 
 const selectedProductsDetailed = computed(() => {
   return selectedProductIds.value
-    .map(id => mockProductsDB.find(p => p.id === id))
+    .map((id) => selectedProductsById.value[id])
     .filter((p): p is NonNullable<typeof p> => !!p)
 })
 
@@ -700,6 +736,14 @@ watch(() => form.value.allowEarlySave, (val) => {
     form.value.earlySaveDate = ''
   }
 })
+
+watch(
+  selectedProductIds,
+  () => {
+    void syncSelectedProductDetails()
+  },
+  { immediate: true },
+)
 
 // ── Helper: populate form from a CouponDto ───────────────────
 const populateFormFromDto = (dto: CouponDto) => {

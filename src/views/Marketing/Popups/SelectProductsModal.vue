@@ -48,7 +48,7 @@
       </div>
 
       <!-- Table Section -->
-      <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-x-auto w-full custom-scrollbar">
+      <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-x-auto overflow-y-auto max-h-[420px] w-full custom-scrollbar">
         <table class="w-full text-left" style="min-width: 600px">
           <thead class="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
             <tr>
@@ -85,6 +85,11 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900">
+            <tr v-if="isLoading">
+              <td colspan="5" class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
+                {{ $t('table.loading') }}
+              </td>
+            </tr>
             <tr v-for="product in products" :key="product.id" class="hover:bg-gray-50 dark:hover:bg-gray-800">
               <td class="px-4 py-4 w-12 align-top">
                 <Checkbox :model-value="selectedProducts.includes(product.id)" @change="toggleProduct(product.id)"
@@ -115,13 +120,27 @@
               </td>
             </tr>
             <!-- Empty State -->
-            <tr v-if="products.length === 0">
+            <tr v-if="!isLoading && products.length === 0">
               <td colspan="5" class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
                 No products found.
               </td>
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-between text-sm text-gray-600 dark:text-gray-400 gap-2">
+        <div>
+          {{ t('pages.common.showing') }} {{ startItem }} - {{ endItem }} {{ t('pages.common.of') }} {{ totalCount }}
+        </div>
+        <div class="flex items-center gap-2">
+          <Button variant="outline" :disabled="pageIndex === 1 || isLoading" @click="prevPage">
+            {{ t('pages.common.prev') }}
+          </Button>
+          <Button variant="outline" :disabled="pageIndex >= totalPages || isLoading" @click="nextPage">
+            {{ t('pages.common.next') }}
+          </Button>
+        </div>
       </div>
     </div>
 
@@ -143,9 +162,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Button, Input, Select, Checkbox, Tabs, SortIcon, SortAscIcon, SortDescIcon } from '@hivespace/shared'
+import type { Product, ProductSearchRequest } from '@/types'
+import { productService } from '@/services'
 
 const { t } = useI18n()
 
@@ -178,52 +199,39 @@ const categoryOptions = computed(() => [
 
 const searchTypeOptions = computed(() => [
   { label: t('coupon.detail.selectProductsModal.searchProductName'), value: 'name' },
+  { label: 'ID', value: 'id' },
 ])
 
-// Mock data based on the screenshot requirements
-const originalProducts = [
-  {
-    id: 56900158122,
-    name: 'xvsdthne5r7jne',
-    image: '', // Will fallback or show broken img frame on mockup
-    sales: 0,
-    priceMin: 1000,
-    priceMax: 1000,
-    stock: 48,
-  },
-  {
-    id: 29717641908,
-    name: 'Computers & Accessories',
-    image: '',
-    sales: 0,
-    priceMin: 1000,
-    priceMax: 2000,
-    stock: 42,
-  },
-  {
-    id: 29268188867,
-    name: 'Computers & AccessoriesComputers & ...',
-    image: '',
-    sales: 0,
-    priceMin: 1000000,
-    priceMax: 1000000,
-    stock: 123,
-  },
-]
+type ProductRow = {
+  id: number
+  name: string
+  image: string
+  sales: number
+  priceMin: number
+  priceMax: number
+  stock: number
+}
 
-const products = ref([...originalProducts])
+const products = ref<ProductRow[]>([])
+const isLoading = ref(false)
+const pageIndex = ref(1)
+const pageSize = ref(10)
+const totalCount = ref(0)
 
 const selectedProducts = ref<number[]>(props.alreadySelected ? [...props.alreadySelected] : [])
 
 const selectAll = computed(() => {
-  return products.value.length > 0 && selectedProducts.value.length === products.value.length
+  if (!products.value.length) return false
+  return products.value.every((p) => selectedProducts.value.includes(p.id))
 })
 
 const toggleSelectAll = (checked: boolean) => {
+  const visibleIds = products.value.map((p) => p.id)
   if (checked) {
-    selectedProducts.value = products.value.map((p) => p.id)
+    const merged = new Set([...selectedProducts.value, ...visibleIds])
+    selectedProducts.value = [...merged]
   } else {
-    selectedProducts.value = []
+    selectedProducts.value = selectedProducts.value.filter((id) => !visibleIds.includes(id))
   }
 }
 
@@ -237,8 +245,8 @@ const toggleProduct = (id: number) => {
 }
 
 const formatPrice = (min: number, max: number) => {
-  if (min === max) return `₫${min}`
-  return `₫${min}-₫${max}`
+  if (min === max) return `₫${min.toLocaleString('vi-VN')}`
+  return `₫${min.toLocaleString('vi-VN')}-₫${max.toLocaleString('vi-VN')}`
 }
 
 // Sorting logic
@@ -262,13 +270,67 @@ const handleSort = (field: string) => {
     sortDirection.value = 'asc'
   }
 
-  // Trigger local sort (Mock data so manual array sort instead of load API)
+  // Trigger local sort.
   if (!currentSort.value || !sortDirection.value) {
-    // Original unsorted order
-    products.value = [...originalProducts]
+    products.value = [...products.value].sort((a, b) => a.id - b.id)
     return
   }
+
+  applySort()
 }
+
+const applySort = () => {
+  if (!currentSort.value || !sortDirection.value) {
+    products.value = [...products.value].sort((a, b) => a.id - b.id)
+    return
+  }
+
+  const direction = sortDirection.value === 'asc' ? 1 : -1
+  products.value = [...products.value].sort((a, b) => {
+    if (currentSort.value === 'sales') return (a.sales - b.sales) * direction
+    if (currentSort.value === 'price') return (a.priceMin - b.priceMin) * direction
+    if (currentSort.value === 'stock') return (a.stock - b.stock) * direction
+    return 0
+  })
+}
+
+const mapProductToRow = (product: Product): ProductRow | null => {
+  if (!product.id) return null
+
+  const skuPrices = product.skus
+    .map((sku) => sku.price?.amount)
+    .filter((price): price is number => typeof price === 'number')
+
+  const priceMin = skuPrices.length ? Math.min(...skuPrices) : 0
+  const priceMax = skuPrices.length ? Math.max(...skuPrices) : 0
+  const stock = product.skus.reduce((sum, sku) => {
+    const quantity = typeof sku.quantity === 'string' ? Number(sku.quantity) : sku.quantity ?? 0
+    return sum + (Number.isFinite(quantity) ? quantity : 0)
+  }, 0)
+
+  return {
+    id: product.id,
+    name: product.name,
+    image: '',
+    sales: 0,
+    priceMin,
+    priceMax,
+    stock,
+  }
+}
+
+const startItem = computed(() => {
+  if (totalCount.value === 0) return 0
+  return (pageIndex.value - 1) * pageSize.value + 1
+})
+
+const endItem = computed(() => {
+  const showingCount = products.value.length
+  if (showingCount === 0) return 0
+  return (pageIndex.value - 1) * pageSize.value + showingCount
+})
+
+const totalPages = computed(() => Math.ceil(totalCount.value / pageSize.value) || 1)
 
 const getSortIcon = (field: string) => {
   if (currentSort.value !== field) return SortIcon
@@ -276,8 +338,8 @@ const getSortIcon = (field: string) => {
 }
 
 const handleSearch = () => {
-  // Execute search logic based on filters.value
-  console.log('Searching with: ', filters.value)
+  pageIndex.value = 1
+  void fetchProducts()
 }
 
 const handleReset = () => {
@@ -285,11 +347,67 @@ const handleReset = () => {
   filters.value.searchType = 'name'
   filters.value.searchQuery = ''
   filters.value.showAvailableOnly = true
+  currentSort.value = null
+  sortDirection.value = null
+  pageIndex.value = 1
+  void fetchProducts()
 }
 
 const handleConfirm = () => {
   emit('close', selectedProducts.value)
 }
+
+const fetchProducts = async () => {
+  isLoading.value = true
+  try {
+    const keyword = filters.value.searchQuery.trim()
+    const params: ProductSearchRequest = {
+      keyword: keyword || undefined,
+      sort: 'ASC',
+      pageIndex: pageIndex.value,
+      pageSize: pageSize.value,
+    }
+    const response = await productService.getProducts(params)
+    totalCount.value = response.pagination.totalItems
+    pageIndex.value = response.pagination.currentPage
+    pageSize.value = response.pagination.pageSize
+    products.value = response.items
+      .map(mapProductToRow)
+      .filter((item): item is ProductRow => item !== null)
+
+    if (filters.value.showAvailableOnly) {
+      products.value = products.value.filter((p) => p.stock > 0)
+    }
+
+    applySort()
+  } finally {
+    isLoading.value = false
+  }
+}
+
+const prevPage = () => {
+  if (pageIndex.value <= 1) return
+  pageIndex.value -= 1
+  void fetchProducts()
+}
+
+const nextPage = () => {
+  if (pageIndex.value >= totalPages.value) return
+  pageIndex.value += 1
+  void fetchProducts()
+}
+
+onMounted(() => {
+  void fetchProducts()
+})
+
+watch(
+  () => filters.value.showAvailableOnly,
+  () => {
+    pageIndex.value = 1
+    void fetchProducts()
+  },
+)
 </script>
 
 <style scoped>
